@@ -11,18 +11,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ORGANIZATION")
 public class Organization {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	
+
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Embedded
 	private Address address;
-	
+
 	@Column(name = "DESCRIPTION")
 	private String description;
 
@@ -57,7 +57,5 @@ public class Organization {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
-	
+
 }

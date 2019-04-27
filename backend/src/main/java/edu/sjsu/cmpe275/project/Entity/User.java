@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -34,6 +36,9 @@ public class User {
 	
 	@Embedded
 	private Profile profile;
+	
+//	@ManyToMany
+//	@JoinTable(name = "ORGANIZATION_MEMBERS")
 
 	public int getId() {
 		return id;
