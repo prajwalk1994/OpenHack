@@ -7,4 +7,5 @@ import edu.sjsu.cmpe275.project.Entity.User;
 
 @Repository
 public interface UserDao extends JpaRepository<User, Integer>{
+	
 }
