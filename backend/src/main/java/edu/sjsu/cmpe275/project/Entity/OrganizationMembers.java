@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.project.Entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ORG_MEMBERS")
-public class OrganizationMembers {
+public class OrganizationMembers implements Serializable {
 	
 	private enum Approve{
 		Yes,
