@@ -1,12 +1,14 @@
 package edu.sjsu.cmpe275.project.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
+
 import edu.sjsu.cmpe275.project.Repository.HackathonDao;
 
 @Service
@@ -25,5 +27,9 @@ public class HackathonService {
 	
 	public void deleteHackathon(int ID) {
         this.hackathonDao.deleteById(ID);
+    }
+	
+	public Optional<Hackathon> getHackathon(int ID) {
+        return this.hackathonDao.findById(ID);
     }
 }
