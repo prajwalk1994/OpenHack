@@ -75,9 +75,9 @@ public class Team {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	@OneToMany
-//	(mappedBy = "hackId", cascade = CascadeType.ALL)
-	@JoinColumn(name = "teamId",table="HackathonTeams")
+	
+	@OneToMany(mappedBy = "teamId", cascade = CascadeType.ALL)
+//	@JoinColumn(name = "teamId",table="HackathonTeams")
     private List<HackathonTeams> HackathonTeams;		
 	
 	
