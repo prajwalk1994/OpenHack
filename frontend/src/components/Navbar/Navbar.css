@@ -1,0 +1,71 @@
+.logo{
+    height: 32px;
+    width: 32px;
+    }
+    
+.fontAwesome {
+    font-family: 'Helvetica', FontAwesome, sans-serif;
+    /* didnot work without important, it is required for input fields i.e here search bar */
+    background-color:#C7D1D8 !important;
+}
+    
+.nav-icon-text {
+    display: block;
+    color: #C7D1D8;
+    font-size: 12px;
+    text-align: center;
+    padding: 0;
+  }
+
+  .nav-item{
+    display: block;
+    text-align: center;
+    margin: -15px 0px -15px 0px;
+    padding: 0px 5px 0px 5px;
+  }
+  
+  .navbarRecruiter{
+      background-color: #283E4A;
+  }
+
+  .navbar{
+    background-color: #283E4A;
+}
+
+  .navbar-rec{
+    background-color: #2774AE;
+  }
+
+  .navbar-rec-fil{
+    background-color: white;
+  }
+
+  .iconColour{
+      color:#C7D1D8;
+  }
+
+  .orangeText{
+      color:#DCCEA4;
+  }
+
+  .borderLeft{
+      border-left : 0.5px solid #C7D1D8;
+      padding: 0px 5px 0px 5px;
+
+  }
+  .borderRight{
+    border-right : 0.5px solid #C7D1D8;
+    padding: 0px 5px 0px 5px;
+}
+  .links{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color : "white"
+  }
+
+  .rec-post{
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
