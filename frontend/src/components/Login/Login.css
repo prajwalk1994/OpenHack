@@ -1,0 +1,76 @@
+.bg_div{
+  position: relative;
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
+    background-color: #f1f1f1;
+  /* background: url("../../images/1.jpg") no-repeat center center; */
+  background-size: cover;
+background-attachment: fixed; 
+}
+
+.intro {
+    position: absolute;
+    top: 10vh;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    font-family: 'Julius Sans One', sans-serif;
+}
+
+.marginTop{
+margin-top: 1vh;
+}
+
+.paddingAll{
+    padding: 2vh;
+}
+
+/***************************** HOME AWAY LOGIN CSS*****************************************/
+.formHeading{
+    border-bottom: 1px solid #dbdbdb;
+    color:#888888;
+    text-align: left;
+}
+
+.formContainer{
+    background-color: #FFF;
+    padding:20px 20px 20px 20px;
+    border-radius: 5px;
+    border:1px solid #dbdbdb;
+    margin-bottom: 40px;
+    color:black;
+}
+
+.form_element{
+    /* padding: 20px; */
+    margin:20px 0px 20px 0px;
+    border-radius: 0;
+}
+
+.float_left{
+    float:left;
+}
+
+.btn_login{
+    background-color: #ff8a00;
+    vertical-align: middle;
+    padding:10px;
+    color:white;
+}
+
+.btn_fb{
+    background-color: #3B5998;
+    padding:10px;
+    color:white;
+}
+.btn_google{
+    background-color: lightgray;
+    padding:10px;
+    color:black;
+}
+
+.form_footer{
+    font-size: 10px;
+}
