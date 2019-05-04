@@ -28,7 +28,7 @@ public class UserService {
 		this.userDao.deleteById(id);
 	}
 	
-	public User updateUser(User user) {
-		return this.userDao.merge(user);
-	}
+//	public User updateUser(User user) {
+//		return this.userDao.merge(user);
+//	}
 }	
