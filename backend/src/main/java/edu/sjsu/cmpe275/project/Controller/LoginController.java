@@ -15,23 +15,23 @@ import edu.sjsu.cmpe275.project.Service.UserService;
 @RestController
 @RequestMapping("/")
 public class LoginController {
-	
-	@Autowired 
+
+	@Autowired
 	UserService userService;
-	
+
 	@PostMapping("/login")
 	public ResponseEntity<Object> loginUser(@RequestBody User user) {
 		Optional<User> loginUser = userService.getUser(user.getId());
-		if(!loginUser.isPresent()) {
+		if (!loginUser.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		if(loginUser.get().getPassword()==user.getPassword()) {
+		if (loginUser.get().getPassword() == user.getPassword()) {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
-//	@PostMapping("/signUp"){
-//		
-//	}
+
+	// @PostMapping("/signUp"){
+	//
+	// }
 }
