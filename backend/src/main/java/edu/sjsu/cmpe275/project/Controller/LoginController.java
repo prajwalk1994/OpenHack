@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import edu.sjsu.cmpe275.project.Service.UserService;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin("*")
 public class LoginController {
 
 	@Autowired
@@ -42,7 +44,6 @@ public class LoginController {
 
 	
 	@PostMapping("/signUp")
-//	@CrossOrigin(origins = {"http://54.193.119.24:3000", "http://localhost:3000"})
 	public ResponseEntity<Object> signup(@RequestBody User req){
 		String email = req.getEmail();
 		String password = req.getPassword();
@@ -63,7 +64,7 @@ public class LoginController {
 		}
 		
 		//To check if the user already exists
-		List<User> users = userDao.getUserByEmail(email);
+		List<User> users = userDao.findUserByEmail(email);
 		if(users.size() > 0){
 			return new ResponseEntity<>("Already Exists!", HttpStatus.OK);
 		}
