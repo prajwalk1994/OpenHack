@@ -9,8 +9,9 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import edu.sjsu.cmpe275.project.Service.UserService;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin("*")
 public class LoginController {
 
 	@Autowired
@@ -31,10 +33,10 @@ public class LoginController {
 
 	@Autowired
 	UserDao userDao;
-	
-	@Autowired
-	PasswordEncoder pe;
-	
+
+//	@Autowired
+//	PasswordEncoder pe;
+
 	@Autowired
 	MailingService mailService;
 
@@ -50,63 +52,62 @@ public class LoginController {
 		return ResponseEntity.notFound().build();
 	}
 
-	
 	@PostMapping("/signUp")
-//	@CrossOrigin(origins = {"http://54.193.119.24:3000", "http://localhost:3000"})
-	public ResponseEntity<Object> signup(@RequestBody User req){
+	public ResponseEntity<Object> signup(@RequestBody User req) {
+		System.out.println("Here");
 		String email = req.getEmail();
 		String password = req.getPassword();
 		String emailCheck[] = email.split("@");
 		String role;
-		if(emailCheck[1].equals("sjsu.edu")){
+		if (emailCheck[1].equals("sjsu.edu")) {
 			role = "ADMIN";
 		} else {
 			role = "USER";
 		}
-		
+
 		// To check if the email and password are not empty
-		if(email.equals("")){
+		if (email.equals("")) {
 			return new ResponseEntity<>("FAILURE-EMPTY_EMAIL", HttpStatus.OK);
 		}
-		if(password.equals("")){
+		if (password.equals("")) {
 			return new ResponseEntity<>("FAILURE-EMPTY_PASSWORD", HttpStatus.OK);
 		}
 		
-		//To check if the user already exists
-		List<User> users = userDao.getUserByEmail(email);
-		if(users.size() > 0){
+		// To check if the user already exists
+		List<User> users = userDao.findUserByEmail(email);
+		if (users.size() > 0) {
 			return new ResponseEntity<>("Already Exists!", HttpStatus.OK);
 		}
 		String accessToken = String.valueOf(new Random(System.nanoTime()).nextInt(10000));
-		Date d=new Date();
-	    java.sql.Timestamp datepresent = new Timestamp(d.getTime());
+		Date d = new Date();
+		java.sql.Timestamp datepresent = new Timestamp(d.getTime());
 		User user = new User();
-		user.setPassword(pe.encode(req.getPassword()));
+		user.setPassword(req.getPassword());
 		user.setEmail(email);
 		user.setVerified(false);
 //		user.setSubscription(0);
 //		user.setSignupdate(presentdate);
 		user.setAccessToken(accessToken);
 		user = userDao.save(user);
-		
-        mailService.sendMail(accessToken, email);
-		
+		System.out.println("User saved and mail is being sent!");
+		mailService.sendMail(accessToken, email);
+
 		return new ResponseEntity<>("Success!", HttpStatus.OK);
 	}
-	
 
-	@GetMapping(value="/activateLogin")
+	@GetMapping(value = "/activateLogin")
 //	@CrossOrigin(origins = {"http://54.193.119.24:3000", "http://localhost:3000"})
-	public ResponseEntity<Object> activateLogin(@RequestParam("email") String email, @RequestParam("accessToken") String accessToken){
-		System.out.println("accessToken "+accessToken);
-		System.out.println("email "+email);
-		User user = userDao.findByEmail(email);
-		
-		if(user == null){
+	public ResponseEntity<Object> activateLogin(@RequestParam("email") String email,
+			@RequestParam("accessToken") String accessToken) {
+		System.out.println("accessToken " + accessToken);
+		System.out.println("email " + email);
+		List<User> users = userDao.findUserByEmail(email);
+
+		if (users.size() == 0) {
 			return new ResponseEntity<>("FAILURE-invalid mail!", HttpStatus.OK);
 		}
-		
-		if(user.getAccessToken().equals(accessToken)){
+		User user = users.get(0);
+		if (user.getAccessToken().equals(accessToken)) {
 			user.setVerified(true);
 			userDao.save(user);
 			return new ResponseEntity<>("Success!", HttpStatus.OK);

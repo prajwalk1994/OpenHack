@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.cmpe275.project.Entity.Organization;
 
 import edu.sjsu.cmpe275.project.Service.OrganizationService;
-
 
 @RestController
 @RequestMapping("/")
@@ -39,7 +38,7 @@ public class OrganizationController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
+
 	@GetMapping("/organizations")
 	public ResponseEntity<List<Organization>> getAllOrganizations() {
 		try {
@@ -49,42 +48,36 @@ public class OrganizationController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	@PutMapping("/organization/{organizationId}")
-	public ResponseEntity<Organization> putOrganization(@RequestBody Organization organization  ){
+
+	@PostMapping("/organization")
+	public ResponseEntity<Organization> addNewOrganization(@RequestBody Organization organization) {
 		try {
-			
-			this.organizationService.addOrganization(organization);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(this.organizationService.addOrganization(organization));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
 		}
-		catch(Exception e) { 
-			return ResponseEntity.badRequest().build();}
-	}
-	
-	@DeleteMapping("/organization/{organizationId}")
-	public ResponseEntity<Organization> deleteOrganization(@RequestBody Organization organization  ){
-		try {
-			
-			this.organizationService.deleteOrganization(organization.getId());
-			return ResponseEntity.ok().build();
-		}
-		catch(Exception e) { 
-			return ResponseEntity.badRequest().build();}
 	}
 
-	
-//	@PostMapping("/organization/{organizationId}")
-//	public ResponseEntity<Organization> updateOrganization(@PathVariable int organizationId, @RequestBody Organization organization){
-//		try {
-//			Optional<User> user = this.userService.getUser(userId);
-//			if(!user.isPresent()) {
-//				return ResponseEntity.notFound().build();
-//			}
-//			User updatedUser = user.get();
-//			updatedUser.setProfile(userProfile);
-//			this.userService.addUser(updatedUser);
-//			return ResponseEntity.ok().build();
-//		}
-//		catch(Exception e) { return ResponseEntity.badRequest().build();}
-//	}
+	@PutMapping("/organization/{organizationId}")
+	public ResponseEntity<Organization> putOrganization(@RequestBody Organization organization) {
+		try {
+
+			this.organizationService.addOrganization(organization);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	@DeleteMapping("/organization/{organizationId}")
+	public ResponseEntity<Organization> deleteOrganization(@RequestBody Organization organization) {
+		try {
+
+			this.organizationService.deleteOrganization(organization.getId());
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
 }
