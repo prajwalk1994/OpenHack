@@ -99,8 +99,8 @@ public class LoginController {
 //	@CrossOrigin(origins = {"http://54.193.119.24:3000", "http://localhost:3000"})
 	public ResponseEntity<Object> activateLogin(@RequestParam("email") String email,
 			@RequestParam("accessToken") String accessToken) {
-		System.out.println("accessToken " + accessToken);
-		System.out.println("email " + email);
+		System.out.println("accessToken: " + accessToken);
+		System.out.println("email is: " + email);
 		List<User> users = userDao.findUserByEmail(email);
 
 		if (users.size() == 0) {
@@ -112,7 +112,7 @@ public class LoginController {
 			userDao.save(user);
 			return new ResponseEntity<>("Success!", HttpStatus.OK);
 		} else {
-			System.out.println("inside verify failure");
+			System.out.println("Activation Failed");
 			return new ResponseEntity<>("FAILURE-invalid code!", HttpStatus.OK);
 		}
 	}
