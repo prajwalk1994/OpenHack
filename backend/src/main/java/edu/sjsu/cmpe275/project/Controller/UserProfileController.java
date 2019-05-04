@@ -19,7 +19,7 @@ import edu.sjsu.cmpe275.project.Service.UserService;
 @RestController
 @RequestMapping("/")
 @CrossOrigin("*")
-public class ProfileController {
+public class UserProfileController {
 
 	@Autowired
 	UserService userService;
@@ -36,19 +36,20 @@ public class ProfileController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
+
 	@PostMapping("/profile/{id}")
-	public ResponseEntity<Profile> updateProfile(@PathVariable int userId, @RequestBody Profile userProfile){
+	public ResponseEntity<Profile> updateProfile(@PathVariable int userId, @RequestBody Profile userProfile) {
 		try {
 			Optional<User> user = this.userService.getUser(userId);
-			if(!user.isPresent()) {
+			if (!user.isPresent()) {
 				return ResponseEntity.notFound().build();
 			}
 			User updatedUser = user.get();
 			updatedUser.setProfile(userProfile);
 			this.userService.addUser(updatedUser);
 			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
 		}
-		catch(Exception e) { return ResponseEntity.badRequest().build();}
 	}
 }

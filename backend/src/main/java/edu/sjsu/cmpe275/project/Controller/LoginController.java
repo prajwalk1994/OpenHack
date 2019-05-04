@@ -20,24 +20,26 @@ import edu.sjsu.cmpe275.project.Service.UserService;
 @RestController
 @RequestMapping("/")
 public class LoginController {
-	
-	@Autowired 
+
+	@Autowired
 	UserService userService;
+
 	
 	@Autowired
 	UserDao userDao;
-	
+
 	@PostMapping("/login")
 	public ResponseEntity<Object> loginUser(@RequestBody User user) {
 		Optional<User> loginUser = userService.getUser(user.getId());
-		if(!loginUser.isPresent()) {
+		if (!loginUser.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		if(loginUser.get().getPassword()==user.getPassword()) {
+		if (loginUser.get().getPassword() == user.getPassword()) {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();
 	}
+
 	
 	@PostMapping("/signUp")
 //	@CrossOrigin(origins = {"http://54.193.119.24:3000", "http://localhost:3000"})
@@ -82,4 +84,5 @@ public class LoginController {
 		
 		return new ResponseEntity<>("Success!", HttpStatus.OK);
 	}
+
 }

@@ -40,7 +40,7 @@ public class OrganizationController {
 		}
 	}
 	
-	@GetMapping("/organization/{organizationId}")
+	@GetMapping("/organizations")
 	public ResponseEntity<List<Organization>> getAllOrganizations() {
 		try {
 			List<Organization> organization = this.organizationService.getAllOrganizations();
