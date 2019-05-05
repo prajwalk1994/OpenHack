@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,11 +16,15 @@ import javax.persistence.Table;
 public class HackathonTeams implements Serializable{
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private int id;
+	
     @ManyToOne
     @JoinColumn
     private Hackathon hackId;
 	
-	@Id
+
     @ManyToOne
     @JoinColumn
     private Team teamId;
@@ -34,6 +40,15 @@ public class HackathonTeams implements Serializable{
 	
 	@Column(name="DISCOUNT")
 	private String Discount;
+
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public Hackathon getHackId() {
 		return hackId;

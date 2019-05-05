@@ -34,6 +34,9 @@ public class User {
 	@Column(name = "VERIFIED")
 	private boolean verified;
 	
+	@Column(name = "ACCESSTOKEN")
+	private String accessToken;
+	
 	@Embedded
 	private Profile profile;
 	
@@ -94,6 +97,14 @@ public class User {
 
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 	
 	

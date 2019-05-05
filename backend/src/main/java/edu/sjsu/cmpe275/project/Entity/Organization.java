@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,6 +27,18 @@ public class Organization {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	@OneToOne 
+	@JoinColumn(name = "OWNERID")
+	private User owner;
+	
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
 
 	public int getId() {
 		return id;
