@@ -1,47 +1,86 @@
 import React, { Component } from 'react';
 import './SignUp.css';
+import Axios from 'axios';
+import url from '../../config/config'
+import Login from '../Login/Login';
+import {Link,Redirect} from "react-router-dom";
+
 class SignUp extends Component {
     constructor(props) {
         super(props);
         console.log("Inside SignUp");
 
         this.state = {
-            firstName: "",
-            lastName: "",
+            name: "",
+            username:"",
             email: "",
-            password: ""
+            password: "",
+            role:"Hacker",
+            redirectVar:""
         }
-    }
-    handleClick = (e) => {
-        // e.preventDefault();
-        // console.log(this.state);
-        // const data = this.state;
-        // axios.defaults.withCredentials = true;
-        // axios.post('http://localhost:3002/travelerSignup', data)
-        //     .then(response => {
-        //         if (response.status === 200) {
-        //             alert("sign up successfull !");
-        //             console.log("sign up successful, data inserted");
-        //             this.props.history.push('/Login');
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         alert("Email already exists");
-        //         console.log("Response status : ", error.response.status, "Response : ", error.response.data);
-        //     })
     }
 
     handleChange = (e) => {
-        // this.setState({
-        //     //square brackets must
-        //     [e.target.name]: e.target.value
-        // })
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+    callingBackend=async(user)=>{
+        await Axios.post(url+"/signUp",user).then(async(res)=>{
+            console.log(res)
+            if(res.data=="Success!"){
+                console.log("Signup successful")
+                 await this.setState({
+                    redirectVar: <Redirect to="/"/>
+                })
+            }
+            else{
+                alert(res.data)
+            }
+            
+            
+
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+    handleClick = (e) => {
+        e.preventDefault();
+        console.log(this.state)
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(this.state.email)) {
+            alert("Invalid Email Format!")
+        }
+        else{
+            const user={
+                ...this.state
+            }
+            if(this.state.email.endsWith("@sjsu.edu") || this.state.role=="Admin"){
+                if(this.state.role=="admin" && this.state.email.endsWith("@sjsu.edu")){
+                    this.callingBackend(user)
+                }
+                else{
+                    alert("Incompatible role")
+                }
+            }
+            else{
+                this.callingBackend(user)
+            }
+        }
+        
+        
     }
 
 
+
+
     render() {
+        
         return (
             <div>
+                <div>
+                    {this.state.redirectVar}
+                </div>
                 <center>
                     <div className="bg_div" style={{ paddingTop: "20px" }} >
                         <h2>SIGN UP</h2>
@@ -50,10 +89,10 @@ class SignUp extends Component {
                         <div class="form-group">
                             <form>
                                 <div>
-                                    <input class="form-control  form_element" name="firstName" type="text" onChange={this.handleChange.bind(this)} placeholder="First Name"></input>
-                                    <input class="form-control  form_element" name="lastName" type="text" onChange={this.handleChange.bind(this)} placeholder="Last Name"></input>
+                                    <input class="form-control  form_element" name="name" type="text" onChange={this.handleChange.bind(this)} placeholder="Name"></input>
+                                    <input class="form-control  form_element" name="username" type="text" onChange={this.handleChange.bind(this)} placeholder="Screen Name"></input>
                                 </div>
-                                <input class="form-control form_element" type="text" name="email" onChange={this.handleChange.bind(this)} placeholder="Email address"></input>
+                                <input class="form-control form_element" type="email" name="email" onChange={this.handleChange.bind(this)} placeholder="Email address"></input>
                                 <input class="form-control form_element" type="password" name="password" onChange={this.handleChange.bind(this)} placeholder="password"></input>
 
                                 <div class="form-group" className="row">
@@ -61,7 +100,7 @@ class SignUp extends Component {
                                         <label for="role">Role</label>
                                     </div>
                                     <div className="col-sm-9">
-                                        <select class="form-control" id="role">
+                                        <select class="form-control" onChange={this.handleChange} name="role" >
                                             <option>Hacker</option>
                                             <option>Judge</option>
                                             <option>Admin</option>

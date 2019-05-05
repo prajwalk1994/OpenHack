@@ -22,7 +22,7 @@ public class MailingService {
 	}
 	
 	public boolean sendMail(String accessToken, String email){
-		Email from = new Email("verification@moviecentral.com");
+		Email from = new Email("verification@openhack.com");
 	    String subject = "Hackathon Verification Mail";
 	    Email to = new Email(email);
 	    

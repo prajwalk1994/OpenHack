@@ -42,28 +42,35 @@ public class LoginController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Object> loginUser(@RequestBody User user) {
-		Optional<User> loginUser = userService.getUser(user.getId());
-		if (!loginUser.isPresent()) {
-			return ResponseEntity.notFound().build();
+		System.out.println("Inside Login");
+		List<User> loginUser = userDao.findUserByEmail(user.getEmail());
+//		System.out.println(user.getPassword());
+		if (loginUser.size() > 0) {
+			System.out.println(loginUser.get(0).getEmail());
+			if(loginUser.get(0).getPassword().equals(user.getPassword())) {
+				return ResponseEntity.ok().build();
+			}
+			else {
+				return ResponseEntity.notFound().build();
+			}
+//			return new ResponseEntity<>("Already Exists!", HttpStatus.OK);
 		}
-		if (loginUser.get().getPassword() == user.getPassword()) {
-			return ResponseEntity.ok().build();
-		}
+
 		return ResponseEntity.notFound().build();
 	}
 
 	@PostMapping("/signUp")
 	public ResponseEntity<Object> signup(@RequestBody User req) {
-		System.out.println("Here");
+		System.out.println("Inside Sign Up!");
 		String email = req.getEmail();
 		String password = req.getPassword();
 		String emailCheck[] = email.split("@");
 		String role;
-		if (emailCheck[1].equals("sjsu.edu")) {
-			role = "ADMIN";
-		} else {
-			role = "USER";
-		}
+//		if (emailCheck[1].equals("sjsu.edu")) {
+//			role = "ADMIN";
+//		} else {
+//			role = "USER";
+//		}
 
 		// To check if the email and password are not empty
 		if (email.equals("")) {
@@ -76,17 +83,23 @@ public class LoginController {
 		// To check if the user already exists
 		List<User> users = userDao.findUserByEmail(email);
 		if (users.size() > 0) {
-			return new ResponseEntity<>("Already Exists!", HttpStatus.OK);
+			return new ResponseEntity<>("FAILURE-Email_Exists", HttpStatus.OK);
+		}
+		List<User> usernames = userDao.findUserByUsername(req.getUsername());
+		
+		if (usernames.size() > 0) {
+			System.out.println(usernames);
+			return new ResponseEntity<>("FAILURE-Username_Exists", HttpStatus.OK);
 		}
 		String accessToken = String.valueOf(new Random(System.nanoTime()).nextInt(10000));
-		Date d = new Date();
-		java.sql.Timestamp datepresent = new Timestamp(d.getTime());
+//		Date d = new Date();
+//		java.sql.Timestamp datepresent = new Timestamp(d.getTime());
 		User user = new User();
 		user.setPassword(req.getPassword());
 		user.setEmail(email);
+		user.setUsername(req.getUsername());
 		user.setVerified(false);
-//		user.setSubscription(0);
-//		user.setSignupdate(presentdate);
+		user.setRole(req.getRole());
 		user.setAccessToken(accessToken);
 		user = userDao.save(user);
 		System.out.println("User saved and mail is being sent!");

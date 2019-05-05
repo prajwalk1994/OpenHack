@@ -1,13 +1,41 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css'
+import url from '../../config/config'
 import Navbar from '../Navbar/Navbar';
+import axios from 'axios';
 
 class Login extends Component {
     constructor(props) {
         super(props);
         console.log("Inside Login");
+        this.state={
+            email:"",
+            password:"",
+            username:""
+        }
     }
+
+    handleChange=(e)=>{
+        this.setState({
+            [e.target.name]:e.target.value
+        })
+    }
+    handleLogin=(e)=>{
+        e.preventDefault();
+        const user={
+            ...this.state
+        }
+        
+        axios.post(url+"/login",user).then((res)=>{
+            console.log("Login successful ",res.status)
+
+        }).catch((err)=>{
+            // console.log(err)
+            alert("Invalid credentials!")
+        })
+    }
+
     render() {
         return (
             <div>
@@ -25,8 +53,8 @@ class Login extends Component {
                                 </div>
                                 <div class="form-group">
                                     <form>
-                                        <input class="form-control form_element" onChange="{this.handleChange.bind(this)}" name="email" value="{email}" type="text" placeholder="Email address"></input>
-                                        <input class="form-control form_element" onChange="{this.handleChange.bind(this)}" name="password" value="{password}" type="password" placeholder="password"></input>
+                                        <input class="form-control form_element" onChange={this.handleChange.bind(this)} type="email" name="email" value={this.state.email} type="text" placeholder="Email address"></input>
+                                        <input class="form-control form_element" onChange={this.handleChange.bind(this)} name="password" value={this.state.password} type="Password" placeholder="password"></input>
                                         <div class="form-group" className="row">
                                             <div className="col-sm-3 align-middle">
                                                 <label for="role">Role</label>
@@ -41,7 +69,7 @@ class Login extends Component {
                                         </div>
                                         {/* <a class="float_left" href="#">Forgot Password?</a> */}
                                         <br></br>
-                                        <button onClick="{this.handleLogin.bind(this)}" class="form_element btn_login btn btn-lg btn-block" type="submit">Log In</button>
+                                        <button onClick={this.handleLogin.bind(this)} class="form_element btn_login btn btn-lg btn-block" type="submit">Log In</button>
                                         <div class="social_login">
                                             <button class="form_element btn_fb btn btn-lg btn-block" >Log in with Facebook</button>
                                             <button class="form_element btn_google btn btn-lg btn-block">Log in with Google</button>
