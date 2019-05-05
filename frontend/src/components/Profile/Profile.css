@@ -1,0 +1,47 @@
+.parentRow{
+    margin:50px;
+}
+.row{
+    margin:20px;
+}
+.profilePic{
+    width:100px;
+    height:100px;
+}
+.profileHeader{
+    text-align: center;
+    margin : 0px 40% 0px 40%;
+    background-color: fff;
+}
+
+.profileHeader H2{
+    font-weight: 500px;
+}
+.profileContainer{
+    background-color: white;
+}
+.profileBody{
+    margin:3% 10% 0px 10%;    
+}
+
+.drawBorder{
+    padding: 20px 0px 35px 25px;
+    margin-bottom:20px;
+    border: 0.5px solid grey;
+}
+
+.saveProfile{
+    margin:25px 0px 25px 0px;
+}
+
+.saveProfile button{
+    height: 50px;
+    background-color:#0067db;
+    border-radius: 30px;
+}
+
+.profileImage{
+    height:420px;
+    width:280px;
+    text-align: center;
+}
