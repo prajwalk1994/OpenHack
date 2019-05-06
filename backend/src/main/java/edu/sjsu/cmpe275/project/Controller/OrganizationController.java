@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.cmpe275.project.Entity.Organization;
-
+import edu.sjsu.cmpe275.project.Entity.User;
 import edu.sjsu.cmpe275.project.Service.OrganizationService;
+import edu.sjsu.cmpe275.project.Service.UserService;
 
 @RestController
 @RequestMapping("/")
@@ -25,6 +26,9 @@ import edu.sjsu.cmpe275.project.Service.OrganizationService;
 public class OrganizationController {
 	@Autowired
 	OrganizationService organizationService;
+	
+	@Autowired
+	UserService userService;
 
 	@GetMapping("/organization/{organizationId}")
 	public ResponseEntity<Organization> getOrganization(@PathVariable int organizationId) {
@@ -50,8 +54,11 @@ public class OrganizationController {
 	}
 
 	@PostMapping("/organization")
-	public ResponseEntity<Organization> addNewOrganization(@RequestBody Organization organization) {
+	public ResponseEntity<Organization> addNewOrganization(@RequestBody Organization organization, @RequestParam("ownerId") int ownerId) {
 		try {
+//			System.out.println(organization);
+			User owner = this.userService.getUser(ownerId).get();
+			organization.setOwner(owner);
 			return ResponseEntity.ok(this.organizationService.addOrganization(organization));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();

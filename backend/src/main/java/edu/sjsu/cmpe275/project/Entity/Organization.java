@@ -72,4 +72,12 @@ public class Organization {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "Organization [id=" + id + ", name=" + name + ", address=" + address + ", description=" + description
+				+ ", owner=" + owner + "]";
+	}
+	
+	
+
 }

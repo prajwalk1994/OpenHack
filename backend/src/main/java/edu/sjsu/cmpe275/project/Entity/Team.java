@@ -19,30 +19,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "TEAM")
 public class Team {
-	
-	public enum Role{
-		ProductManager,
-		Engineer,
-		FullStack,
-		Designer,
-		Other
-	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	
-	@OneToMany
-	@JoinTable(
-			name = "TEAM",
-			joinColumns = @JoinColumn(name = "USERID", referencedColumnName = "ID")
-	)
-	private List<User> user;
-	
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name = "ROLE")
-	private Role role;
+
+	@Column(name = "TEAMNAME")
+	private String teamName;
+
+	@OneToMany(mappedBy = "team")
+	private List<TeamMember> teamMembers;
+
+	@Column(name = "SCORE")
+	private int score;
 
 	public int getId() {
 		return id;
@@ -52,21 +42,29 @@ public class Team {
 		this.id = id;
 	}
 
-	public Role getRole() {
-		return role;
+	public String getTeamName() {
+		return teamName;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
 	}
 
-	public List<User> getUser() {
-		return user;
+	public List<TeamMember> getTeamMembers() {
+		return teamMembers;
 	}
 
-	public void setUser(List<User> user) {
-		this.user = user;
-	}	
-	
-	
+	public void setTeamMembers(List<TeamMember> teamMembers) {
+		this.teamMembers = teamMembers;
+	}
+
+	public int getScore() {
+		return score;
+
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 }

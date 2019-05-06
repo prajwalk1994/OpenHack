@@ -1,7 +1,5 @@
 package edu.sjsu.cmpe275.project.Entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,28 +12,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ORG_MEMBERS")
-public class OrganizationMembers implements Serializable {
-
-	public static enum Approve {
-		Yes, No
+@Table(name = "TEAMMEMBER")
+public class TeamMember {
+	
+	public static enum Role{
+		ProductManager,
+		Engineer,
+		FullStack,
+		Designer,
+		Other
 	}
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
 	private int id;
-
+	
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "USERID")
 	private User user;
-
+	
 	@ManyToOne
-	@JoinColumn
-	private Organization organization;
-
+	@JoinColumn(name = "TEAMID")
+	private Team team;
+	
 	@Enumerated(EnumType.STRING)
-	private Approve approval;
+	private Role role;
+	
+	@Column(name = "PAYMENT")
+	private boolean payment;
 
 	public int getId() {
 		return id;
@@ -53,20 +57,30 @@ public class OrganizationMembers implements Serializable {
 		this.user = user;
 	}
 
-	public Organization getOrganization() {
-		return organization;
+	public Team getTeam() {
+		return team;
 	}
 
-	public void setOrganization(Organization organization) {
-		this.organization = organization;
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 
-	public Approve getApproval() {
-		return approval;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setApproval(Approve approval) {
-		this.approval = approval;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
+	public boolean isPayment() {
+		return payment;
+	}
+
+	public void setPayment(boolean payment) {
+		this.payment = payment;
+	}
+	
+	
+	
 }

@@ -38,7 +38,7 @@ public class UserProfileController {
 	}
 
 	@PostMapping("/profile/{id}")
-	public ResponseEntity<Profile> updateProfile(@PathVariable int userId, @RequestBody Profile userProfile) {
+	public ResponseEntity<Profile> updateProfile(@PathVariable("id") int userId, @RequestBody Profile userProfile) {
 		try {
 			Optional<User> user = this.userService.getUser(userId);
 			if (!user.isPresent()) {
