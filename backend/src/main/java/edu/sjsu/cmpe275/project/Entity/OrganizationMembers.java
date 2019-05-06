@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "ORG_MEMBERS")
 public class OrganizationMembers implements Serializable {
 
-	private enum Approve {
+	public static enum Approve {
 		Yes, No
 	}
 
