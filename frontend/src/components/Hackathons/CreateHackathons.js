@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Axios from 'axios';
+import url from '../../config/config'
 
 class CreateHackathons extends Component {
 
@@ -9,9 +11,33 @@ class CreateHackathons extends Component {
         }
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
+    handleChange=(e)=>{
+        this.setState({
+            [e.target.name]:e.target.value
+        })
     }
+
+    handleSubmit = async (e) => {
+        e.preventDefault();
+        // var judges=await this.state.judgeList.split(",")
+        // var judgeList=[]
+        // for (let i of judges){
+        //     await judgeList.push({email:i})
+        // }
+        // console.log(judgeList)
+        const hackathon=await {
+            ...this.state,
+            judgeList:await this.state.judgeList.split(",")
+        }
+        // console.log(this.state)
+        console.log(hackathon)
+        Axios.post(url+`/hackathon?email=kovurivinay@sjsu.edu`,hackathon).then(res=>{
+            console.log(res)
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+
     render() {
         return (
             <div>
@@ -19,33 +45,36 @@ class CreateHackathons extends Component {
                     <h3>Create Hackathon</h3>
                     <center>
                         <div className="row justify-content-center">
-                            <input className="form-control col-sm-4" type="text" name="name" placeholder="Event Name"></input>
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="text" name="name" placeholder="Event Name"></input>
                         </div>
                         <div className="row justify-content-center">
                             <label className="col-sm-2">Start Date</label>
-                            <input className="form-control col-sm-2" type="date" name="startDate" placeholder="Start Date"></input>
+                            <input className="form-control col-sm-2" onChange={this.handleChange.bind(this)} type="date" name="startDate" placeholder="Start Date"></input>
                         </div>
                         <div className="row justify-content-center">
                             <label className="col-sm-2">End Date</label>
-                            <input className="form-control col-sm-2" type="date" name="endDate" placeholder="End Date"></input>
+                            <input className="form-control col-sm-2" onChange={this.handleChange.bind(this)} type="date" name="endDate" placeholder="End Date"></input>
                         </div>
                         <div className="row justify-content-center">
-                            <input className="form-control col-sm-4" type="textArea" name="fee" placeholder="Registration fee"></input>
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="textArea" name="description" placeholder="Description"></input>
                         </div>
                         <div className="row justify-content-center">
-                            <input className="form-control col-sm-4" type="text" name="judges" placeholder="Judges"></input>
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="number" name="regFee" placeholder="Registration fee"></input>
                         </div>
                         <div className="row justify-content-center">
-                            <input className="form-control col-sm-4" type="text" name="minTeam" placeholder="Min Team Size"></input>
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="text" name="judgeList" placeholder="Judges"></input>
                         </div>
                         <div className="row justify-content-center">
-                            <input className="form-control col-sm-4" type="text" name="maxTeam" placeholder="Max Team Size"></input>
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="number" name="minTeam" placeholder="Min Team Size"></input>
                         </div>
                         <div className="row justify-content-center">
-                            <input className="form-control col-sm-4" type="text" name="sponsers" placeholder="Sponsers"></input>
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="number" name="maxTeam" placeholder="Max Team Size"></input>
                         </div>
                         <div className="row justify-content-center">
-                            <input className="form-control col-sm-4" type="text" name="sponserDiscount" placeholder="Sponser Discount"></input>
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="text" name="sponsers" placeholder="Sponsers"></input>
+                        </div>
+                        <div className="row justify-content-center">
+                            <input className="form-control col-sm-4" onChange={this.handleChange.bind(this)} type="number" name="sponDiscount" placeholder="Sponser Discount"></input>
                         </div>
                         <div className="row justify-content-center">
                             <button className="btn btn-primary" name="pay" onClick={this.handleSubmit}>Submit</button>

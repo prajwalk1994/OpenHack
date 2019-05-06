@@ -3,13 +3,17 @@ package edu.sjsu.cmpe275.project.Service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.sjsu.cmpe275.project.Entity.Team;
 
 import edu.sjsu.cmpe275.project.Repository.TeamDao;
 
+@Service
+@Transactional
 public class TeamService {
 	@Autowired
 	TeamDao teamDao;

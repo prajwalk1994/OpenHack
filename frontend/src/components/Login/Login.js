@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import './Login.css'
 import url from '../../config/config'
 import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
+import {Link,Redirect} from "react-router-dom";
 
 class Login extends Component {
     constructor(props) {
@@ -39,6 +39,9 @@ class Login extends Component {
     render() {
         return (
             <div>
+                <div>
+                    {this.state.redirectVar}
+                </div>
                 <div id="home" class="bg_div">
                     <center>
                         <div class="loginHeader" >

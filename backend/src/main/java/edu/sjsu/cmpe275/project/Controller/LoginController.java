@@ -53,7 +53,6 @@ public class LoginController {
 			else {
 				return ResponseEntity.notFound().build();
 			}
-//			return new ResponseEntity<>("Already Exists!", HttpStatus.OK);
 		}
 
 		return ResponseEntity.notFound().build();
@@ -104,7 +103,6 @@ public class LoginController {
 		user = userDao.save(user);
 		System.out.println("User saved and mail is being sent!");
 		mailService.sendMail(accessToken, email);
-
 		return new ResponseEntity<>("Success!", HttpStatus.OK);
 	}
 
