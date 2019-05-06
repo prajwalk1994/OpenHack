@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './Profile.css';
 import axios from 'axios';
 import Navbar from '../Navbar/Navbar';
+import url from '../../config/config'
+
 
 class Profile extends Component {
 
@@ -12,16 +14,53 @@ class Profile extends Component {
         console.log("Inside Profile");
 
         this.state = {
-            name: "John Doe",
-            username: "usrname",
-            businessTitle: "business title",
-            organization: "organization",
-            aboutMe: "hello world",
-            address: "pakistan",
+            userId: 1,
+            name: "",
+            username: "",
+            businessTitle: "",
+            // organization: "",
+            aboutMe: "",
+            address: {
+                state: "",
+                city: "",
+                zip: "",
+                street: "",
+            },
             myOrganizations: ["Org1", "Org2", "Org3"],
             myHackathons: ["hack1", "hack2", "hack3"],
             ListOfOrgs: ["Org1", "Org2", "Org3", "Org4", "Org5"]
         }
+    }
+
+    componentDidMount = () => {
+
+        axios.get(url + "/organizationMember/?userId="+ this.state.userId)
+        .then((response) => {
+            var tempOrg =[]
+            for(let item of response.data){
+                if(item.approval=="Yes"){
+                    tempOrg.push(item.organization.name)
+                }
+            }
+            this.setState({
+                myOrganizations : tempOrg,
+            })
+        })
+        .catch((error) => {
+            console.log("Error ", error);
+        })
+
+        axios.get(url + "/profile/" + this.state.userId)
+            .then((response) => {
+
+                this.setState({
+                    ...response.data
+                })
+                console.log(response)
+            })
+            .catch((err) => {
+                console.log("err", err)
+            })
     }
 
     handleChange = (e) => {
@@ -29,15 +68,38 @@ class Profile extends Component {
             [e.target.name]: e.target.value
         })
     }
+
+    handleAddress = (e) => {
+        this.setState({
+            address: {
+                ...this.state.address,
+                [e.target.name]: e.target.value
+            }
+        })
+    }
     handleSubmit = (e) => {
         e.preventDefault();
+        console.log(this.state)
+        axios.post(url + "/profile/" + this.state.userId, this.state)
+            .then((response) => {
+                this.setState({
+                    ...response.data,
+                })
+                console.log("response", response);
+                alert("Profile Updated Successfully");
+            })
+            .catch((err) => {
+                console.log(err);
+                alert("Error Updating Profile");
+            })
     }
+
 
     render() {
 
         var organizationsDiv = (<div>No Organizations</div>);
         var organizationsDiv = this.state.myOrganizations.map((item) => {
-            console.log(item)
+            //console.log(item)
             return (
                 <div className="row">
                     <label className="col-sm-8">{item}</label>
@@ -47,7 +109,7 @@ class Profile extends Component {
         })
         var HackathonsDiv = (<div>No Organizations</div>);
         var HackathonsDiv = this.state.myHackathons.map((item) => {
-            console.log(item)
+            //console.log(item)
             return (
                 <div className="row">
                     <label className="col-sm-8">{item}</label>
@@ -70,14 +132,23 @@ class Profile extends Component {
                         <div className="mb-4">
                             <input type="text" className="form-control" onChange={this.handleChange} name="businessTitle" value={this.state.businessTitle} placeholder="businessTitle" />
                         </div>
-                        <div className="mb-4">
+                        {/* <div className="mb-4">
                             <input type="text" className="form-control" onChange={this.handleChange} name="organization" value={this.state.organization} placeholder="organization" />
-                        </div>
+                        </div> */}
                         <div className="mb-4">
                             <input type="text" className="form-control" onChange={this.handleChange} name="aboutMe" value={this.state.aboutMe} placeholder="aboutMe" />
                         </div>
                         <div className="mb-4">
-                            <input type="text" className="form-control" onChange={this.handleChange} name="address" value={this.state.address} placeholder="address" />
+                            <input type="text" className="form-control" onChange={this.handleAddress} name="street" value={this.state.address.street} placeholder="street" />
+                        </div>
+                        <div className="mb-4">
+                            <input type="text" className="form-control" onChange={this.handleAddress} name="city" value={this.state.address.city} placeholder="city" />
+                        </div>
+                        <div className="mb-4">
+                            <input type="text" className="form-control" onChange={this.handleAddress} name="zip" value={this.state.address.zip} placeholder="zip" />
+                        </div>
+                        <div className="mb-4">
+                            <input type="text" className="form-control" onChange={this.handleAddress} name="state" value={this.state.address.state} placeholder="state" />
                         </div>
                         <div>
                             <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
