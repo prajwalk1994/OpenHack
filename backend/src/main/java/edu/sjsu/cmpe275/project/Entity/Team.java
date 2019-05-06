@@ -19,30 +19,19 @@ import javax.persistence.Table;
 @Table(name = "TEAM")
 public class Team {
 	
-	public enum Role{
-		ProductManager,
-		Engineer,
-		FullStack,
-		Designer,
-		Other
-	}
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
 	
-	@OneToOne
-	@JoinColumn(table = "USER", name= "ID")
-	private User user;
+	@Column(name = "TEAMNAME")
+	private String teamName;
 	
-	@OneToOne
-	@JoinColumn(table = "HACKATHON", name = "ID")
-	private Hackathon hackathon;
+	@OneToMany(mappedBy = "team")
+	private List<TeamMember> teamMembers;
 	
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name = "ROLE")
-	private Role role;
+	@Column(name = "SCORE")
+	private int score;
 
 	public int getId() {
 		return id;
@@ -52,33 +41,31 @@ public class Team {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public String getTeamName() {
+		return teamName;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
 	}
 
-	public Hackathon getHackathon() {
-		return hackathon;
+	public List<TeamMember> getTeamMembers() {
+		return teamMembers;
 	}
 
-	public void setHackathon(Hackathon hackathon) {
-		this.hackathon = hackathon;
+	public void setTeamMembers(List<TeamMember> teamMembers) {
+		this.teamMembers = teamMembers;
 	}
 
-	public Role getRole() {
-		return role;
+	public int getScore() {
+		return score;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setScore(int score) {
+		this.score = score;
 	}
 	
-	@OneToMany(mappedBy = "teamId", cascade = CascadeType.ALL)
-//	@JoinColumn(name = "teamId",table="HackathonTeams")
-    private List<HackathonTeams> HackathonTeams;		
+	
 	
 	
 }
