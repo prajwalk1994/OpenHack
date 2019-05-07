@@ -1,12 +1,24 @@
 package edu.sjsu.cmpe275.project.Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.sjsu.cmpe275.project.Entity.Team;
+import edu.sjsu.cmpe275.project.Entity.TeamMember;
+import edu.sjsu.cmpe275.project.Entity.User;
 import edu.sjsu.cmpe275.project.Service.TeamMemberService;
 import edu.sjsu.cmpe275.project.Service.TeamService;
+import edu.sjsu.cmpe275.project.Service.UserService;
 
 @RestController
 @RequestMapping("/")
@@ -14,9 +26,35 @@ import edu.sjsu.cmpe275.project.Service.TeamService;
 public class TeamController {
 	@Autowired
 	TeamService teamService;
-	
+
 	@Autowired
 	TeamMemberService teamMemberService;
-	
-	
+
+	@Autowired
+	UserService userService;
+
+	@PostMapping("/team/{teamName}")
+	public ResponseEntity<Object> createTeam(@RequestBody List<String> usernames, @PathVariable("teamName") String teamName) {
+		try {
+			List<TeamMember> users = new ArrayList<>();
+			for(String username : usernames) {
+				List<User> user = this.userService.getUserByUsername(username);
+				if(user.size() == 0) {
+					return new ResponseEntity<Object>("User "+ username + " Not found", HttpStatus.NOT_FOUND);
+				}
+				TeamMember teamMember = new TeamMember();
+				teamMember.setUser(user.get(0));
+				teamMember.setRole(TeamMember.Role.Other);
+				this.teamMemberService.addTeamMember(teamMember);
+			}
+			Team team = new Team();
+			team.setTeamMembers(users);
+			team.setTeamName(teamName);
+			return new ResponseEntity<Object>(this.teamService.addTeam(team), HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
 }
