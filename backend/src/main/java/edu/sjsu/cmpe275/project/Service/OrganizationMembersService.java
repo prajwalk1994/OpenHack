@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.sjsu.cmpe275.project.Entity.Organization;
 import edu.sjsu.cmpe275.project.Entity.OrganizationMembers;
 
 import edu.sjsu.cmpe275.project.Repository.OrganizationMembersDao;
