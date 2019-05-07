@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.project.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class UserService {
 
 	public void deleteUser(int id) {
 		this.userDao.deleteById(id);
+	}
+	
+	public List<User> getUserByUsername(String username) {
+		return this.userDao.findUserByUsername(username);
 	}
 	
 //	public User updateUser(User user) {
