@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.project.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,9 @@ public class TeamMemberService {
 	
 	public TeamMember addTeamMember(TeamMember teamMember) {
 		return this.teamMemberDao.save(teamMember);
+	}
+	
+	public List<TeamMember> getTeamMemberByUser(int userId){
+		return this.teamMemberDao.findTeamMemberByUserId(userId);
 	}
 }
