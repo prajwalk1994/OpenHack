@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin("*")
 public class PaymentController {
 
-	@PostMapping("makePayment")
+	@PostMapping("akePayment")
 	public ResponseEntity<Object> makePayment(@RequestBody String payment) {
 		System.out.println();
 		return null;

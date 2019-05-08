@@ -24,7 +24,7 @@ public class MailingService {
 		return new MailingService();
 	}
 	
-	public boolean makePaymentMail(Hackathon hackathon, Integer teamid, String email){
+	public boolean makePaymentMail(Hackathon hackathon, int teamid,int userid, String email){
 		Email from = new Email("payment@openhack.com");
 	    String subject = "Hackathon Payment Mail";
 	    Email to = new Email(email);
@@ -38,7 +38,7 @@ public class MailingService {
 	    		"    <br>\n" + 
 	    		"  	Please click on below link to make the payment\n" + 
 	    		"    <br>\n" + 
-	    		"    <a href=\"'"+Config.url+"\"/makePayment?teamid=\""+teamid+"\"&hackathonName=\""+hackathon.getName()+"\"&email=\""+email+"\"' value=\"Make payment\">Payment Link </a>\n" + 
+	    		"    <a href=\"'"+Config.url+"\"/makePayment?hackathonName=\""+hackathon.getName()+"\"&teamid=\""+teamid+"\"&userid=\""+userid+"\"' value=\"Make payment\">Payment Link </a>\n" + 
 	    		"  </div>\n" + 
 	    		"</html>");
 	    Mail mail = new Mail(from, subject, to, content);

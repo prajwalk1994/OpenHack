@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.sjsu.cmpe275.project.Entity.HackathonTeams;
 import edu.sjsu.cmpe275.project.Entity.TeamMember;
 import edu.sjsu.cmpe275.project.Repository.TeamMemberDao;
 
@@ -26,5 +27,8 @@ public class TeamMemberService {
 	
 	public List<TeamMember> getTeamMemberByUser(int userId){
 		return this.teamMemberDao.findTeamMemberByUserId(userId);
+	}
+	public List<TeamMember> getTeamMemberByTeamIdAndUserId(int teamid, int userid){
+		return this.teamMemberDao.findTeamMemberByTeamIdAndUserId(teamid, userid);
 	}
 }
