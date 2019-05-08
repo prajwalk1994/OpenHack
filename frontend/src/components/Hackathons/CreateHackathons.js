@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import url from '../../config/config'
+import url from '../../config/config';
+import {Link,Redirect} from "react-router-dom";
 
 class CreateHackathons extends Component {
 
@@ -31,16 +32,29 @@ class CreateHackathons extends Component {
         }
         // console.log(this.state)
         console.log(hackathon)
-        Axios.post(url+`/hackathon?email=kovurivinay@sjsu.edu`,hackathon).then(res=>{
+        Axios.post(url+`/hackathon?email=kovurivinay@sjsu.edu`,hackathon).then(async (res)=>{
             console.log(res)
+            await this.setState({
+                redirectTo: <Redirect to="/searchHackathon"/>
+            })
         }).catch(err=>{
-            console.log(err)
+            if(err.response){
+                alert(err.response.data)
+                console.log(err)
+            }
+                else{
+                    alert("Something went wrong!")
+                }
         })
     }
+
 
     render() {
         return (
             <div>
+                <div>
+                {this.state.redirectTo}
+                </div>
                 <div className="container mt-5">
                     <h3>Create Hackathon</h3>
                     <center>

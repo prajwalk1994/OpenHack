@@ -99,11 +99,22 @@ class Profile extends Component {
     createOrg=async (e)=>{
         if(localStorage.getItem("role")!="Admin"){
             await this.setState({
-                redirectToCreateOrg: <Redirect to="/createOrg"/>
+                redirectTo: <Redirect to="/createOrg"/>
             })
         }
         else{
             alert("Admin cannot create Organization")
+        }
+    }
+
+    createHackathon=async (e)=>{
+        if(localStorage.getItem("role")=="Admin"){
+            await this.setState({
+                redirectTo: <Redirect to="/createHackathon"/>
+            })
+        }
+        else{
+            alert("Only Admin can create Hackathon")
         }
     }
 
@@ -134,7 +145,7 @@ class Profile extends Component {
         return (
             <div>
                 <div>
-                {this.state.redirectToCreateOrg}
+                {this.state.redirectTo}
                 </div>
                 <Navbar></Navbar>
                 <div className="row parentRow">
@@ -200,12 +211,12 @@ class Profile extends Component {
                         <div className="row justify-content-center">
                             <Link to="/searchHackathons"><button className="btn btn-primary" onClick={this.searchHackathon}>search Hackathons</button></Link>
                         </div>
-                        {/* <div>
-                            <Link to="/createHackathon"><button className="btn btn-primary" onClick={this.createHackathon}>create Hackathon</button></Link>
+                        <div>
+                            <button className="btn btn-primary" onClick={this.createHackathon}>create Hackathon</button>
                         </div>
                         <div>
                             <label> </label>
-                        </div> */}
+                        </div>
                         <div>
                            <Link to="/judge"> <button className="btn btn-primary" onClick={this.judgehackathon}>Judge Hackathon</button></Link>
                         </div>

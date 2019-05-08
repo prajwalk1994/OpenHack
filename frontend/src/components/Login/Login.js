@@ -29,6 +29,7 @@ class Login extends Component {
         
         axios.post(url+"/login",user).then(async(res)=>{
             localStorage.setItem("userid",res.data[0].id)
+            localStorage.setItem("role",res.data[0].role)
             localStorage.setItem("email",res.data[0].email)
             localStorage.setItem("username",res.data[0].username)
             localStorage.setItem("verified",res.data[0].verified)

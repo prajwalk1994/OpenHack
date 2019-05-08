@@ -115,9 +115,10 @@ public class HackathonController {
 		
 		List<User> users = new ArrayList<User>();
 		for(String str : hackathonTemp.getJudgeList()){
+			System.out.println(str);
 			ArrayList<User> user = userDao.findUserByEmail(str);
 			if(user.size()==0) {
-				return new ResponseEntity<>("FAILURE-Invalid_Judges", HttpStatus.OK);
+				return new ResponseEntity<>("FAILURE-Invalid_Judges", HttpStatus.BAD_REQUEST);
 			}
 			users.add(user.get(0));
 		}
@@ -127,16 +128,16 @@ public class HackathonController {
 		System.out.println("Inside Create Hackathon");
 		int len = email.length();
 		if (!email.substring(len - 8, len).equals("sjsu.edu")) {
-			return new ResponseEntity<>("FAILURE-Invalid_admin", HttpStatus.OK);
+			return new ResponseEntity<>("FAILURE-Invalid_admin", HttpStatus.BAD_REQUEST);
 		}
 		
 		if (hackathon.getName() == null || hackathon.getName().length() == 0 || hackathon.getStartDate() == null
 				|| hackathon.getEndDate() == null || hackathon.getDescription() == null
 				|| hackathon.getDescription().length() == 0 || hackathon.getRegFee()<0 || hackathon.getJudgeList().size()==0
 				|| hackathon.getMaxTeam()<=0 || hackathon.getMinTeam()<=0 || hackathon.getSponDiscount()>50) {
-			return new ResponseEntity<>("FAILURE-Empty-fields", HttpStatus.OK);
+			return new ResponseEntity<>("FAILURE-Empty-fields", HttpStatus.BAD_REQUEST);
 		}
-		return ResponseEntity.ok(this.hackathonService.addHackathon(hackathon));
+		return new ResponseEntity<>(this.hackathonService.addHackathon(hackathon), HttpStatus.OK);
 	}
 	
 	@GetMapping("hackathons")
