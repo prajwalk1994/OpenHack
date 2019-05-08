@@ -74,7 +74,7 @@ public class TeamController {
 				users.add(teamMember);
 			}
 			for (TeamMember member : users) {
-				//mailService.makePaymentMail(hackathon.get(), member.getTeam().getId(), member.getUser().getId(), member.getUser().getEmail());
+				mailService.makePaymentMail(hackathon.get(), member.getTeam().getId(), member.getUser().getId(), member.getUser().getEmail());
 				this.teamMemberService.addTeamMember(member);
 				
 			}

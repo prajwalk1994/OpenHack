@@ -23,12 +23,12 @@ public class HackathonTeams implements Serializable{
 	@Column
 	private int id;
 	
-    @OneToOne
+    @ManyToOne
     @JoinColumn
-    @JsonIgnoreProperties(value = {"judgeList", "orgList", "HackathonTeams"})
+    @JsonIgnoreProperties(value = {"judgeList", "orgList", "hackathonTeams"})
     private Hackathon hackId;
 	
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     @JsonIgnoreProperties(value = {"teamMembers"})
     private Team teamId;
