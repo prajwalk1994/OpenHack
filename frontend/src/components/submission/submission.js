@@ -1,19 +1,39 @@
 import React, { Component } from 'react';
+import Axios from 'axios';
+import url from '../../config/config'
+
 
 class submission extends Component {
     constructor(props) {
         super(props);
         this.state = {
             url: "",
+            teamid:"",
+            hackathonId:""
         }
+    }
+
+    componentDidMount=()=>{
+
+    }
+
+    checkPayment=()=>{
+        Axios.get(url+"/checkPayment")
+        .then((response)=>{
+
+        })
+        .catch((response)=>{
+
+        })
     }
 
     doSubmission=(e)=>{
         e.preventDefault();
-        axios.get(url + "/submission")
+        //check payment if all team members has made
+        this.checkPayment();
+        Axios.get(url + "/submission/"+this.state.teamid+"/"+this.state.hackathonId)
             .then((response) => {
                 console.log(response.data)
-                
                 console.log("state after response",this.state)
             })
             .catch((err) => {

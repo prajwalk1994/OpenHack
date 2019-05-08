@@ -211,7 +211,6 @@ class Profile extends Component {
                 <div>
                     {this.state.redirectTo}
                 </div>
-                <Navbar></Navbar>
                 <div className="row parentRow">
                     <div className="col-sm-4 border border-1">
                         <div className="mb-4">
