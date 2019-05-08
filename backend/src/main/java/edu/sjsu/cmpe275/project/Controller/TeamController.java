@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.sjsu.cmpe275.project.Entity.Hackathon;
 import edu.sjsu.cmpe275.project.Entity.Team;
 import edu.sjsu.cmpe275.project.Entity.TeamMember;
 import edu.sjsu.cmpe275.project.Entity.User;
+import edu.sjsu.cmpe275.project.Service.HackathonService;
+import edu.sjsu.cmpe275.project.Service.MailingService;
 import edu.sjsu.cmpe275.project.Service.TeamMemberService;
 import edu.sjsu.cmpe275.project.Service.TeamService;
 import edu.sjsu.cmpe275.project.Service.UserService;
@@ -37,13 +40,20 @@ public class TeamController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	MailingService mailService;
+	
+	@Autowired
+	HackathonService hackathonService;
 
 	@PostMapping("/team/{teamName}/{hackId}")
 	public ResponseEntity<Object> createTeam(@RequestBody Map<String, Role> usernames,
 			@PathVariable("teamName") String teamName, @PathVariable("hackId") int hackId) {
 		try {
 			List<TeamMember> users = new ArrayList<>();
-			
+			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
+			if(!hackathon.isPresent()) return new ResponseEntity<Object>("Hackathon not found", HttpStatus.NOT_FOUND);
 			for (String username : usernames.keySet()) {
 				List<User> user = this.userService.getUserByUsername(username);
 				if (user.size() == 0) {
@@ -55,6 +65,7 @@ public class TeamController {
 				users.add(teamMember);
 			}
 			for (TeamMember member : users) {
+				mailService.makePaymentMail(hackathon.get(), member.getTeam().getId(), member.getUser().getId(), member.getUser().getEmail());
 				this.teamMemberService.addTeamMember(member);
 				
 			}
