@@ -35,7 +35,7 @@ public class OrganizationMembers implements Serializable {
 
 	@ManyToOne
 	@JoinColumn
-	@JsonIgnoreProperties(value = {"owner", "address"})
+	@JsonIgnoreProperties(value = {"owner", "address", "organizationRequests"})
 	private Organization organization;
 
 	@Enumerated(EnumType.STRING)
