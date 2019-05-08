@@ -32,7 +32,7 @@ public class SubmissionController {
 				return new ResponseEntity<Object>("No team with hackathon present", HttpStatus.FORBIDDEN);
 			}
 			HackathonTeams currentTeam = hackathonTeams.get(0);
-			currentTeam.setSubmissionUrl(url);
+//			currentTeam.setSubmissionUrl(url);
 			this.hackathonTeamsService.addHackathonTeams(currentTeam);
 			return new ResponseEntity<Object>(currentTeam, HttpStatus.OK);
 		} catch (Exception e) {

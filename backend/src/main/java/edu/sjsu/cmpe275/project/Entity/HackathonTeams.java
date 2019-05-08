@@ -42,8 +42,8 @@ public class HackathonTeams implements Serializable{
 	@Column(name="SUBMISSION_STATUS")
 	private String Submission_status;
 	
-	@Column(name = "SUBMISSION_URL")
-	private String submissionUrl;
+//	@Column(name = "SUBMISSION_URL")
+//	private String submissionUrl;
 	
 	@Column(name="DISCOUNT")
 	private String Discount;
@@ -105,14 +105,14 @@ public class HackathonTeams implements Serializable{
 		Discount = discount;
 	}
 
-	public String getSubmissionUrl() {
-		return submissionUrl;
-	}
-
-	public void setSubmissionUrl(String submissionUrl) {
-		this.submissionUrl = submissionUrl;
-	}
-	
+//	public String getSubmissionUrl() {
+//		return submissionUrl;
+//	}
+//
+//	public void setSubmissionUrl(String submissionUrl) {
+//		this.submissionUrl = submissionUrl;
+//	}
+//	
 	
 	
 	

@@ -56,7 +56,9 @@ public class TeamController {
 			if(!hackathon.isPresent()) return new ResponseEntity<Object>("Hackathon not found", HttpStatus.NOT_FOUND);
 			List<User> judgeList = hackathon.get().getJudgeList();
 			for (String username : usernames.keySet()) {
+				
 				List<User> user = this.userService.getUserByUsername(username);
+				System.out.println(user.get(0).getEmail());
 				if (user.size() == 0) {
 					return new ResponseEntity<Object>("User " + username + " Not found", HttpStatus.NOT_FOUND);
 				}
@@ -69,7 +71,7 @@ public class TeamController {
 				users.add(teamMember);
 			}
 			for (TeamMember member : users) {
-				mailService.makePaymentMail(hackathon.get(), member.getTeam().getId(), member.getUser().getId(), member.getUser().getEmail());
+				//mailService.makePaymentMail(hackathon.get(), member.getTeam().getId(), member.getUser().getId(), member.getUser().getEmail());
 				this.teamMemberService.addTeamMember(member);
 				
 			}
@@ -79,7 +81,7 @@ public class TeamController {
 			return new ResponseEntity<Object>(this.teamService.addTeam(team), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>("Bad Request1", HttpStatus.BAD_REQUEST);
 		}
 	}
 
