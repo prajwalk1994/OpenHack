@@ -25,7 +25,6 @@ public class HackathonTeams implements Serializable{
     @JoinColumn
     private Hackathon hackId;
 	
-
     @OneToOne
     @JoinColumn
     private Team teamId;
