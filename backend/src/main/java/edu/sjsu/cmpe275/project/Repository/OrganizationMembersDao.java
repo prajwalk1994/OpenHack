@@ -15,5 +15,5 @@ public interface OrganizationMembersDao extends JpaRepository<OrganizationMember
 
 //	@Query("select a from org_members a where user_id = ?1")
 	List<OrganizationMembers> findOrganizationMembersByUserId(int userId);
-	Optional<OrganizationMembers> findOrganizatonMembersByOrganizationIdAndUserId(int organizationId, int userId);
+	List<OrganizationMembers> findOrganizatonMembersByOrganizationIdAndUserId(int organizationId, int userId);
 }

@@ -36,7 +36,7 @@ public class OrganizationMembersService {
 		return this.organizationMembersDao.findOrganizationMembersByUserId(userId);
 	}
 	
-	public Optional<OrganizationMembers> getOrganizationMembersByUserAndOrg(int organizationId, int userId) {
+	public List<OrganizationMembers> getOrganizationMembersByUserAndOrg(int organizationId, int userId) {
 		return this.organizationMembersDao.findOrganizatonMembersByOrganizationIdAndUserId(organizationId, userId);
 	}
 }

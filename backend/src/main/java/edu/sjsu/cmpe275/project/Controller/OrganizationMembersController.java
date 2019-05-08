@@ -78,15 +78,15 @@ public class OrganizationMembersController {
 		try {
 			Optional<User> owner = this.userService.getUser(ownerId);
 			Optional<Organization> organization = this.organizationService.getOrganization(organizationId);
-			Optional<OrganizationMembers> member = this.organizationMembersService
+			List<OrganizationMembers> member = this.organizationMembersService
 					.getOrganizationMembersByUserAndOrg(organizationId, userId);
-			if (!member.isPresent() || !owner.isPresent() || !organization.isPresent()) {
+			if (!owner.isPresent() || !organization.isPresent()) {
 				return new ResponseEntity<Object>("Not Found", HttpStatus.NOT_FOUND);
 			}
 			if(owner.get().getId() != organization.get().getOwner().getId()) {
 				return new ResponseEntity<Object>("Owner not the actual owner", HttpStatus.FORBIDDEN);
 			}
-			OrganizationMembers currentMember = member.get();
+			OrganizationMembers currentMember = member.get(0);
 			currentMember.setApproval(OrganizationMembers.Approve.Yes);
 			return new ResponseEntity<Object>(this.organizationMembersService.addOrganizationMembers(currentMember),
 					HttpStatus.OK);
