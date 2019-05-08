@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.Organization;
 import edu.sjsu.cmpe275.project.Entity.OrganizationMembers;
+import edu.sjsu.cmpe275.project.Entity.Profile;
 import edu.sjsu.cmpe275.project.Entity.User;
 import edu.sjsu.cmpe275.project.Service.OrganizationMembersService;
 import edu.sjsu.cmpe275.project.Service.OrganizationService;
@@ -69,21 +70,56 @@ public class OrganizationMembersController {
 		}
 	}
 
-	@PostMapping("/activateMember/{userId}/{organizationId}")
+	@PostMapping("/activateMember/{userId}/{ownerId}/{organizationId}")
 	public ResponseEntity<Object> activateMembership(@PathVariable("userId") int userId,
-			@PathVariable("organizationId") int organizationId) {
+			@PathVariable("ownerId") int ownerId, @PathVariable("organizationId") int organizationId) {
 		try {
+			Optional<User> owner = this.userService.getUser(ownerId);
+			Optional<Organization> organization = this.organizationService.getOrganization(organizationId);
 			Optional<OrganizationMembers> member = this.organizationMembersService
 					.getOrganizationMembersByUserAndOrg(organizationId, userId);
-			if (!member.isPresent()) {
+			if (!member.isPresent() || !owner.isPresent() || !organization.isPresent()) {
 				return new ResponseEntity<Object>("Not Found", HttpStatus.NOT_FOUND);
+			}
+			if(owner.get().getId() != organization.get().getOwner().getId()) {
+				return new ResponseEntity<Object>("Owner not the actual owner", HttpStatus.FORBIDDEN);
 			}
 			OrganizationMembers currentMember = member.get();
 			currentMember.setApproval(OrganizationMembers.Approve.Yes);
-			return new ResponseEntity<Object>(this.organizationMembersService.addOrganizationMembers(currentMember), HttpStatus.OK);
+			return new ResponseEntity<Object>(this.organizationMembersService.addOrganizationMembers(currentMember),
+					HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	public ResponseEntity<Object> leaveOrganization(@PathVariable("userId") int userId,
+			@PathVariable("organizationId") int organizationId) {
+		try {
+			Optional<User> user = this.userService.getUser(userId);
+			Optional<Organization> organization = this.organizationService.getOrganization(organizationId);
+			if (!user.isPresent() || !organization.isPresent()) {
+				return new ResponseEntity<Object>("User or Organization with the given Id not found",
+						HttpStatus.NOT_FOUND);
+			}
+			User currentUser = user.get();
+			Profile currentUserProfile = currentUser.getProfile();
+			if (currentUserProfile != null) {
+				if (currentUserProfile.getOrganization().equals(organization.get())) {
+					currentUserProfile.setOrganization(null);
+					currentUser.setProfile(currentUserProfile);
+					return new ResponseEntity<Object>(this.userService.addUser(currentUser), HttpStatus.OK);
+				} else {
+					return new ResponseEntity<Object>("User does not belong to this organization",
+							HttpStatus.NOT_MODIFIED);
+				}
+			} else {
+				return new ResponseEntity<Object>("User Profile not updated", HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Error while leaving Organization", HttpStatus.BAD_REQUEST);
 		}
 	}
 }
