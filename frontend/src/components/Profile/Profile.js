@@ -3,7 +3,7 @@ import './Profile.css';
 import axios from 'axios';
 import Navbar from '../Navbar/Navbar';
 import url from '../../config/config'
-import {Link,Redirect} from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 
 class Profile extends Component {
@@ -96,31 +96,82 @@ class Profile extends Component {
             })
     }
 
-    createOrg=async (e)=>{
-        if(localStorage.getItem("role")!="Admin"){
-            await this.setState({
-                redirectTo: <Redirect to="/createOrg"/>
-            })
+    createOrg = async (e) => {
+        if (localStorage.getItem("role") != "Admin") {
+            if (localStorage.getItem("verified") == 1) {
+                await this.setState({
+                    redirectTo: <Redirect to="/createOrg" />
+                })
+            } else {
+                alert(" user not verified");
+            }
+
+
+
         }
-        else{
+        else {
             alert("Admin cannot create Organization")
         }
     }
 
-    createHackathon=async (e)=>{
-        if(localStorage.getItem("role")=="Admin"){
+    searchOrgnizations = async (e) => {
+        if (localStorage.getItem("verified") == 1) {
             await this.setState({
-                redirectTo: <Redirect to="/createHackathon"/>
+                redirectTo: <Redirect to="/searchOrgs" />
             })
+        } else {
+            alert(" user not verified");
         }
-        else{
+    }
+
+    searchHackathon = async (e) => {
+        if (localStorage.getItem("verified") == 1) {
+            await this.setState({
+                redirectTo: <Redirect to="/searchHackathons" />
+            })
+        } else {
+            alert(" user not verified");
+        }
+    }
+
+    approveMembership = async (e) => {
+        if (localStorage.getItem("verified") == 1) {
+            await this.setState({
+                redirectTo: <Redirect to="/membershipApprovals" />
+            })
+        } else {
+            alert(" user not verified");
+        }
+    }
+
+    judgehackathon = async (e) => {
+        if (localStorage.getItem("verified") == 1) {
+            await this.setState({
+                redirectTo: <Redirect to="/judge" />
+            })
+        } else {
+            alert(" user not verified");
+        }
+    }
+
+    createHackathon = async (e) => {
+        if (localStorage.getItem("role") == "Admin") {
+            if (localStorage.getItem("verified") == 1) {
+                await this.setState({
+                    redirectTo: <Redirect to="/createHackathon" />
+                })
+            } else {
+                alert(" user not verified");
+            }
+
+        }
+        else {
             alert("Only Admin can create Hackathon")
         }
     }
 
 
     render() {
-
         var organizationsDiv = (<div>No Organizations</div>);
         var organizationsDiv = this.state.myOrganizations.map((item) => {
             //console.log(item)
@@ -145,7 +196,7 @@ class Profile extends Component {
         return (
             <div>
                 <div>
-                {this.state.redirectTo}
+                    {this.state.redirectTo}
                 </div>
                 <Navbar></Navbar>
                 <div className="row parentRow">
@@ -186,7 +237,7 @@ class Profile extends Component {
                             {organizationsDiv}
                         </div>
                         <div >
-                            <Link to="/searchOrgs"> <button className="btn btn-primary" onClick={this.searchOrgnizations}>search organizations</button></Link>
+                            <button className="btn btn-primary" onClick={this.searchOrgnizations}>search organizations</button>
                         </div>
                         <div>
                             <label> </label>
@@ -198,7 +249,7 @@ class Profile extends Component {
                             <label> </label>
                         </div>
                         <div>
-                            <Link to="/membershipApprovals"> <button className="btn btn-primary" onClick={this.approveMembership}>Approve Membership</button></Link>
+                            <button className="btn btn-primary" onClick={this.approveMembership}>Approve Membership</button>
                         </div>
                     </div>
                     <div className="col-sm-4 border border-1">
@@ -209,7 +260,7 @@ class Profile extends Component {
                             {HackathonsDiv}
                         </div>
                         <div className="row justify-content-center">
-                            <Link to="/searchHackathons"><button className="btn btn-primary" onClick={this.searchHackathon}>search Hackathons</button></Link>
+                            <button className="btn btn-primary" onClick={this.searchHackathon}>search Hackathons</button>
                         </div>
                         <div>
                             <button className="btn btn-primary" onClick={this.createHackathon}>create Hackathon</button>
@@ -218,7 +269,7 @@ class Profile extends Component {
                             <label> </label>
                         </div>
                         <div>
-                           <Link to="/judge"> <button className="btn btn-primary" onClick={this.judgehackathon}>Judge Hackathon</button></Link>
+                            <button className="btn btn-primary" onClick={this.judgehackathon}>Judge Hackathon</button>
                         </div>
                     </div>
                 </div>
