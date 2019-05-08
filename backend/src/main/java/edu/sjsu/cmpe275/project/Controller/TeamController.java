@@ -54,10 +54,14 @@ public class TeamController {
 			List<TeamMember> users = new ArrayList<>();
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
 			if(!hackathon.isPresent()) return new ResponseEntity<Object>("Hackathon not found", HttpStatus.NOT_FOUND);
+			List<User> judgeList = hackathon.get().getJudgeList();
 			for (String username : usernames.keySet()) {
 				List<User> user = this.userService.getUserByUsername(username);
 				if (user.size() == 0) {
 					return new ResponseEntity<Object>("User " + username + " Not found", HttpStatus.NOT_FOUND);
+				}
+				if(judgeList.contains(user.get(0))) {
+					return new ResponseEntity<Object>("Judge cannot be a participant", HttpStatus.UNAUTHORIZED);
 				}
 				TeamMember teamMember = new TeamMember();
 				teamMember.setUser(user.get(0));
