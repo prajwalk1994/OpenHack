@@ -158,4 +158,21 @@ public class HackathonController {
 		}
 		
 	}
+	
+	@PostMapping("hackathon/changeStatus/{hackId}/{status}")
+	public ResponseEntity<Object> changeHackathonStatus(@PathVariable("hackId") int hackId, @PathVariable("status") String status){
+		try {
+			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
+			if(!hackathon.isPresent()) {
+				return new ResponseEntity<Object>("Hackathon Not found", HttpStatus.NOT_FOUND);
+			}
+			Hackathon currentHackathon = hackathon.get();
+			currentHackathon.setStatus(status);
+			return new ResponseEntity<Object>(this.hackathonService.addHackathon(currentHackathon), HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
 }

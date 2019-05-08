@@ -32,4 +32,8 @@ public class HackathonTeamsService {
 	public Optional<HackathonTeams> getHackathonTeams(int ID) {
         return this.hackathonTeamsDao.findById(ID);
     }
+	
+	public List<HackathonTeams> getHackathonTeamsByHackIdAndTeamId(int hackId, int teamId){
+		return this.hackathonTeamsDao.findHackathonTeamsByHackIdAndTeamId(hackId, teamId);
+	}
 }

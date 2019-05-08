@@ -94,6 +94,7 @@ public class OrganizationMembersController {
 		}
 	}
 
+	@PostMapping("leaveOrganization/{userId}/{organizationId}")
 	public ResponseEntity<Object> leaveOrganization(@PathVariable("userId") int userId,
 			@PathVariable("organizationId") int organizationId) {
 		try {
