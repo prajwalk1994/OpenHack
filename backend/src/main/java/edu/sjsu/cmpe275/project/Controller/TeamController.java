@@ -48,24 +48,24 @@ public class TeamController {
 	HackathonService hackathonService;
 
 	@PostMapping("/team/{teamName}/{hackId}")
-	public ResponseEntity<Object> createTeam(@RequestBody Map<String, Role> usernames,
+	public ResponseEntity<Object> createTeam(@RequestBody Map<String, Role> emails,
 			@PathVariable("teamName") String teamName, @PathVariable("hackId") int hackId) {
 		try {
 			List<TeamMember> users = new ArrayList<>();
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
 			if(!hackathon.isPresent()) return new ResponseEntity<Object>("Hackathon not found", HttpStatus.NOT_FOUND);
 			List<User> judgeList = hackathon.get().getJudgeList();
-			for (String username : usernames.keySet()) {
-				List<User> user = this.userService.getUserByUsername(username);
+			for (String email : emails.keySet()) {
+				List<User> user = this.userService.getUserByEmail(email);
 				if (user.size() == 0) {
-					return new ResponseEntity<Object>("User " + username + " Not found", HttpStatus.NOT_FOUND);
+					return new ResponseEntity<Object>("User " + email + " Not found", HttpStatus.NOT_FOUND);
 				}
 				if(judgeList.contains(user.get(0))) {
 					return new ResponseEntity<Object>("Judge cannot be a participant", HttpStatus.UNAUTHORIZED);
 				}
 				TeamMember teamMember = new TeamMember();
 				teamMember.setUser(user.get(0));
-				teamMember.setRole(usernames.get(username));
+				teamMember.setRole(emails.get(email));
 				users.add(teamMember);
 			}
 			for (TeamMember member : users) {
