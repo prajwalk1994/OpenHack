@@ -56,7 +56,6 @@ class Profile extends Component {
                 console.log(response.data)
                 this.setState({
                     ...response.data
-
                 })
                 console.log(response)
             })

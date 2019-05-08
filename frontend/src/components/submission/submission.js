@@ -10,6 +10,19 @@ class submission extends Component {
 
     doSubmission=(e)=>{
         e.preventDefault();
+        axios.get(url + "/submission")
+            .then((response) => {
+                console.log(response.data)
+                
+                console.log("state after response",this.state)
+            })
+            .catch((err) => {
+                if(err.response){
+                console.log("errror", err.response)
+                }else{
+                    alert("something went wrong")
+                }
+            })
     }
     render() {
         return (
