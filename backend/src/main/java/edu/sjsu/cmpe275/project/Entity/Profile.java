@@ -6,6 +6,8 @@ import javax.persistence.Embedded;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Embeddable
 public class Profile {
 	
@@ -20,6 +22,7 @@ public class Profile {
 	
 	@OneToOne
 	@JoinColumn(name = "ORG_ID")
+	@JsonIgnoreProperties(value = {"address"})
 	private Organization organization;
 	
 	@Column(name = "ABOUT_ME")

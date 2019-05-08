@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="HACKATHON_TEAMS")
 public class HackathonTeams implements Serializable{
@@ -23,10 +25,12 @@ public class HackathonTeams implements Serializable{
 	
     @OneToOne
     @JoinColumn
+    @JsonIgnoreProperties(value = {"judgeList", "orgList", "HackathonTeams"})
     private Hackathon hackId;
 	
     @OneToOne
     @JoinColumn
+    @JsonIgnoreProperties(value = {"teamMembers"})
     private Team teamId;
 	
 	@Column(name="GRADE")

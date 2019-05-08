@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.project.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.annotation.RequestScope;
 
 import edu.sjsu.cmpe275.project.Entity.Organization;
 import edu.sjsu.cmpe275.project.Entity.OrganizationMembers;
@@ -121,6 +123,26 @@ public class OrganizationMembersController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Error while leaving Organization", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/organizationRequests/{ownerId}")
+	public ResponseEntity<Object> getOrganizationRequests(@PathVariable("ownerId") int ownerId){
+		try {
+			Optional<User> owner = this.userService.getUser(ownerId);
+			if(!owner.isPresent()) {
+				return new ResponseEntity<Object>("Owner not found", HttpStatus.NOT_FOUND);
+			}
+			List<OrganizationMembers> requests = new ArrayList<>();
+			List<Organization> organizations = this.organizationService.getOrganizationsByOwnerId(ownerId);
+			for(Organization organization : organizations) {
+				requests.addAll(organization.getOrganizationRequests());
+			}
+			return new ResponseEntity<Object>(requests, HttpStatus.OK); 
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

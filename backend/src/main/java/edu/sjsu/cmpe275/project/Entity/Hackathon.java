@@ -13,6 +13,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.JoinColumn;;
 
 @Entity
@@ -40,14 +43,14 @@ public class Hackathon {
 	@JoinTable(name = "HACK_JUDGE", joinColumns = {
 			@JoinColumn(name = "USER_ID", table = "USER", referencedColumnName = "ID") }, inverseJoinColumns = {
 					@JoinColumn(name = "HACKATHON_ID", referencedColumnName = "ID") })
-//	@JsonIgnoreProperties(value = { "manager", "reports", "address", "collaborators", "employer" })
+	@JsonIgnoreProperties(value = { "password", "verified", "accessToken", "profile" })
 	private List<User> judgeList;
 	
 	@ManyToMany
 	@JoinTable(name = "HACK_ORG", joinColumns = {
 			@JoinColumn(name = "ORG_ID", table = "ORGANIZATION", referencedColumnName = "ID") }, inverseJoinColumns = {
 					@JoinColumn(name = "HACKATHON_ID", referencedColumnName = "ID") })
-//	@JsonIgnoreProperties(value = { "manager", "reports", "address", "collaborators", "employer" })
+	@JsonIgnoreProperties(value = { "address", "description" })
 	private List<Organization> orgList;
 	
 

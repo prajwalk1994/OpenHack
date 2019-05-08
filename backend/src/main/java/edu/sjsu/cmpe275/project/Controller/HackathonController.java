@@ -21,6 +21,7 @@ import edu.sjsu.cmpe275.project.Entity.Hackathon;
 import edu.sjsu.cmpe275.project.Entity.User;
 import edu.sjsu.cmpe275.project.Repository.UserDao;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
+import edu.sjsu.cmpe275.project.Service.UserService;
 
 class HackathonTemp{
 	private String name;
@@ -96,6 +97,8 @@ public class HackathonController {
 	HackathonService hackathonService;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	UserService userService;
 	
 	@PostMapping("hackathon")
 	public ResponseEntity<Object> createHackathon(@RequestBody HackathonTemp hackathonTemp,
@@ -176,6 +179,27 @@ public class HackathonController {
 			Hackathon currentHackathon = hackathon.get();
 			currentHackathon.setStatus(status);
 			return new ResponseEntity<Object>(this.hackathonService.addHackathon(currentHackathon), HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("hackathon/{userId}/{hackId}")
+	public ResponseEntity<Object> judgeHackathon(@PathVariable("userId") int userId, @PathVariable("hackId") int hackId){
+		try {
+			Optional<User> user = this.userService.getUser(userId);
+			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
+			if(!user.isPresent() || !hackathon.isPresent()) {
+				return new ResponseEntity<Object>("User or Hackathon not found", HttpStatus.NOT_FOUND);
+			}
+			User currUser = user.get();
+			Hackathon currHackathon = hackathon.get();
+			List<User> currentJudgeList = currHackathon.getJudgeList();
+			currentJudgeList.add(currUser);
+			currHackathon.setJudgeList(currentJudgeList);
+			return new ResponseEntity<Object>(this.hackathonService.addHackathon(currHackathon), HttpStatus.OK);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "ORG_MEMBERS")
 public class OrganizationMembers implements Serializable {
@@ -28,10 +30,12 @@ public class OrganizationMembers implements Serializable {
 
 	@ManyToOne
 	@JoinColumn
+	@JsonIgnoreProperties(value = {"password", "role", "accessToken", "profile"})
 	private User user;
 
 	@ManyToOne
 	@JoinColumn
+	@JsonIgnoreProperties(value = {"owner", "address", "organizationRequests"})
 	private Organization organization;
 
 	@Enumerated(EnumType.STRING)

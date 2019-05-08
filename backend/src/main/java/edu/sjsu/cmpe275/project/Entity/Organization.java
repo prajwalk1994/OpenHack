@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.project.Entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -7,8 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "ORGANIZATION")
@@ -30,7 +35,11 @@ public class Organization {
 	
 	@OneToOne 
 	@JoinColumn(name = "OWNERID")
+	@JsonIgnoreProperties(value = {"password", "role", "accessToken", "profile"})
 	private User owner;
+	
+	@OneToMany(mappedBy = "organization")
+	private List<OrganizationMembers> organizationRequests;
 	
 	public User getOwner() {
 		return owner;
@@ -70,6 +79,16 @@ public class Organization {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	
+
+	public List<OrganizationMembers> getOrganizationRequests() {
+		return organizationRequests;
+	}
+
+	public void setOrganizationRequests(List<OrganizationMembers> organizationRequests) {
+		this.organizationRequests = organizationRequests;
 	}
 
 	@Override
