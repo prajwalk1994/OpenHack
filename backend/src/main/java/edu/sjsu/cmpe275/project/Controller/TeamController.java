@@ -1,7 +1,9 @@
 package edu.sjsu.cmpe275.project.Controller;
 
 import java.util.ArrayList;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import edu.sjsu.cmpe275.project.Entity.User;
 import edu.sjsu.cmpe275.project.Service.TeamMemberService;
 import edu.sjsu.cmpe275.project.Service.TeamService;
 import edu.sjsu.cmpe275.project.Service.UserService;
+import edu.sjsu.cmpe275.project.Entity.TeamMember.Role;
 
 @RestController
 @RequestMapping("/")
@@ -35,20 +38,25 @@ public class TeamController {
 	@Autowired
 	UserService userService;
 
-	@PostMapping("/team/{teamName}")
-	public ResponseEntity<Object> createTeam(@RequestBody List<String> usernames,
-			@PathVariable("teamName") String teamName) {
+	@PostMapping("/team/{teamName}/{hackId}")
+	public ResponseEntity<Object> createTeam(@RequestBody Map<String, Role> usernames,
+			@PathVariable("teamName") String teamName, @PathVariable("hackId") int hackId) {
 		try {
 			List<TeamMember> users = new ArrayList<>();
-			for (String username : usernames) {
+			
+			for (String username : usernames.keySet()) {
 				List<User> user = this.userService.getUserByUsername(username);
 				if (user.size() == 0) {
 					return new ResponseEntity<Object>("User " + username + " Not found", HttpStatus.NOT_FOUND);
 				}
 				TeamMember teamMember = new TeamMember();
 				teamMember.setUser(user.get(0));
-				teamMember.setRole(TeamMember.Role.Other);
-				this.teamMemberService.addTeamMember(teamMember);
+				teamMember.setRole(usernames.get(username));
+				users.add(teamMember);
+			}
+			for (TeamMember member : users) {
+				this.teamMemberService.addTeamMember(member);
+				
 			}
 			Team team = new Team();
 			team.setTeamMembers(users);
@@ -61,16 +69,15 @@ public class TeamController {
 	}
 
 	@GetMapping("/team/{userId}")
-	public ResponseEntity<Object> getTeamByUser(@PathVariable("userId") int userId){
+	public ResponseEntity<Object> getTeamByUser(@PathVariable("userId") int userId) {
 		try {
 			Optional<User> user = this.userService.getUser(userId);
-			if(!user.isPresent()) {
+			if (!user.isPresent()) {
 				return new ResponseEntity<Object>("User not found", HttpStatus.NOT_FOUND);
 			}
 			List<TeamMember> teamMembers = this.teamMemberService.getTeamMemberByUser(userId);
 			return new ResponseEntity<Object>(teamMembers, HttpStatus.OK);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
 		}
