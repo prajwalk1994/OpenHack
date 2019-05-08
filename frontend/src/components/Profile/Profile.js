@@ -27,13 +27,13 @@ class Profile extends Component {
                 zip: "",
                 street: "",
             },
-            myOrganizations: ["Org1", "Org2", "Org3"],
-            myHackathons: ["hack1", "hack2", "hack3"],
-            ListOfOrgs: ["Org1", "Org2", "Org3", "Org4", "Org5"]
+            myOrganizations: [],
+            myHackathons: [],
+            ListOfOrgs: []
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
 
         axios.get(url + "/organizationMember/?userId=" + this.state.userId)
             .then((response) => {
@@ -61,6 +61,22 @@ class Profile extends Component {
             })
             .catch((err) => {
                 console.log("err", err)
+            })
+
+        axios.get(url + "/hackathon/?userId=" + localStorage.getItem("userid"))
+            .then((response) => {
+                var tempHack = []
+                for (let item of response.data) {
+                    if (item.approval == "Yes") {
+                        tempHack.push(item.Hackathon.name)
+                    }
+                }
+                this.setState({
+                    myHackathons: tempHack,
+                })
+            })
+            .catch((error) => {
+                console.log("Error ", error);
             })
     }
 
@@ -102,7 +118,7 @@ class Profile extends Component {
                     redirectTo: <Redirect to="/createOrg" />
                 })
             } else {
-                alert(" user not verified");
+                alert("User not verified!");
             }
 
 
@@ -119,7 +135,7 @@ class Profile extends Component {
                 redirectTo: <Redirect to="/searchOrgs" />
             })
         } else {
-            alert(" user not verified");
+            alert("User not verified!");
         }
     }
 
@@ -129,7 +145,7 @@ class Profile extends Component {
                 redirectTo: <Redirect to="/searchHackathons" />
             })
         } else {
-            alert(" user not verified");
+            alert("User not verified!");
         }
     }
 
@@ -139,7 +155,7 @@ class Profile extends Component {
                 redirectTo: <Redirect to="/membershipApprovals" />
             })
         } else {
-            alert(" user not verified");
+            alert("User not verified!");
         }
     }
 
@@ -149,7 +165,7 @@ class Profile extends Component {
                 redirectTo: <Redirect to="/judge" />
             })
         } else {
-            alert(" user not verified");
+            alert("User not verified!");
         }
     }
 
@@ -160,7 +176,7 @@ class Profile extends Component {
                     redirectTo: <Redirect to="/createHackathon" />
                 })
             } else {
-                alert(" user not verified");
+                alert("User not verified!");
             }
 
         }
