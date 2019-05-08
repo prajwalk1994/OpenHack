@@ -7,7 +7,13 @@ class CreateOrganization extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ownerid: 1
+            ownerid: localStorage.getItem("userid"),
+            address: {
+                state: "",
+                city: "",
+                zip: "",
+                street: "",
+            }
         }
     }
 
@@ -24,6 +30,7 @@ class CreateOrganization extends Component {
         const data = {
             ...this.state
         }
+        
         Axios.post(url + "/organization?ownerId=" + this.state.ownerid, data)
             .then((res) => {
                 console.log(res)

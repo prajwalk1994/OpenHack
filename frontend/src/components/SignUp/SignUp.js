@@ -56,7 +56,7 @@ class SignUp extends Component {
                 ...this.state
             }
             if(this.state.email.endsWith("@sjsu.edu") || this.state.role=="Admin"){
-                if(this.state.role=="admin" && this.state.email.endsWith("@sjsu.edu")){
+                if(this.state.role=="Admin" && this.state.email.endsWith("@sjsu.edu")){
                     this.callingBackend(user)
                 }
                 else{

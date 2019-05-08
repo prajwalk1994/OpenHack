@@ -3,7 +3,7 @@ import './Profile.css';
 import axios from 'axios';
 import Navbar from '../Navbar/Navbar';
 import url from '../../config/config'
-import { Link } from 'react-router-dom';
+import {Link,Redirect} from "react-router-dom";
 
 
 class Profile extends Component {
@@ -15,7 +15,7 @@ class Profile extends Component {
         console.log("Inside Profile");
 
         this.state = {
-            userId: 1,
+            userId: localStorage.getItem("userid"),
             name: "",
             username: "",
             businessTitle: "",
@@ -53,9 +53,10 @@ class Profile extends Component {
 
         axios.get(url + "/profile/" + this.state.userId)
             .then((response) => {
-
+                console.log(response.data)
                 this.setState({
                     ...response.data
+
                 })
                 console.log(response)
             })
@@ -95,6 +96,17 @@ class Profile extends Component {
             })
     }
 
+    createOrg=async (e)=>{
+        if(localStorage.getItem("role")!="Admin"){
+            await this.setState({
+                redirectToCreateOrg: <Redirect to="/createOrg"/>
+            })
+        }
+        else{
+            alert("Admin cannot create Organization")
+        }
+    }
+
 
     render() {
 
@@ -121,6 +133,9 @@ class Profile extends Component {
 
         return (
             <div>
+                <div>
+                {this.state.redirectToCreateOrg}
+                </div>
                 <Navbar></Navbar>
                 <div className="row parentRow">
                     <div className="col-sm-4 border border-1">
@@ -166,7 +181,7 @@ class Profile extends Component {
                             <label> </label>
                         </div>
                         <div>
-                            <Link to="/createOrg"><button className="btn btn-primary" onClick={this.createOrg}>create organization</button></Link>
+                            <button className="btn btn-primary" onClick={this.createOrg}>create organization</button>
                         </div>
                         <div>
                             <label> </label>

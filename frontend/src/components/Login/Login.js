@@ -27,8 +27,17 @@ class Login extends Component {
             ...this.state
         }
         
-        axios.post(url+"/login",user).then((res)=>{
+        axios.post(url+"/login",user).then(async(res)=>{
+            localStorage.setItem("userid",res.data[0].id)
+            localStorage.setItem("email",res.data[0].email)
+            localStorage.setItem("username",res.data[0].username)
+            localStorage.setItem("verified",res.data[0].verified)
+
+            console.log(res.data)
             console.log("Login successful ",res.status)
+            await this.setState({
+                redirectVar: <Redirect to="/profile"/>
+            })
 
         }).catch((err)=>{
             // console.log(err)
@@ -58,7 +67,7 @@ class Login extends Component {
                                     <form>
                                         <input class="form-control form_element" onChange={this.handleChange.bind(this)} type="email" name="email" value={this.state.email} type="text" placeholder="Email address"></input>
                                         <input class="form-control form_element" onChange={this.handleChange.bind(this)} name="password" value={this.state.password} type="Password" placeholder="password"></input>
-                                        <div class="form-group" className="row">
+                                        {/* <div class="form-group" className="row">
                                             <div className="col-sm-3 align-middle">
                                                 <label for="role">Role</label>
                                             </div>
@@ -69,7 +78,7 @@ class Login extends Component {
                                                     <option>Admin</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         {/* <a class="float_left" href="#">Forgot Password?</a> */}
                                         <br></br>
                                         <button onClick={this.handleLogin.bind(this)} class="form_element btn_login btn btn-lg btn-block" type="submit">Log In</button>

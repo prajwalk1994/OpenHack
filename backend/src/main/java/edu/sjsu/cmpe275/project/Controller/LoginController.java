@@ -48,7 +48,7 @@ public class LoginController {
 		if (loginUser.size() > 0) {
 			System.out.println(loginUser.get(0).getEmail());
 			if(loginUser.get(0).getPassword().equals(user.getPassword())) {
-				return ResponseEntity.ok().build();
+				return new ResponseEntity<>(loginUser, HttpStatus.OK);
 			}
 			else {
 				return ResponseEntity.notFound().build();
@@ -102,7 +102,7 @@ public class LoginController {
 		user.setAccessToken(accessToken);
 		user = userDao.save(user);
 		System.out.println("User saved and mail is being sent!");
-		mailService.sendMail(accessToken, email);
+		//mailService.sendMail(accessToken, email);
 		return new ResponseEntity<>("Success!", HttpStatus.OK);
 	}
 
