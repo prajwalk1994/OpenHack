@@ -3,6 +3,7 @@ import './Profile.css';
 import axios from 'axios';
 import Navbar from '../Navbar/Navbar';
 import url from '../../config/config'
+import { Link } from 'react-router-dom';
 
 
 class Profile extends Component {
@@ -34,21 +35,21 @@ class Profile extends Component {
 
     componentDidMount = () => {
 
-        axios.get(url + "/organizationMember/?userId="+ this.state.userId)
-        .then((response) => {
-            var tempOrg =[]
-            for(let item of response.data){
-                if(item.approval=="Yes"){
-                    tempOrg.push(item.organization.name)
+        axios.get(url + "/organizationMember/?userId=" + this.state.userId)
+            .then((response) => {
+                var tempOrg = []
+                for (let item of response.data) {
+                    if (item.approval == "Yes") {
+                        tempOrg.push(item.organization.name)
+                    }
                 }
-            }
-            this.setState({
-                myOrganizations : tempOrg,
+                this.setState({
+                    myOrganizations: tempOrg,
+                })
             })
-        })
-        .catch((error) => {
-            console.log("Error ", error);
-        })
+            .catch((error) => {
+                console.log("Error ", error);
+            })
 
         axios.get(url + "/profile/" + this.state.userId)
             .then((response) => {
@@ -113,7 +114,7 @@ class Profile extends Component {
             return (
                 <div className="row">
                     <label className="col-sm-8">{item}</label>
-                    <button className="btn btn-danger col-sm-4">leave</button>
+                    <button className="btn btn-primary col-sm-4">submit</button>
                 </div>
             )
         })
@@ -132,9 +133,6 @@ class Profile extends Component {
                         <div className="mb-4">
                             <input type="text" className="form-control" onChange={this.handleChange} name="businessTitle" value={this.state.businessTitle} placeholder="businessTitle" />
                         </div>
-                        {/* <div className="mb-4">
-                            <input type="text" className="form-control" onChange={this.handleChange} name="organization" value={this.state.organization} placeholder="organization" />
-                        </div> */}
                         <div className="mb-4">
                             <input type="text" className="form-control" onChange={this.handleChange} name="aboutMe" value={this.state.aboutMe} placeholder="aboutMe" />
                         </div>
@@ -161,22 +159,20 @@ class Profile extends Component {
                         <div>
                             {organizationsDiv}
                         </div>
-                        <div className="row">
-                            <div className="col-sm-8">
-                                <input type="text" className="form-control" placeholder="search Organizations"></input>
-                            </div>
-                            <div className="col-sm-4">
-                                <button className="btn btn-primary" onClick={this.searchOrgnizations}>search</button>
-                            </div>
-                        </div>
-                        <div>
-                            <button className="btn btn-primary" onClick={this.createOrg}>create organization</button>
+                        <div >
+                            <Link to="/searchOrgs"> <button className="btn btn-primary" onClick={this.searchOrgnizations}>search organizations</button></Link>
                         </div>
                         <div>
                             <label> </label>
                         </div>
                         <div>
-                            <button className="btn btn-primary" onClick={this.approveMembership}>Approve Membership</button>
+                            <Link to="/createOrg"><button className="btn btn-primary" onClick={this.createOrg}>create organization</button></Link>
+                        </div>
+                        <div>
+                            <label> </label>
+                        </div>
+                        <div>
+                            <Link to="/membershipApprovals"> <button className="btn btn-primary" onClick={this.approveMembership}>Approve Membership</button></Link>
                         </div>
                     </div>
                     <div className="col-sm-4 border border-1">
@@ -186,16 +182,17 @@ class Profile extends Component {
                         <div>
                             {HackathonsDiv}
                         </div>
-                        <div className="row">
-                            <div className="col-sm-8">
-                                <input type="text" className="form-control" placeholder="search hackathons"></input>
-                            </div>
-                            <div className="col-sm-4">
-                                <button className="btn btn-primary" onClick={this.searchHackathon}>search</button>
-                            </div>
+                        <div className="row justify-content-center">
+                            <Link to="/searchHackathons"><button className="btn btn-primary" onClick={this.searchHackathon}>search Hackathons</button></Link>
+                        </div>
+                        {/* <div>
+                            <Link to="/createHackathon"><button className="btn btn-primary" onClick={this.createHackathon}>create Hackathon</button></Link>
                         </div>
                         <div>
-                            <button className="btn btn-primary" onClick={this.judgehackathon}>Judge Hackathon</button>
+                            <label> </label>
+                        </div> */}
+                        <div>
+                           <Link to="/judge"> <button className="btn btn-primary" onClick={this.judgehackathon}>Judge Hackathon</button></Link>
                         </div>
                     </div>
                 </div>

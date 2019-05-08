@@ -3,7 +3,7 @@ import Axios from 'axios';
 import url from '../../config/config'
 
 
-class CreateOrgazation extends Component {
+class CreateOrganization extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -61,4 +61,4 @@ class CreateOrgazation extends Component {
     }
 }
 
-export default CreateOrgazation;
+export default CreateOrganization;
