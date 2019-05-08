@@ -140,8 +140,14 @@ public class HackathonController {
 	}
 	
 	@GetMapping("hackathons")
-	public ResponseEntity<List<Hackathon>> getHackathons(){
+	public ResponseEntity<Object> getHackathons(){
+		try {
 		return ResponseEntity.ok(this.hackathonService.getAllHackathons());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@GetMapping("hackathon/{id}")
