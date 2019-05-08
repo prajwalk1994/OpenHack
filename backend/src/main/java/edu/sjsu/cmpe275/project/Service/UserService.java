@@ -33,6 +33,10 @@ public class UserService {
 		return this.userDao.findUserByUsername(username);
 	}
 	
+	public List<User> getUserByEmail(String email){
+		return this.userDao.findUserByEmail(email);
+	}
+	
 //	public User updateUser(User user) {
 //		return this.userDao.merge(user);
 //	}
