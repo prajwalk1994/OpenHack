@@ -26,7 +26,7 @@ class Judge extends Component {
 
         return (
             <div className="container">
-                <h3>Payment</h3>
+                <h3>Judge Hackathon</h3>
                 <center>
                     <div className="row justify-content-start">
                         <h4 className="col-sm-8">URL</h4>

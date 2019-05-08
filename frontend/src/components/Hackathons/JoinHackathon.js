@@ -4,12 +4,13 @@ class JoinHackathon extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            teamSize: 5
+            minteamSize: 5,
+            maxteamSize:10
         }
     }
     render() {
 
-        var teamMembers = Array.apply(null, { length: this.state.teamSize }).map((e, i) => (
+        var teamMembers = Array.apply(null, { length: this.state.minteamSize }).map((e, i) => (
             <tr>
                 <td><input type="text" name={"member" + (i + 1)} placeholder={"team member " + (i + 1)} ></input></td>
                 <td>

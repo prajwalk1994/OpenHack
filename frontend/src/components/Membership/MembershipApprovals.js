@@ -15,8 +15,6 @@ class MembershipApprovals extends Component {
     }
 
     render() {
-
-
         var MembershipRequests = "";
         MembershipRequests = this.state.username.map((item,i)=>{
             return(

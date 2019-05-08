@@ -10,7 +10,9 @@ import submission from './submission/submission';
 import Judge from './Judge/Judge';
 import MembershipApprovals from './Membership/MembershipApprovals';
 import CreateHackathons from './Hackathons/CreateHackathons';
-import CreateOrgazation from './Organizations/CreateOrgazation';
+import CreateOrganization from './Organizations/CreateOrganization';
+import searchOrganizations from './Organizations/searchOrganizations'
+import searchHackathons from './Hackathons/searchHackathons';
 class Menu extends Component {
     constructor(props) {
         super(props);
@@ -30,8 +32,9 @@ class Menu extends Component {
                 <Route exact={true} path="/judge" component={Judge} />
                 <Route exact={true} path="/membershipApprovals" component={MembershipApprovals} />
                 <Route exact={true} path="/createHackathon" component={CreateHackathons} />
-                <Route exact={true} path="/createOrg" component={CreateOrgazation} />
-
+                <Route exact={true} path="/createOrg" component={CreateOrganization} />
+                <Route exact={true} path="/searchOrgs" component={searchOrganizations} />
+                <Route exact={true} path="/searchHackathons" component={searchHackathons} />
 
             </div>
         );
