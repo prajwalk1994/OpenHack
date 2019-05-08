@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import url from '../../config/config'
+import {Link,Redirect} from "react-router-dom";
 
 class searchHackathons extends Component {
     constructor(props) {
@@ -35,9 +36,11 @@ class searchHackathons extends Component {
                 var maxSizeList = []
                 // var tempOrgIds=[]
                 for (let i of response.data) {
-                    tempHack.push(i.name)
-                    minSizeList.push(i.minTeam)
-                    maxSizeList.push(i.maxTeam)
+                    if(i.status!="\"No\""){
+                        tempHack.push(i.name)
+                        minSizeList.push(i.minTeam)
+                        maxSizeList.push(i.maxTeam)
+                    }
                 }
                 this.setState({
                     hackathonsList: tempHack,
@@ -78,9 +81,15 @@ class searchHackathons extends Component {
             }
             console.log(requestBody)
         }
-        Axios.post(url + `/team/${this.state.teamName}/${this.state.hackathonId}`,requestBody)
-            .then((response) => {
+        await Axios.post(url + `/team/${this.state.teamName}/${this.state.hackathonId}`, requestBody)
+            .then(async (response) => {
                 console.log(response.data)
+                await Axios.post(url + `/hackathonteam/${this.state.hackathonId}/${response.data.id}`).then(async response => {
+                    alert("Creation successful")
+                    await this.setState({
+                        redirectTo: <Redirect to="/profile"/>
+                    })
+                })
 
             })
             .catch((err) => {
@@ -129,17 +138,24 @@ class searchHackathons extends Component {
         e.preventDefault();
         await this.setState({
             visibility: true,
-            hackathonId: id - 1,
+            hackathonId: id,
             minteamSize: this.state.minteamSizeList[id - 1],
             maxteamSize: this.state.maxteamSizeList[id - 1]
         })
         console.log("hackathon id ", id, " min team size ", this.state.minteamSize, " max team size", this.state.maxteamSize)
 
-
-
-
     }
-
+    DeleteHackathon = async (e, id) => {
+        await Axios.post(url + `/hackathon/changeStatus/${id}/"No"`).then(res=>{
+            console.log(res.data)
+        }).catch((err) => {
+            if (err.response) {
+                console.log("err", err.response)
+            } else {
+                alert("Something went wrong!")
+            }
+        })
+    }
     changeTeamSize = () => {
         if (this.state.minteamSize + 1 <= this.state.maxteamSize) {
             this.setState({
@@ -159,7 +175,7 @@ class searchHackathons extends Component {
                     <div></div>
                     <h4 className="">{item}</h4>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button className="btn btn-primary" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>
+                    {(localStorage.getItem("role")=="Admin")?<button className="btn btn-danger" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button>:<button className="btn btn-primary" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
                     <br></br>
                 </div>
             )
@@ -181,7 +197,7 @@ class searchHackathons extends Component {
                     <select class="form-control" name={"role" + (i + 1)} id="role" onChange={this.handleChange}>
                         <option selected>ProductManger</option>
                         <option>Engineer</option>
-                        <option>Full Stack</option>
+                        <option>FullStack</option>
                         <option>Designer</option>
                         <option>Other</option>
                     </select>
@@ -191,6 +207,9 @@ class searchHackathons extends Component {
 
         return (
             <div>
+                <div>                
+                {this.state.redirectTo}
+                </div>
                 <center>
                     <h3>Search Hackathons</h3>
                     <div>
@@ -214,7 +233,7 @@ class searchHackathons extends Component {
                                 <h4> <label className="mb-4 mr-3" name="searchedName">{this.state.hackathonSearched}</label></h4>
                                 <table>
                                     <tr>
-                                        <td><input type="text" name="teamName" placeholder="Team Name"onChange={this.handleChange}/>
+                                        <td><input type="text" name="teamName" placeholder="Team Name" onChange={this.handleChange} />
                                         </td>
                                         <td>
                                         </td>
