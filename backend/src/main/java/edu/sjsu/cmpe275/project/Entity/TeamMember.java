@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "TEAMMEMBER")
 public class TeamMember {
@@ -29,10 +31,12 @@ public class TeamMember {
 	
 	@ManyToOne
 	@JoinColumn(name = "USERID")
+	@JsonIgnoreProperties(value = {"password", "role", "accessToken", "profile"})
 	private User user;
 	
 	@ManyToOne
 	@JoinColumn(name = "TEAMID")
+	@JsonIgnoreProperties(value = {"teamMembers", "score"})
 	private Team team;
 	
 	@Enumerated(EnumType.STRING)

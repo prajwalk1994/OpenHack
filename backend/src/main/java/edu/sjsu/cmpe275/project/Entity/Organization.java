@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "ORGANIZATION")
 public class Organization {
@@ -30,6 +32,7 @@ public class Organization {
 	
 	@OneToOne 
 	@JoinColumn(name = "OWNERID")
+	@JsonIgnoreProperties(value = {"password", "role", "accessToken", "profile"})
 	private User owner;
 	
 	public User getOwner() {
