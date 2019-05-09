@@ -33,6 +33,26 @@ class Profile extends Component {
     }
 
     componentDidMount = async () => {
+        
+        // console.log("**************************cfhgjhk*")
+
+        await axios.get(url + "/hackathonsByUser/" + this.state.userId)
+            .then((response) => {
+                // console.log("***************************")
+                let hackathons = response.data;
+                console.log(hackathons);
+                var temphackslist=[]
+                hackathons.map((hackathon) => {
+                    temphackslist.push(hackathon)
+                    
+                })
+                this.setState({
+                    myHackathons: temphackslist,
+                })
+            })
+            .catch((error) => {
+                console.log("Error", error);
+            })
 
         axios.get(url + "/organizationMember/?userId=" + this.state.userId)
             .then((response) => {
@@ -62,35 +82,23 @@ class Profile extends Component {
                 console.log("err", err)
             })
 
-        axios.get(url + "/hackathon/?userId=" + localStorage.getItem("userid"))
-            .then((response) => {
-                var tempHack = []
-                for (let item of response.data) {
-                    if (item.approval == "Yes") {
-                        tempHack.push(item.Hackathon.name)
-                    }
-                }
-                this.setState({
-                    myHackathons: tempHack,
-                })
-            })
-            .catch((error) => {
-                console.log("Error ", error);
-            })
+        // axios.get(url + "/hackathon/?userId=" + localStorage.getItem("userid"))
+        //     .then((response) => {
+        //         var tempHack = []
+        //         for (let item of response.data) {
+        //             if (item.approval == "Yes") {
+        //                 tempHack.push(item.Hackathon.name)
+        //             }
+        //         }
+        //         this.setState({
+        //             myHackathons: tempHack,
+        //         })
+        //     })
+        //     .catch((error) => {
+        //         console.log("Error ", error);
+        //     })
 
-        axios.get(url + "hackathonsByuser/" + localStorage.getItem("userId"))
-        .then((response) => {
-            let hackathons = response.data;
-            console.log(hackathons);
-            hackathons.map((hackathon) => {
-                this.setState({
-                    myHackathons : this.state.myHackathons.append(hackathon),
-                })
-            })
-        })
-        .catch((error) => {
-            console.log("Error", error);
-        })
+        
     }
 
     handleChange = (e) => {
@@ -214,7 +222,7 @@ class Profile extends Component {
             //console.log(item)
             return (
                 <div className="row">
-                    <label className="col-sm-8">{item}</label>
+                    <label className="col-sm-8">{item.name}</label>
                     <button className="btn btn-primary col-sm-4">submit</button>
                 </div>
             )
