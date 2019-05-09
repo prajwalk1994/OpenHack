@@ -7,5 +7,5 @@ import edu.sjsu.cmpe275.project.Entity.Hackathon;
 
 @Repository
 public interface HackathonDao extends JpaRepository<Hackathon, Integer>{
-
+	
 }
