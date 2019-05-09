@@ -31,4 +31,8 @@ public class TeamMemberService {
 	public List<TeamMember> getTeamMemberByTeamIdAndUserId(int teamid, int userid){
 		return this.teamMemberDao.findTeamMemberByTeamIdAndUserId(teamid, userid);
 	}
+	
+	public List<TeamMember> getTeamMemberByTeamId(int teamid){
+		return this.teamMemberDao.findTeamMemberByTeamId(teamid);
+	}
 }

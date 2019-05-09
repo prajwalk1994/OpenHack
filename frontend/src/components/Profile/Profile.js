@@ -11,7 +11,6 @@ class Profile extends Component {
     constructor(props) {
         super(props);
 
-
         console.log("Inside Profile");
 
         this.state = {
@@ -56,7 +55,6 @@ class Profile extends Component {
                 console.log(response.data)
                 this.setState({
                     ...response.data
-
                 })
                 console.log(response)
             })
@@ -128,7 +126,7 @@ class Profile extends Component {
 
     createOrg = async (e) => {
         if (localStorage.getItem("role") != "Admin") {
-            if (localStorage.getItem("verified") == 1) {
+            if (localStorage.getItem("verified")) {
                 await this.setState({
                     redirectTo: <Redirect to="/createOrg" />
                 })
@@ -145,7 +143,7 @@ class Profile extends Component {
     }
 
     searchOrgnizations = async (e) => {
-        if (localStorage.getItem("verified") == 1) {
+        if (localStorage.getItem("verified")) {
             await this.setState({
                 redirectTo: <Redirect to="/searchOrgs" />
             })
@@ -155,7 +153,7 @@ class Profile extends Component {
     }
 
     searchHackathon = async (e) => {
-        if (localStorage.getItem("verified") == 1) {
+        if (localStorage.getItem("verified")) {
             await this.setState({
                 redirectTo: <Redirect to="/searchHackathons" />
             })
@@ -165,7 +163,7 @@ class Profile extends Component {
     }
 
     approveMembership = async (e) => {
-        if (localStorage.getItem("verified") == 1) {
+        if (localStorage.getItem("verified")) {
             await this.setState({
                 redirectTo: <Redirect to="/membershipApprovals" />
             })
@@ -175,7 +173,7 @@ class Profile extends Component {
     }
 
     judgehackathon = async (e) => {
-        if (localStorage.getItem("verified") == 1) {
+        if (localStorage.getItem("verified")) {
             await this.setState({
                 redirectTo: <Redirect to="/judge" />
             })
@@ -186,14 +184,13 @@ class Profile extends Component {
 
     createHackathon = async (e) => {
         if (localStorage.getItem("role") == "Admin") {
-            if (localStorage.getItem("verified") == 1) {
+            if (localStorage.getItem("verified")) {
                 await this.setState({
                     redirectTo: <Redirect to="/createHackathon" />
                 })
             } else {
                 alert("User not verified!");
             }
-
         }
         else {
             alert("Only Admin can create Hackathon")
@@ -228,7 +225,6 @@ class Profile extends Component {
                 <div>
                     {this.state.redirectTo}
                 </div>
-                <Navbar></Navbar>
                 <div className="row parentRow">
                     <div className="col-sm-4 border border-1">
                         <div className="mb-4">

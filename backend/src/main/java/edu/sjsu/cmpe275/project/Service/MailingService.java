@@ -28,7 +28,18 @@ public class MailingService {
 		Email from = new Email("payment@openhack.com");
 	    String subject = "Hackathon Payment Mail";
 	    Email to = new Email(email);
-	    
+	    System.out.println(( "<html>\n" + 
+	    		"  <div>\n" + 
+	    		"    Hackathon name:\n" + hackathon.getName()+
+	    		"    <br>\n" + 
+	    		"    Hackathon Description: \n" + hackathon.getDescription()+
+	    		"   <br>\n" + 
+	    		"    <br>\n" + 
+	    		"  	Please click on below link to make the payment\n" + 
+	    		"    <br>\n" + 
+	    		"    <a href="+Config.url+"/makePayment?hackathonName="+hackathon.getName()+"&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+	    		"  </div>\n" + 
+	    		"</html>"));
 	    Content content = new Content("text/html", "<html>\n" + 
 	    		"  <div>\n" + 
 	    		"    Hackathon name:\n" + hackathon.getName()+
@@ -38,7 +49,7 @@ public class MailingService {
 	    		"    <br>\n" + 
 	    		"  	Please click on below link to make the payment\n" + 
 	    		"    <br>\n" + 
-	    		"    <a href=\"'"+Config.url+"\"/makePayment?hackathonName=\""+hackathon.getName()+"\"&teamid=\""+teamid+"\"&userid=\""+userid+"\"' value=\"Make payment\">Payment Link </a>\n" + 
+	    		"    <a href="+Config.url+"/individualPayment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
 	    		"  </div>\n" + 
 	    		"</html>");
 	    Mail mail = new Mail(from, subject, to, content);

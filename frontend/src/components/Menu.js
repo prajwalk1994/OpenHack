@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route,IndexRoute } from 'react-router-dom';
 import Login from './Login/Login'
 import SignUp from './SignUp/SignUp';
 import Landingpage from './Landingpage/Landingpage';
@@ -13,6 +13,7 @@ import CreateHackathons from './Hackathons/CreateHackathons';
 import CreateOrganization from './Organizations/CreateOrganization';
 import searchOrganizations from './Organizations/searchOrganizations'
 import searchHackathons from './Hackathons/searchHackathons';
+import Navbar from './Navbar/Navbar';
 class Menu extends Component {
     constructor(props) {
         super(props);
@@ -22,19 +23,20 @@ class Menu extends Component {
     render() {
         return(
             <div>
-                <Route exact={true} path="/" component={Login} />
-                <Route exact={true} path="/signup" component={SignUp} />
-                <Route exact={true} path="/landingpage" component={Landingpage} />
-                <Route exact={true} path="/profile" component={Profile} />
-                <Route exact={true} path="/joinHackathon" component={JoinHackathon} />
-                <Route exact={true} path="/payment" component={Payment} />
-                <Route exact={true} path="/submission" component={submission} />
-                <Route exact={true} path="/judge" component={Judge} />
-                <Route exact={true} path="/membershipApprovals" component={MembershipApprovals} />
-                <Route exact={true} path="/createHackathon" component={CreateHackathons} />
-                <Route exact={true} path="/createOrg" component={CreateOrganization} />
-                <Route exact={true} path="/searchOrgs" component={searchOrganizations} />
-                <Route exact={true} path="/searchHackathons" component={searchHackathons} />
+                <Route  path="/" component={Navbar} />
+                <Route  path="/login" component={Login} />
+                <Route  path="/signup" component={SignUp} />
+                <Route  path="/landingpage" component={Landingpage} />
+                <Route  path="/profile" component={Profile} />
+                <Route  path="/joinHackathon" component={JoinHackathon} />
+                <Route  path="/payment" component={Payment} />
+                <Route  path="/submission" component={submission} />
+                <Route  path="/judge" component={Judge} />
+                <Route  path="/membershipApprovals" component={MembershipApprovals} />
+                <Route  path="/createHackathon" component={CreateHackathons} />
+                <Route  path="/createOrg" component={CreateOrganization} />
+                <Route  path="/searchOrgs" component={searchOrganizations} />
+                <Route  path="/searchHackathons" component={searchHackathons} />
 
             </div>
         );
