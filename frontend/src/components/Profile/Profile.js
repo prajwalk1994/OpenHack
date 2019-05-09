@@ -64,21 +64,35 @@ class Profile extends Component {
                 console.log("err", err)
             })
 
-        axios.get(url + "/hackathon/?userId=" + localStorage.getItem("userid"))
-            .then((response) => {
-                var tempHack = []
-                for (let item of response.data) {
-                    if (item.approval == "Yes") {
-                        tempHack.push(item.Hackathon.name)
-                    }
-                }
+        // axios.get(url + "/hackathon/?userId=" + localStorage.getItem("userid"))
+        //     .then((response) => {
+        //         var tempHack = []
+        //         for (let item of response.data) {
+        //             if (item.approval == "Yes") {
+        //                 tempHack.push(item.Hackathon.name)
+        //             }
+        //         }
+        //         this.setState({
+        //             myHackathons: tempHack,
+        //         })
+        //     })
+        //     .catch((error) => {
+        //         console.log("Error ", error);
+        //     })
+
+        axios.get(url + "hackathonsByuser/" + localStorage.getItem("userId"))
+        .then((response) => {
+            let hackathons = response.data;
+            console.log(hackathons);
+            hackathons.map((hackathon) => {
                 this.setState({
-                    myHackathons: tempHack,
+                    myHackathons : this.state.myHackathons.append(hackathon),
                 })
             })
-            .catch((error) => {
-                console.log("Error ", error);
-            })
+        })
+        .catch((error) => {
+            console.log("Error", error);
+        })
     }
 
     handleChange = (e) => {
