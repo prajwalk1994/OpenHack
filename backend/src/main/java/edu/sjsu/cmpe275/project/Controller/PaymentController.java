@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
@@ -41,6 +42,19 @@ public class PaymentController {
 		String email="kovurivinay@gmail.com";
 		mailService.makePaymentMail(hackathon, teamid, userid, email);
 		return null;
+	}
+	
+	@PostMapping("checkPayment")
+	public ResponseEntity<Object> checkPayment(@RequestBody int teamid) {
+		System.out.println();
+		
+		List<TeamMember> tm = tms.getTeamMemberByTeamId(teamid);
+		for(TeamMember check:tm){
+			if(!check.isPayment()) {
+				return new ResponseEntity<Object>("Make payments", HttpStatus.BAD_REQUEST);
+			}
+		}
+		return new ResponseEntity<Object>("Success!", HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/individualPayment")

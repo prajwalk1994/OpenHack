@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
-
+import {Link,Redirect} from "react-router-dom";
 class Payment extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            price: 0,
-            discount: 0
+            price: 100,
+            discount:0,
+            redirectVar:""
         }
     }
 
     makePayment = (e) => {
         e.preventDefault();
+        alert("Payment email sent!")
+        this.setState({
+            redirectVar:<Redirect to="/submission"></Redirect>
+        })
     }
 
     render() {
         return (
             <div className="">
                 <center>
+                    {this.state.redirectVar}
                     {/* PAYMENT CARD START */}
                     <form class="payment container">
                         <body className="col-sm-6">

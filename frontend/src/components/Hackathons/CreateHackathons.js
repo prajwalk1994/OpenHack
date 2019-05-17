@@ -8,7 +8,7 @@ class CreateHackathons extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            email:localStorage.getItem("email")
         }
     }
 
@@ -32,10 +32,10 @@ class CreateHackathons extends Component {
         }
         // console.log(this.state)
         console.log(hackathon)
-        Axios.post(url+`/hackathon?email=kovurivinay@sjsu.edu`,hackathon).then(async (res)=>{
+        Axios.post(url+`/hackathon?email=${this.state.email}`,hackathon).then(async (res)=>{
             console.log(res)
             await this.setState({
-                redirectTo: <Redirect to="/searchHackathon"/>
+                redirectTo: <Redirect to="/searchHackathons"/>
             })
         }).catch(err=>{
             if(err.response){

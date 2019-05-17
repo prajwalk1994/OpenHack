@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import url from '../../config/config'
-
+import {Link,Redirect} from "react-router-dom";
 
 class CreateOrganization extends Component {
     constructor(props) {
@@ -32,8 +32,11 @@ class CreateOrganization extends Component {
         }
         
         Axios.post(url + "/organization?ownerId=" + this.state.ownerid, data)
-            .then((res) => {
+            .then(async (res) => {
                 console.log(res)
+                await this.setState({
+                    redirectVar: <Redirect to="/login"/>
+                })
             })
             .catch((err) => {
                 console.log(err)
@@ -43,6 +46,9 @@ class CreateOrganization extends Component {
     render() {
         return (
             <div>
+                <div>
+                    {this.state.redirectVar}
+                </div>
                 <div className="container mt-5">
                     <h3>Create Organization</h3>
                     <center>
