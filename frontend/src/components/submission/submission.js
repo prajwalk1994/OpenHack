@@ -20,7 +20,7 @@ class submission extends Component {
     checkPayment=()=>{
         Axios.get(url+"/checkPayment")
         .then((response)=>{
-
+            
         })
         .catch((response)=>{
 
@@ -29,8 +29,12 @@ class submission extends Component {
 
     doSubmission=(e)=>{
         e.preventDefault();
+        
+        
         //check payment if all team members has made
         this.checkPayment();
+
+
         Axios.get(url + "/submission/"+this.state.teamid+"/"+this.state.hackathonId)
             .then((response) => {
                 console.log(response.data)
