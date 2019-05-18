@@ -12,4 +12,5 @@ public interface TeamMemberDao extends JpaRepository<TeamMember, Integer>{
 	List<TeamMember> findTeamMemberByUserId(int userId);
 
 	List<TeamMember> findTeamMemberByTeamIdAndUserId(int teamid, int userid);
+	List<TeamMember> findTeamMemberByTeamId(int teamid);
 }

@@ -21,10 +21,11 @@ class Navbar extends Component {
                                         <span class="nav-icon-text">Home</span><span class="sr-only">(current)</span></a>
                                     </li>
                                     {/* <li className="nav-item">
-                                        <a className="nav-link" href="/connections"><i class="fal fa-users fa-lg iconColour">
+                                        <a className="nav-link" href="/login"><i class="fal fa-users fa-lg iconColour">
                                             </i><br />
-                                            <span class="nav-icon-text">My Network</span></a>
-                                    </li>
+                                            <span class="nav-icon-text">login</span></a>
+                                    </li> */}
+                                    {/*
                                     <li className="nav-item">
                                         <a className="nav-link" onClick={() => { this.jobsDisplay() }}><i class="fal fa-suitcase fa-lg iconColour"></i><br />
                                         <span class="nav-icon-text">Jobs</span></a>
@@ -47,7 +48,7 @@ class Navbar extends Component {
                                             <span class="nav-icon-text">Me</span></a>
                                     </li>
                                     <li className="nav-item" onClick={this.logout}>
-                                        <a className="nav-link"><i class="fal fa-sign-out fa-lg iconColour"></i><br />
+                                        <a className="nav-link" href="/login"><i class="fal fa-sign-out fa-lg iconColour"></i><br />
                                             <span class="nav-icon-text">SignOut</span></a>
                                     </li>
                                 </ul>

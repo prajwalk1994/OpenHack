@@ -9,5 +9,7 @@ import edu.sjsu.cmpe275.project.Entity.HackathonTeams;
 
 @Repository
 public interface HackathonTeamsDao extends JpaRepository<HackathonTeams, Integer>{
+	
+	List<HackathonTeams> findHackathonTeamsByTeamIdId(int teamId);
 	List<HackathonTeams> findHackathonTeamsByHackIdAndTeamId(int hackId, int teamId);
 }

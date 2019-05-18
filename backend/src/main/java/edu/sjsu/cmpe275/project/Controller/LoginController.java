@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.User;
+import edu.sjsu.cmpe275.project.Repository.TeamMemberDao;
 import edu.sjsu.cmpe275.project.Repository.UserDao;
 import edu.sjsu.cmpe275.project.Service.MailingService;
 import edu.sjsu.cmpe275.project.Service.UserService;
@@ -39,6 +40,8 @@ public class LoginController {
 
 	@Autowired
 	MailingService mailService;
+	
+	
 
 	@PostMapping("/login")
 	public ResponseEntity<Object> loginUser(@RequestBody User user) {
@@ -102,7 +105,7 @@ public class LoginController {
 		user.setAccessToken(accessToken);
 		user = userDao.save(user);
 		System.out.println("User saved and mail is being sent!");
-		//mailService.sendMail(accessToken, email);
+		mailService.sendMail(accessToken, email);
 		return new ResponseEntity<>("Success!", HttpStatus.OK);
 	}
 
@@ -127,5 +130,5 @@ public class LoginController {
 			return new ResponseEntity<>("FAILURE-invalid code!", HttpStatus.OK);
 		}
 	}
-
+	
 }

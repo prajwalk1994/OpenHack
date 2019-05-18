@@ -3,44 +3,74 @@ import './Login.css'
 import url from '../../config/config'
 import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
-import {Link,Redirect} from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import firebase from 'firebase'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
+firebase.initializeApp({
+    apiKey: "AIzaSyC0PdhMUGu5E2IsSuaLkJ_4V0VOJXWoaIM",
+    authDomain: "openhack-afe32.firebaseapp.com"
+})
 class Login extends Component {
     constructor(props) {
         super(props);
         console.log("Inside Login");
-        this.state={
-            email:"",
-            password:"",
-            username:""
+        this.state = {
+            email: "",
+            password: "",
+            username: ""
+        }
+        this.uiConfig = {
+            signInFlow: "popup",
+            signInOptions: [
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+            ],
+            callbacks: {
+                signInSuccess: () => false
+            }
         }
     }
-
-    handleChange=(e)=>{
-        this.setState({
-            [e.target.name]:e.target.value
+    componentDidMount = () => {
+        firebase.auth().onAuthStateChanged(user => {
+            this.setState({ isSignedIn: !!user })
+            if(!!user){
+                let firbaseuser={
+                    userid: user.email,
+                    profilepic:user.photoURL,
+                    firstname:user.displayName,
+                    phonenumber:user.phoneNumber
+                }
+            }
+            console.log("user", user)
+            console.log("user",JSON.stringify(user))
         })
     }
-    handleLogin=(e)=>{
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+    handleLogin = (e) => {
         e.preventDefault();
-        const user={
+        const user = {
             ...this.state
         }
-        
-        axios.post(url+"/login",user).then(async(res)=>{
-            localStorage.setItem("userid",res.data[0].id)
-            localStorage.setItem("role",res.data[0].role)
-            localStorage.setItem("email",res.data[0].email)
-            localStorage.setItem("username",res.data[0].username)
-            localStorage.setItem("verified",res.data[0].verified)
+
+        axios.post(url + "/login", user).then(async (res) => {
+            localStorage.setItem("userid", res.data[0].id)
+            localStorage.setItem("role", res.data[0].role)
+            localStorage.setItem("email", res.data[0].email)
+            localStorage.setItem("username", res.data[0].username)
+            localStorage.setItem("verified", res.data[0].verified)
 
             console.log(res.data)
-            console.log("Login successful ",res.status)
+            console.log("Login successful ", res.status)
             await this.setState({
-                redirectVar: <Redirect to="/profile"/>
+                redirectVar: <Redirect to="/profile" />
             })
 
-        }).catch((err)=>{
+        }).catch((err) => {
             // console.log(err)
             alert("Invalid credentials!")
         })
@@ -83,10 +113,14 @@ class Login extends Component {
                                         {/* <a class="float_left" href="#">Forgot Password?</a> */}
                                         <br></br>
                                         <button onClick={this.handleLogin.bind(this)} class="form_element btn_login btn btn-lg btn-block" type="submit">Log In</button>
-                                        <div class="social_login">
+                                        {/* <div class="social_login">
                                             <button class="form_element btn_fb btn btn-lg btn-block" >Log in with Facebook</button>
                                             <button class="form_element btn_google btn btn-lg btn-block">Log in with Google</button>
-                                        </div>
+                                        </div> */}
+                                        <StyledFirebaseAuth
+                                            uiConfig={this.uiConfig}
+                                            firebaseAuth={firebase.auth()}
+                                        />
                                         <div class="">
                                             <label class="form_footer">We don't post anything without your permission.</label>
                                         </div>
