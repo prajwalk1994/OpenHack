@@ -8,23 +8,23 @@ class submission extends Component {
         super(props);
         this.state = {
             url: "",
-            teamid:"",
-            hackathonId:localStorage.getItem("hackathonid"),
-            teamid:localStorage.getItem("teamid"),
+            teamid: "",
+            hackathonId: localStorage.getItem("hackathonid"),
+            teamid: localStorage.getItem("teamid"),
         }
     }
 
-    componentDidMount=()=>{
+    componentDidMount = () => {
 
     }
-    
+
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
 
-    checkPayment=()=>{
+    checkPayment = () => {
         alert("Submission successful!")
         // Axios.get(url+"/checkPayment",6)
         // .then((response)=>{
@@ -42,23 +42,23 @@ class submission extends Component {
         // })
     }
 
-    doSubmission=(e)=>{
+    doSubmission = (e) => {
         e.preventDefault();
-        
-        
+
+
         //check payment if all team members has made
         this.checkPayment();
 
 
-        Axios.get(url + "/submission/"+this.state.teamid+"/"+this.state.hackathonId)
+        Axios.get(url + "/submission/" + this.state.teamid + "/" + this.state.hackathonId)
             .then((response) => {
                 console.log(response.data)
-                console.log("state after response",this.state)
+                console.log("state after response", this.state)
             })
             .catch((err) => {
-                if(err.response){
-                console.log("errror", err.response)
-                }else{
+                if (err.response) {
+                    console.log("errror", err.response)
+                } else {
                     alert("something went wrong")
                 }
             })
@@ -66,14 +66,21 @@ class submission extends Component {
     render() {
         return (
             <div className="container">
-                <h3>Hackathon Submission</h3>
                 <center>
-                    <div className="row justify-content-center">
-                        <label className="col-sm-2">CODE URL</label>
-                        <input className="form-control col-sm-4" type="text" name="url" onChange={this.handleChange}  value={this.state.url}></input>
-                    </div>
-                    <div className="row justify-content-center">
-                        <button className="btn btn-primary" name="pay" onClick={this.doSubmission}>Submit Code URL</button>
+                    <div className="row col-sm-6 formContainer justify-content-center">
+                        <div className="row">
+                            <h3>Hackathon Submission</h3>
+                        </div>
+                        <div className="row">
+                            submission details if any
+                        </div>
+                        <div className="row">
+                            <label className="col-sm-3">CODE URL</label>
+                            <input className="form-control col-sm-9" type="text" name="url" onChange={this.handleChange} value={this.state.url}></input>
+                        </div>
+                        <div className="row">
+                            <button className="form_element btn btn_login" name="pay" onClick={this.doSubmission}>Submit Code URL</button>
+                        </div>
                     </div>
                 </center>
             </div>

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import {Link,Redirect} from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 class Payment extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            price: 100,
-            discount:0,
-            redirectVar:""
+            price: 0,
+            discount: 0,
+            redirectVar: ""
         }
     }
 
@@ -15,7 +15,7 @@ class Payment extends Component {
         e.preventDefault();
         alert("Payment email sent!")
         this.setState({
-            redirectVar:<Redirect to="/submission"></Redirect>
+            redirectVar: <Redirect to="/submission"></Redirect>
         })
     }
 
@@ -26,7 +26,7 @@ class Payment extends Component {
                     {this.state.redirectVar}
                     {/* PAYMENT CARD START */}
                     <form class="payment container">
-                        <body className="col-sm-6">
+                        <div className="col-sm-6 formContainer" style={{ margin: "25px" }}>
                             <div class="panel panel-default credit-card-box">
                                 <div class="panel-heading display-table">
                                     <div class="row display-tr">
@@ -47,19 +47,27 @@ class Payment extends Component {
                                 <label className="col-sm-2" >Total</label>
                                 <input className="form-control col-sm-4" type="text" name="discount" value={this.state.discount} disabled></input>
                             </div>
-                            <label for="cardNumber">CARD NUMBER</label>
-                            <input type="number" maxlength="16" class="form-control" name="cardNumber" placeholder="Valid Card Number" autocomplete="cc-number" required autofocus />
-                            <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                            <label for="cardExpir">EXPIRATION DATE</label>
-                            <input type="number" maxlength="5" class="form-control" name="cardExpiry" placeholder="MM / YY" autocomplete="cc-exp" required />
-                            <label for="cardCVC">CV CODE</label>
-                            <input type="number" maxlength="3" class="form-control" name="cardCVC" placeholder="CVV" autocomplete="cc-csc" required />
-                        </body>
+                            <div className="row justify-content-right">
+                                <label for="cardNumber" className="col-sm-4">CARD NUMBER</label>
+                                <input type="number" maxlength="16" className="form-control col-sm-8" name="cardNumber" placeholder="Valid Card Number" autocomplete="cc-number" required autofocus />
+                            </div>
+
+                            <div className="row justify-content-right">
+                                <label for="cardNumber" className="col-sm-4">EXPIRATION DATE</label>
+                                <input type="date" maxlength="5" class="form-control col-sm-8" name="cardExpiry" placeholder="MM / YY" autocomplete="cc-exp" required />
+                            </div>
+                            <div className="row justify-content-right">
+                                <label for="cardNumber" className="col-sm-4">CVV</label>
+                                <input type="number" maxlength="3" class="form-contro col-sm-8" name="cardCVC" placeholder="CVV" autocomplete="cc-csc" required />
+                            </div>
+                            <div className="row justify-content-center">
+                                <button className="form_element btn btn_login" name="pay" onClick={this.makePayment} >Make payment</button>
+                            </div>
+                        </div>
+
                     </form>
                     {/* PAYMENT CARD END */}
-                    <div className="row justify-content-center">
-                        <button className="btn btn-primary" name="pay" onClick={this.makePayment} >Make payment</button>
-                    </div>
+
                 </center>
             </div>
         );

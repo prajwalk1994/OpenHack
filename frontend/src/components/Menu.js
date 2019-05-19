@@ -14,6 +14,7 @@ import CreateOrganization from './Organizations/CreateOrganization';
 import searchOrganizations from './Organizations/searchOrganizations'
 import searchHackathons from './Hackathons/searchHackathons';
 import Navbar from './Navbar/Navbar';
+import Navbar2 from './Navbar/Navbar2'
 class Menu extends Component {
     constructor(props) {
         super(props);
@@ -23,7 +24,7 @@ class Menu extends Component {
     render() {
         return(
             <div>
-                <Route  path="/" component={Navbar} />
+                <Route  path="/" component={Navbar2} />
                 <Route  path="/login" component={Login} />
                 <Route  path="/signup" component={SignUp} />
                 <Route  path="/landingpage" component={Landingpage} />

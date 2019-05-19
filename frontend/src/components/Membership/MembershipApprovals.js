@@ -96,13 +96,15 @@ class MembershipApprovals extends Component {
         })
 
         return (
-            <div className="container">
-                <h3>Membership Approvals</h3>
-                <div className="row justify-content-center">
-                    <h6 className="col-sm-3">Username</h6>
-                    <h6 className="col-sm-3">Organization name</h6>
+            <div className="container mt-5">
+                <div className="formContainer" style={{ marginLeft: "25%", marginRight: "25%" }}>
+                    <h3>Membership Approvals</h3>
+                    <div className="row justify-content-center">
+                        <h6 className="col-sm-6">Username</h6>
+                        <h6 className="col-sm-6">Organization name</h6>
+                    </div>
+                    {MembershipRequests}
                 </div>
-                {MembershipRequests}
             </div>
         );
     }

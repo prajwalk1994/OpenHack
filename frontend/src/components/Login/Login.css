@@ -1,20 +1,6 @@
-.bg_div{
-  position: relative;
-  height: 100%;
-  width: 100%;
-  min-height: 100vh;
-    background-color: #f1f1f1;
-  /* background: url("../../images/1.jpg") no-repeat center center; */
-  background-size: cover;
-background-attachment: fixed; 
-}
-
 .intro {
+    margin-top:110px;
     position: absolute;
-    top: 10vh;
-    right: 0;
-    bottom: 0;
-    left: 0;
     color: #fff;
     font-family: 'Julius Sans One', sans-serif;
 }
@@ -51,6 +37,16 @@ margin-top: 1vh;
 
 .float_left{
     float:left;
+}
+
+.loginHeader{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #FFF;
+}
+
+.orangeColor{
+    color:#FFF;
 }
 
 .btn_login{

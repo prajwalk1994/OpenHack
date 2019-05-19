@@ -9,7 +9,6 @@ class Landingpage extends Component {
                     <Navbar></Navbar>
                 </div>
                 <div>
-
                 </div>
             </div>
         );

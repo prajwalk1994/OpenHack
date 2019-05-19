@@ -34,7 +34,7 @@ class Profile extends Component {
     }
 
     componentDidMount = async () => {
-        
+
         // console.log("**************************cfhgjhk*")
 
         await axios.get(url + "/hackathonsByUser/" + this.state.userId)
@@ -42,10 +42,10 @@ class Profile extends Component {
                 // console.log("***************************")
                 let hackathons = response.data;
                 console.log(hackathons);
-                var temphackslist=[]
+                var temphackslist = []
                 hackathons.map((hackathon) => {
                     temphackslist.push(hackathon)
-                    
+
                 })
                 this.setState({
                     myHackathons: temphackslist,
@@ -99,7 +99,7 @@ class Profile extends Component {
         //         console.log("Error ", error);
         //     })
 
-        
+
     }
 
     handleChange = (e) => {
@@ -206,42 +206,59 @@ class Profile extends Component {
         }
     }
 
-    submitcode=(e)=>{
+    submitcode = (e) => {
         this.setState({
-            redirectTo:<Redirect to="/Payment"/>
+            redirectTo: <Redirect to="/Payment" />
         })
         // Axios.post()
     }
 
     render() {
         var organizationsDiv = (<div>No Organizations</div>);
-        var organizationsDiv = this.state.myOrganizations.map((item) => {
-            //console.log(item)
-            return (
-                <div className="row">
-                    <label className="col-sm-8">{item}</label>
-                    <button className="btn btn-danger col-sm-4">leave</button>
+        if (this.state.myOrganizations.length > 0) {
+            var organizationsDiv = this.state.myOrganizations.map((item) => {
+                //console.log(item)
+                return (
+                    <div className="row">
+                        <label className="col-sm-8">{item}</label>
+                        <button className="btn btn-danger col-sm-4">leave</button>
+                    </div>
+                )
+            })
+        } else {
+            var organizationsDiv = (
+                <div className="row justify-content-center">
+                    No Organizations now
                 </div>
             )
-        })
+        }
+
         var HackathonsDiv = (<div>No Organizations</div>);
-        var HackathonsDiv = this.state.myHackathons.map((item) => {
-            //console.log(item)
-            return (
-                <div className="row">
-                    <label className="col-sm-8">{item.name}</label>
-                    <button className="btn btn-primary col-sm-4" onClick={this.submitcode}>submit </button>
+        if (this.state.myHackathons.length > 0) {
+            HackathonsDiv = this.state.myHackathons.map((item) => {
+                //console.log(item)
+                return (
+                    <div className="row">
+                        <label className="col-sm-8">{item.name}</label>
+                        <button className="btn btn-primary col-sm-4" onClick={this.submitcode}>submit </button>
+                    </div>
+                )
+            })
+        } else {
+            HackathonsDiv = (
+                <div className="row justify-content-center">
+                    No Hackathons now
                 </div>
             )
-        })
+        }
 
         return (
-            <div>
+            <div className="scroll" style={{ marginLeft: "10%", marginRight: "5%" }}>
                 <div>
                     {this.state.redirectTo}
                 </div>
                 <div className="row parentRow">
-                    <div className="col-sm-4 border border-1">
+                    <div className="formContainer col-sm-3" style={{ margin: "15px" }}>
                         <div className="mb-4">
                             <img className="profilePic" src={require("../../images/user.png")} ></img>
                         </div>
@@ -267,52 +284,55 @@ class Profile extends Component {
                             <input type="text" className="form-control" onChange={this.handleAddress} name="state" value={this.state.address.state} placeholder="state" />
                         </div>
                         <div>
-                            <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+                            <button className="form_element btn_login btn btn-lg btn-block" onClick={this.handleSubmit}>Submit</button>
                         </div>
                     </div>
-                    <div className="col-sm-4 border border-1">
-                        <div>
-                            <h3>My organizations</h3>
+                    <div className="row col-sm-3" style={{ margin: "15px" }}>
+
+                        <div className="formContainer">
+                            <div>
+                                <h3>My Hackathons List</h3>
+                            </div>
+                            <div>
+                                {HackathonsDiv}
+                            </div>
                         </div>
-                        <div>
-                            {organizationsDiv}
-                        </div>
-                        <div >
-                            <button className="btn btn-primary" onClick={this.searchOrgnizations}>search organizations</button>
-                        </div>
-                        <div>
-                            <label> </label>
-                        </div>
-                        <div>
-                            <button className="btn btn-primary" onClick={this.createOrg}>create organization</button>
-                        </div>
-                        <div>
-                            <label> </label>
-                        </div>
-                        <div>
-                            <button className="btn btn-primary" onClick={this.approveMembership}>Approve Membership</button>
+                        <div className="formContainer">
+                            <div>
+                                <h3>My organizations List</h3>
+                            </div>
+                            <div>
+                                {organizationsDiv}
+                            </div>
                         </div>
                     </div>
-                    <div className="col-sm-4 border border-1">
-                        <div>
-                            <h3>My Hackathons</h3>
+                    <div className="row col-sm-4" style={{ margin: "15px" }}>
+
+
+                        <div className="formContainer">
+                            <div className="">
+                                <button className="form_element btn_login btn btn-block" onClick={this.searchHackathon}>search Hackathons</button>
+                            </div>
+                            <div>
+                                <button className="form_element btn_login btn btn-block" onClick={this.createHackathon}>create Hackathon</button>
+                            </div>
+                            <div>
+                                <button className="form_element btn_login btn btn-block" onClick={this.judgehackathon}>Judge Hackathon</button>
+                            </div>
                         </div>
-                        <div>
-                            {HackathonsDiv}
-                        </div>
-                        <div className="row justify-content-center">
-                            <button className="btn btn-primary" onClick={this.searchHackathon}>search Hackathons</button>
-                        </div>
-                        <div>
-                            <button className="btn btn-primary" onClick={this.createHackathon}>create Hackathon</button>
-                        </div>
-                        <div>
-                            <label> </label>
-                        </div>
-                        <div>
-                            <button className="btn btn-primary" onClick={this.judgehackathon}>Judge Hackathon</button>
+                        <div className="formContainer">
+                            <div>
+                                <button className="form_element btn_login btn btn-block" onClick={this.searchOrgnizations}>search organizations</button>
+                            </div>
+                            <div>
+                                <button className="form_element btn_login btn btn-block" onClick={this.createOrg}>create organization</button>
+                            </div>
+                            <div>
+                                <button className="form_element btn_login btn btn-block" onClick={this.approveMembership}>Approve Membership</button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         );

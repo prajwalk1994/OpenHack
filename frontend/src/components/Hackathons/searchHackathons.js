@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import url from '../../config/config'
-import {Link,Redirect} from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 class searchHackathons extends Component {
     constructor(props) {
@@ -36,7 +36,7 @@ class searchHackathons extends Component {
                 var maxSizeList = []
                 // var tempOrgIds=[]
                 for (let i of response.data) {
-                    if(i.status!="\"No\""){
+                    if (i.status != "\"No\"") {
                         tempHack.push(i.name)
                         minSizeList.push(i.minTeam)
                         maxSizeList.push(i.maxTeam)
@@ -87,7 +87,7 @@ class searchHackathons extends Component {
                 await Axios.post(url + `/hackathonteam/${this.state.hackathonId}/${response.data.id}`).then(async response => {
                     alert("Creation successful")
                     await this.setState({
-                        redirectTo: <Redirect to="/profile"/>
+                        redirectTo: <Redirect to="/profile" />
                     })
                 })
 
@@ -146,7 +146,7 @@ class searchHackathons extends Component {
 
     }
     DeleteHackathon = async (e, id) => {
-        await Axios.post(url + `/hackathon/changeStatus/${id}/"No"`).then(res=>{
+        await Axios.post(url + `/hackathon/changeStatus/${id}/"No"`).then(res => {
             console.log(res.data)
         }).catch((err) => {
             if (err.response) {
@@ -175,7 +175,7 @@ class searchHackathons extends Component {
                     <div></div>
                     <h4 className="">{item}</h4>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    {(localStorage.getItem("role")=="Admin")?<button className="btn btn-danger" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button>:<button className="btn btn-primary" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
+                    {(localStorage.getItem("role") == "Admin") ? <button className="btn btn-danger" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button> : <button className="btn btn-primary" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
                     <br></br>
                 </div>
             )
@@ -207,53 +207,53 @@ class searchHackathons extends Component {
 
         return (
             <div>
-                <div>                
-                {this.state.redirectTo}
+                <div>
+                    {this.state.redirectTo}
                 </div>
                 <center>
-                    <h3>Search Hackathons</h3>
-                    <div>
-                        <div className="row justify-content-center">
-                            <div className="col-sm-4 ">
+                    <div></div>
+                    
+                    <div className=" container  row">
+                        <div className="justify-content-center formContainer">
+                        <h3>Search Hackathons</h3>
+                            <div className="">
                                 <input type="text" className="form-control mb-4" name="searchHackathon" placeholder="Search Hackathons"></input>
-                                <button className="btn btn-primary" onClick={this.searchHackathons}>Search</button>                            </div>
+                                <button className="btn btn_login" onClick={this.searchHackathons}>Search</button>                            </div>
+                        </div>
+                        <div className="justify-content-center formContainer ml-5">
+                            {!this.state.visibility ? <h3>List of all Hackathons</h3> : <div></div>}
+                            <div className=" justify-content-center">
+                                {!this.state.visibility ? hackathonsListDiv : searchedHackathonDiv}
+                            </div>
                         </div>
 
-                        {!this.state.visibility ? <h3>List of all Hackathons</h3> : <div></div>}
-                        <div className=" justify-content-center">
-                            {!this.state.visibility ? hackathonsListDiv : searchedHackathonDiv}
+                        <div >
+                            {!this.state.visibility ? <div /> : <div className="justify-content-center formContainer ml-5">
+                                <center>
+                                    <h3>Enter Team Details</h3>
+                                    <h4> <label className="mb-4 mr-3" name="searchedName">{this.state.hackathonSearched}</label></h4>
+                                    <table>
+                                        <tr>
+                                            <td><input type="text" name="teamName" placeholder="Team Name" onChange={this.handleChange} />
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                        {teamMembers}
+                                    </table>
+                                    <div className="row justify-content-center">
+                                        <div className="col-sm-4 ">
+                                            <button className="btn btn-primary" onClick={this.changeTeamSize}>+ add More</button>
+                                        </div>
+                                    </div>
+                                    <div className="row justify-content-center">
+                                        <div className="col-sm-4 ">
+                                            <button className="btn btn-primary" onClick={this.sendJoinRequest}>join Hackathon</button>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>}
                         </div>
-
-                        {/* MODAL FOR TEAM START */}
-
-                        {/* MODAL FOR TEAM END */}
-                        {!this.state.visibility ? <div /> : <div>
-                            <center>
-                                <h3>Enter Team Details</h3>
-                                <h4> <label className="mb-4 mr-3" name="searchedName">{this.state.hackathonSearched}</label></h4>
-                                <table>
-                                    <tr>
-                                        <td><input type="text" name="teamName" placeholder="Team Name" onChange={this.handleChange} />
-                                        </td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    {teamMembers}
-                                </table>
-                                <div className="row justify-content-center">
-                                    <div className="col-sm-4 ">
-                                        <button className="btn btn-primary" onClick={this.changeTeamSize}>+ add More</button>
-                                    </div>
-                                </div>
-                                <div className="row justify-content-center">
-                                    <div className="col-sm-4 ">
-                                        <button className="btn btn-primary" onClick={this.sendJoinRequest}>join Hackathon</button>
-                                    </div>
-                                </div>
-                            </center>
-                        </div>}
-
-
 
                     </div>
                 </center>

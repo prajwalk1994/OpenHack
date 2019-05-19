@@ -1,9 +1,9 @@
-.parentRow{
+ .parentRow{
     margin:50px;
 }
 .row{
     margin:20px;
-}
+} 
 .profilePic{
     width:100px;
     height:100px;
@@ -13,6 +13,7 @@
     margin : 0px 40% 0px 40%;
     background-color: fff;
 }
+
 
 .profileHeader H2{
     font-weight: 500px;

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css'
 import url from '../../config/config'
-import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 import { Link, Redirect } from "react-router-dom";
 import firebase from 'firebase'
@@ -82,12 +81,11 @@ class Login extends Component {
                 <div>
                     {this.state.redirectVar}
                 </div>
-                <div id="home" class="bg_div">
+                <div id="home" class="">
                     <center>
                         <div class="loginHeader" >
-                            {/* <Alert bsStyle="warning"></Alert> */}
                             <h2>Log in to OpenHack</h2>
-                            <p className="">Need an account? <a href="#"><Link to="/SignUp"><span>Sign Up</span></Link></a></p>
+                            <p className="">Need an account? <a href="#"><Link to="/SignUp"><span className="orangeColor"><u>Sign Up</u></span></Link></a></p>
                         </div>
                         <div className="container intro">
                             <div class="formContainer col-lg-4 col-lg-offset-4 col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
@@ -98,19 +96,6 @@ class Login extends Component {
                                     <form>
                                         <input class="form-control form_element" onChange={this.handleChange.bind(this)} type="email" name="email" value={this.state.email} type="text" placeholder="Email address"></input>
                                         <input class="form-control form_element" onChange={this.handleChange.bind(this)} name="password" value={this.state.password} type="Password" placeholder="password"></input>
-                                        {/* <div class="form-group" className="row">
-                                            <div className="col-sm-3 align-middle">
-                                                <label for="role">Role</label>
-                                            </div>
-                                            <div className="col-sm-9">
-                                                <select class="form-control" id="role">
-                                                    <option>Hacker</option>
-                                                    <option>Judge</option>
-                                                    <option>Admin</option>
-                                                </select>
-                                            </div>
-                                        </div> */}
-                                        {/* <a class="float_left" href="#">Forgot Password?</a> */}
                                         <br></br>
                                         <button onClick={this.handleLogin.bind(this)} class="form_element btn_login btn btn-lg btn-block" type="submit">Log In</button>
                                         {/* <div class="social_login">

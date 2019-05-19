@@ -13,7 +13,6 @@ class Judge extends Component {
         e.preventDefault();
     }
     render() {
-
         var urlList = "";
         urlList = this.state.urls.map((item,i)=>{
             return(
@@ -25,7 +24,8 @@ class Judge extends Component {
         })
 
         return (
-            <div className="container">
+            <div className="container mt-5">
+                <div className="formContainer" style={{marginLeft:"25%",marginRight:"25%"}}>
                 <h3>Judge Hackathon</h3>
                 <center>
                     <div className="row justify-content-start">
@@ -34,9 +34,10 @@ class Judge extends Component {
                     </div>
                     {urlList}
                     <div className="row justify-content-center">
-                        <button className="btn btn-primary" name="judge" onClick={this.judge} >DONE</button>
+                        <button className="btn btn_login form_element" name="judge" onClick={this.judge} >DONE</button>
                     </div>
                 </center>
+                </div>
             </div>
         );
     }
