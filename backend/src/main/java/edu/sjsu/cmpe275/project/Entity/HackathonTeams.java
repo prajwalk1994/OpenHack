@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +19,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name="HACKATHON_TEAMS")
 public class HackathonTeams implements Serializable{
+	
+	public enum SubmissionStatus{
+		Yes,
+		No
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +41,14 @@ public class HackathonTeams implements Serializable{
     private Team teamId;
 	
 	@Column(name="GRADE")
-	private String Grade;
+	private Float Grade;
 	
 	@Column(name="PAYMENTS")
 	private String Payments;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name="SUBMISSION_STATUS")
-	private String Submission_status;
+	private SubmissionStatus Submission_status;
 	
 //	@Column(name = "SUBMISSION_URL")
 //	private String submissionUrl;
@@ -73,11 +81,11 @@ public class HackathonTeams implements Serializable{
 		this.teamId = teamId;
 	}
 
-	public String getGrade() {
+	public Float getGrade() {
 		return Grade;
 	}
 
-	public void setGrade(String grade) {
+	public void setGrade(Float grade) {
 		Grade = grade;
 	}
 
@@ -89,11 +97,11 @@ public class HackathonTeams implements Serializable{
 		Payments = payments;
 	}
 
-	public String getSubmission_status() {
+	public SubmissionStatus getSubmission_status() {
 		return Submission_status;
 	}
 
-	public void setSubmission_status(String submission_status) {
+	public void setSubmission_status(SubmissionStatus submission_status) {
 		Submission_status = submission_status;
 	}
 

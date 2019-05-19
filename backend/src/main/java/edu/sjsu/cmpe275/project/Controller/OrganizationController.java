@@ -64,6 +64,7 @@ public class OrganizationController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+	
 
 	@PutMapping("/organization/{organizationId}")
 	public ResponseEntity<Organization> putOrganization(@RequestBody Organization organization) {
