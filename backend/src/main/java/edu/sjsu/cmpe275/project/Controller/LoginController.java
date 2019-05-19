@@ -105,7 +105,7 @@ public class LoginController {
 		user.setAccessToken(accessToken);
 		user = userDao.save(user);
 		System.out.println("User saved and mail is being sent!");
-		//mailService.sendMail(accessToken, email);
+		mailService.sendMail(accessToken, email);
 		return new ResponseEntity<>("Success!", HttpStatus.OK);
 	}
 

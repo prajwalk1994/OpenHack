@@ -9,28 +9,47 @@ class submission extends Component {
         this.state = {
             url: "",
             teamid:"",
-            hackathonId:""
+            hackathonId:localStorage.getItem("hackathonid"),
+            teamid:localStorage.getItem("teamid"),
         }
     }
 
     componentDidMount=()=>{
 
     }
+    
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
 
     checkPayment=()=>{
-        Axios.get(url+"/checkPayment")
-        .then((response)=>{
-
-        })
-        .catch((response)=>{
-
-        })
+        alert("Submission successful!")
+        // Axios.get(url+"/checkPayment",6)
+        // .then((response)=>{
+        //     console.log(response.data)
+        //     Axios.post(url+"/submission").then(res=>{
+        //         console.log(res.data)
+        //     })
+        // })
+        // .catch((err) => {
+        //     if(err.response){
+        //     console.log("errror", err.response.data)
+        //     }else{
+        //         alert("Something went wrong!")
+        //     }
+        // })
     }
 
     doSubmission=(e)=>{
         e.preventDefault();
+        
+        
         //check payment if all team members has made
         this.checkPayment();
+
+
         Axios.get(url + "/submission/"+this.state.teamid+"/"+this.state.hackathonId)
             .then((response) => {
                 console.log(response.data)
@@ -51,7 +70,7 @@ class submission extends Component {
                 <center>
                     <div className="row justify-content-center">
                         <label className="col-sm-2">CODE URL</label>
-                        <input className="form-control col-sm-4" type="text" name="url" value={this.state.url}></input>
+                        <input className="form-control col-sm-4" type="text" name="url" onChange={this.handleChange}  value={this.state.url}></input>
                     </div>
                     <div className="row justify-content-center">
                         <button className="btn btn-primary" name="pay" onClick={this.doSubmission}>Submit Code URL</button>

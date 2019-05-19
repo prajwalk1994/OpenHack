@@ -4,7 +4,8 @@ import axios from 'axios';
 import Navbar from '../Navbar/Navbar';
 import url from '../../config/config'
 import { Link, Redirect } from "react-router-dom";
-
+import Axios from 'axios';
+import Payment from '../Payment/Payment'
 
 class Profile extends Component {
 
@@ -205,6 +206,12 @@ class Profile extends Component {
         }
     }
 
+    submitcode=(e)=>{
+        this.setState({
+            redirectTo:<Redirect to="/Payment"/>
+        })
+        // Axios.post()
+    }
 
     render() {
         var organizationsDiv = (<div>No Organizations</div>);
@@ -223,7 +230,7 @@ class Profile extends Component {
             return (
                 <div className="row">
                     <label className="col-sm-8">{item.name}</label>
-                    <button className="btn btn-primary col-sm-4">submit</button>
+                    <button className="btn btn-primary col-sm-4" onClick={this.submitcode}>submit </button>
                 </div>
             )
         })

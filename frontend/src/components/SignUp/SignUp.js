@@ -31,7 +31,7 @@ class SignUp extends Component {
             if(res.data=="Success!"){
                 console.log("Signup successful")
                  await this.setState({
-                    redirectVar: <Redirect to="/"/>
+                    redirectVar: <Redirect to="/login"/>
                 })
             }
             else{
