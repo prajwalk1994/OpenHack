@@ -14,7 +14,7 @@ class searchHackathons extends Component {
             maxteamSizeList: 0,
             visibility: false,
             allHackathonsData: [],
-            hackathonsList: [],
+            hackathonsList: ["Code bug","codera"],
             visibility: false,
             members: {},
             roles: {},
@@ -171,11 +171,10 @@ class searchHackathons extends Component {
         var hackathonsListDiv = "";
         hackathonsListDiv = this.state.hackathonsList.map((item, index) => {
             return (
-                <div className="">
+                <div className="row">
                     <div></div>
-                    <h4 className="">{item}</h4>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    {(localStorage.getItem("role") == "Admin") ? <button className="btn btn-danger" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button> : <button className="btn btn-primary" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
+                    <h4 className="col-sm-6">{item}</h4>
+                    {(localStorage.getItem("role") == "Admin") ? <button className="btn btn-danger col-sm-6" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button> : <button className="btn btn_login col-sm-6" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
                     <br></br>
                 </div>
             )
@@ -185,9 +184,18 @@ class searchHackathons extends Component {
         searchedHackathonDiv = (
             <div className="row justify-content-center">
                 <label className="mb-4 mr-3" name="searchedName">{this.state.organizationSearched}</label>
-                <button className="btn btn-primary" onClick={this.sendJoinRequest}>join</button>
+                <button className="btn btn_login" onClick={this.sendJoinRequest}>join</button>
             </div>
         )
+
+        var datalistHackathons = "";
+        datalistHackathons = this.state.hackathonsList.map((item, index) => {
+            return (
+                <div>
+                    <option value={item} />
+                </div>
+            )
+        })
 
 
         var teamMembers = Array.apply(null, { length: this.state.minteamSize }).map((e, i) => (
@@ -212,13 +220,17 @@ class searchHackathons extends Component {
                 </div>
                 <center>
                     <div></div>
-                    
+
                     <div className=" container  row">
                         <div className="justify-content-center formContainer">
-                        <h3>Search Hackathons</h3>
+                            <h3>Search Hackathons</h3>
                             <div className="">
-                                <input type="text" className="form-control mb-4" name="searchHackathon" placeholder="Search Hackathons"></input>
-                                <button className="btn btn_login" onClick={this.searchHackathons}>Search</button>                            </div>
+                                <input list="hackathons1" type="text" className="form-control mb-4" name="searchHackathon" placeholder="Search Hackathons"></input>
+                                <datalist id="hackathons1">
+                                    {datalistHackathons}
+                                </datalist>
+                                <button className="btn btn_login" onClick={this.searchHackathons}>Search</button>
+                            </div>
                         </div>
                         <div className="justify-content-center formContainer ml-5">
                             {!this.state.visibility ? <h3>List of all Hackathons</h3> : <div></div>}
@@ -242,13 +254,13 @@ class searchHackathons extends Component {
                                         {teamMembers}
                                     </table>
                                     <div className="row justify-content-center">
-                                        <div className="col-sm-4 ">
-                                            <button className="btn btn-primary" onClick={this.changeTeamSize}>+ add More</button>
+                                        <div className="col-sm-4">
+                                            <button className="btn btn_login" onClick={this.changeTeamSize}>+ add More</button>
                                         </div>
                                     </div>
                                     <div className="row justify-content-center">
                                         <div className="col-sm-4 ">
-                                            <button className="btn btn-primary" onClick={this.sendJoinRequest}>join Hackathon</button>
+                                            <button className="btn btn_login" onClick={this.sendJoinRequest}>join Hackathon</button>
                                         </div>
                                     </div>
                                 </center>

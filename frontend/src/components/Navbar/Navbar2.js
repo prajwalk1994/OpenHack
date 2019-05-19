@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import '../Navbar/Navbar2.css'
+import {Redirect} from 'react-router-dom';
 class Navbar2 extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            redirect:true
+        }
+    }
+
     render() {
         return (
+        // {this.state.redirect ? <Redirect to="/login"></Redirect>:<div></div>}
+
             <div>
                 <div class="nav-wrapper">
                     <div class="logo-container">

@@ -19,6 +19,7 @@ class Profile extends Component {
             name: "",
             username: "",
             businessTitle: "",
+            screenName:"",
             // organization: "",
             aboutMe: "",
             address: {
@@ -261,6 +262,7 @@ class Profile extends Component {
                     <div className="formContainer col-sm-3" style={{ margin: "15px" }}>
                         <div className="mb-4">
                             <img className="profilePic" src={require("../../images/user.png")} ></img>
+                            <h5>{this.state.screenName}</h5>
                         </div>
                         <div className="mb-4">
                             <input type="text" className="form-control" onChange={this.handleChange} name="name" value={this.state.name} placeholder="name" />
