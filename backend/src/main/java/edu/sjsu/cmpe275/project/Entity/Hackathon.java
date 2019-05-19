@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +23,12 @@ import javax.persistence.JoinColumn;;
 @Entity
 @Table(name = "HACKATHON")
 public class Hackathon {
+	
+	public enum Status{
+		Open,
+		Closed,
+		Final
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,7 +75,8 @@ public class Hackathon {
 	private int sponDiscount;
 
 	@Column(name = "STATUS")
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private Status status;
 	
 	@OneToMany(mappedBy = "hackId", cascade = CascadeType.ALL)
     private List<HackathonTeams> HackathonTeams;
@@ -160,11 +169,11 @@ public class Hackathon {
 		this.sponDiscount = sponDiscount;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 

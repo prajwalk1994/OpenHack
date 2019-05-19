@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
+import edu.sjsu.cmpe275.project.Entity.Hackathon.Status;
 import edu.sjsu.cmpe275.project.Entity.User;
 import edu.sjsu.cmpe275.project.Repository.UserDao;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
@@ -170,7 +171,7 @@ public class HackathonController {
 	}
 	
 	@PostMapping("hackathon/changeStatus/{hackId}/{status}")
-	public ResponseEntity<Object> changeHackathonStatus(@PathVariable("hackId") int hackId, @PathVariable("status") String status){
+	public ResponseEntity<Object> changeHackathonStatus(@PathVariable("hackId") int hackId, @PathVariable("status") Status status){
 		try {
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
 			if(!hackathon.isPresent()) {
@@ -200,6 +201,22 @@ public class HackathonController {
 			currentJudgeList.add(currUser);
 			currHackathon.setJudgeList(currentJudgeList);
 			return new ResponseEntity<Object>(this.hackathonService.addHackathon(currHackathon), HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("hackathon/judges/{hackId}")
+	public ResponseEntity<Object> getJudgeList(@PathVariable("hackId") int hackId){
+		try {
+			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
+			if(!hackathon.isPresent()) {
+				return new ResponseEntity<Object>("Hackathon not found", HttpStatus.NOT_FOUND);
+			}
+			Hackathon currHackathon = hackathon.get();
+			return new ResponseEntity<Object>(currHackathon.getJudgeList(), HttpStatus.OK);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

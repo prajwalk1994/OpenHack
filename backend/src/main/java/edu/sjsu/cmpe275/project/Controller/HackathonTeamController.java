@@ -83,7 +83,7 @@ public class HackathonTeamController {
 	public ResponseEntity<Object> getHackathonsByUser(@PathVariable("userId") int userId){
 		try {
 			Optional<User> user = this.userService.getUser(userId);
-			List<Hackathon> hackathons = new ArrayList<>();
+			List<HackathonTeams> hackathons = new ArrayList<>();
 			if(!user.isPresent()) {
 				return new ResponseEntity<Object>("User not found", HttpStatus.NOT_FOUND);
 			}
@@ -93,7 +93,7 @@ public class HackathonTeamController {
 				List<HackathonTeams> hackathonTeams = this.hackathonTeamsService.getHackathonTeamsByTeamId(team.getId());
 				System.out.println(hackathonTeams);
 				for(HackathonTeams hackTeam: hackathonTeams) {
-					hackathons.add(hackTeam.getHackId());
+					hackathons.add(hackTeam);
 				}
 			}
 			return new ResponseEntity<Object>(hackathons, HttpStatus.OK);
