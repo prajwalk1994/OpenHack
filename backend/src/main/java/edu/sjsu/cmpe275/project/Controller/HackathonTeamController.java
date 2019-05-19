@@ -75,7 +75,22 @@ public class HackathonTeamController {
 		TeamMember currMember=a.get(0);
 		currMember.setPayment(true);
 		this.teamMemberService.addTeamMember(currMember);
-		return null;
+		List<TeamMember> a1=teamMemberService.getTeamMemberByTeamIdAndUserId(teamid, userid);
+		for(TeamMember member:a1) {
+			if(!member.isPayment()) {
+				return new ResponseEntity<Object>("Team Payment Not Done", HttpStatus.OK);
+			}
+		}
+		Optional<HackathonTeams> hackTeam=hackathonTeamsService.getHackathonTeams(teamid);
+		if(hackTeam.isEmpty()) {
+			return new ResponseEntity<Object>("Team Not present", HttpStatus.OK);
+		}
+		HackathonTeams currTeam=hackTeam.get();
+		currTeam.setPayments("1");
+		this.hackathonTeamsService.addHackathonTeams(currTeam);
+		// throw mail
+		System.out.println("Mail sent as team payment is done!");
+		return new ResponseEntity<Object>("Team Payment Done and Mail Sent", HttpStatus.OK);
 	}
 	
 	
@@ -103,4 +118,17 @@ public class HackathonTeamController {
 			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+//	@GetMapping("/checkTeamPayment")
+//	public ResponseEntity<Object> checkTeamPayment(@RequestParam("hack_id") int hack_id){
+//		try {
+//			
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+//		}
+//		return null;
+//		
+//	}
 }
