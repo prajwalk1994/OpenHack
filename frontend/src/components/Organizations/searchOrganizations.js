@@ -9,7 +9,7 @@ class searchOrganizations extends Component {
             userid: localStorage.getItem("userid"),
             organizationSearched: "EMPTY NAME",
             organizationSearchedId: "",
-            organizationsList: ["asd", "vhgjbh"],
+            organizationsList: ["happy", "haoppy"],
             // organizationsIds:[],
             AllOrgsData: "",
             visibility: false
@@ -21,7 +21,6 @@ class searchOrganizations extends Component {
         axios.get(url + "/organizations")
             .then((response) => {
                 console.log(response.data)
-
                 this.setState({
                     AllOrgsData: response.data
                 })
@@ -79,6 +78,15 @@ class searchOrganizations extends Component {
             )
         })
 
+        var datalistOrgs = "";
+        datalistOrgs = this.state.organizationsList.map((item,index)=>{
+            return(
+                <div>
+                    <option value={item}/>
+                </div>
+            )
+        })
+
         var searchedOrgDiv = "";
         searchedOrgDiv = (
             <div className="row">
@@ -86,12 +94,16 @@ class searchOrganizations extends Component {
                 <button className="col-sm-9  btn btn_login" onClick={this.sendJoinRequest}>join</button>
             </div>
         )
+
         return (
             <div className="row justify-content-center">
                 <div className=" justify-content-center formContainer">
                     <h3>Search Organizations</h3>
                     <div className="row justify-content-center">
-                        <input type="text" className="form-control mb-4" name="searchOrg" placeholder="search organizations"></input>
+                        <input list="organizations" type="text" className="form-control mb-4" name="searchOrg" placeholder="search organizations"></input>
+                        <datalist id="organizations">
+                            {datalistOrgs}
+                        </datalist>
                     </div>
                     <div className="row justify-content-center">
                         <button className="form_element btn btn_login" onClick={this.searchOrgnizations}>Search</button>
