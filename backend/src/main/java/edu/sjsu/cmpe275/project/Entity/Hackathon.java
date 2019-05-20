@@ -16,7 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.JoinColumn;;
 
@@ -79,6 +81,7 @@ public class Hackathon {
 	private Status status;
 	
 	@OneToMany(mappedBy = "hackId", cascade = CascadeType.ALL)
+	@JsonIgnore
     private List<HackathonTeams> HackathonTeams;
 
 	public int getId() {
@@ -177,6 +180,7 @@ public class Hackathon {
 		this.status = status;
 	}
 
+	@JsonIgnore
 	public List<HackathonTeams> getHackathonTeams() {
 		return HackathonTeams;
 	}

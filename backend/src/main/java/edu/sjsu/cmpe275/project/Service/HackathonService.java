@@ -29,6 +29,10 @@ public class HackathonService {
         this.hackathonDao.deleteById(ID);
     }
 	
+	public List<Hackathon> getFinalHackathons(){
+		return this.hackathonDao.findAllFinalHackathons();
+	}
+	
 	public Optional<Hackathon> getHackathon(int ID) {
         return this.hackathonDao.findById(ID);
     }

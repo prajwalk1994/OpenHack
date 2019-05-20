@@ -19,7 +19,7 @@ class Profile extends Component {
             name: "",
             username: "",
             businessTitle: "",
-            screenName:"",
+            screenName:localStorage.getItem("username"),
             // organization: "",
             aboutMe: "",
             address: {
@@ -29,6 +29,7 @@ class Profile extends Component {
                 street: "",
             },
             myOrganizations: [],
+            myOrganizationIds: [],
             myHackathons: [],
             ListOfOrgs: []
         }
@@ -58,14 +59,18 @@ class Profile extends Component {
 
         axios.get(url + "/organizationMember/?userId=" + this.state.userId)
             .then((response) => {
+                console.log("Org details: ",response.data)
                 var tempOrg = []
+                var tempOrgIds = []
                 for (let item of response.data) {
                     if (item.approval == "Yes") {
                         tempOrg.push(item.organization.name)
+                        tempOrgIds.push(item.id)
                     }
                 }
                 this.setState({
                     myOrganizations: tempOrg,
+                    myOrganizationIds:tempOrgIds
                 })
             })
             .catch((error) => {
@@ -211,15 +216,28 @@ class Profile extends Component {
         // Axios.post()
     }
 
+    handleLeaveOrg=(e,id)=>{
+        console.log(id)
+        axios.post(url + `/leaveOrganization/${this.state.userId}/${this.state.myOrganizationIds[id]}`)
+            .then((response) => {
+                console.log("response", response.data);
+                alert("Profile Updated Successfully");
+            })
+            .catch((err) => {
+                console.log(err);
+                alert("Error Updating Profile");
+            })
+    }
+
     render() {
         var organizationsDiv = (<div>No Organizations</div>);
         if (this.state.myOrganizations.length > 0) {
-            var organizationsDiv = this.state.myOrganizations.map((item) => {
-                //console.log(item)
+            var organizationsDiv = this.state.myOrganizations.map((item,index) => {
+                console.log(item)
                 return (
                     <div className="row">
                         <label className="col-sm-8">{item}</label>
-                        <button className="btn btn-danger col-sm-4">leave</button>
+                        <button className="btn btn-danger col-sm-4" onClick={(e)=>this.handleLeaveOrg(e,(index))}>leave</button>
                     </div>
                 )
             })

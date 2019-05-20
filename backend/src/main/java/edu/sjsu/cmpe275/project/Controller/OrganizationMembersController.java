@@ -96,9 +96,10 @@ public class OrganizationMembersController {
 		}
 	}
 
-	@PostMapping("leaveOrganization/{userId}/{organizationId}")
+	@PostMapping("/leaveOrganization/{userId}/{organizationId}")
 	public ResponseEntity<Object> leaveOrganization(@PathVariable("userId") int userId,
 			@PathVariable("organizationId") int organizationId) {
+		
 		try {
 			Optional<User> user = this.userService.getUser(userId);
 			Optional<Organization> organization = this.organizationService.getOrganization(organizationId);
@@ -107,9 +108,12 @@ public class OrganizationMembersController {
 						HttpStatus.NOT_FOUND);
 			}
 			User currentUser = user.get();
+			
 			Profile currentUserProfile = currentUser.getProfile();
+			System.out.println("hHeeeeeeeeeeeeeeeeeeeee");
 			if (currentUserProfile != null) {
-				if (currentUserProfile.getOrganization().equals(organization.get())) {
+//				if (currentUserProfile.getOrganization().equals(organization.get())) {
+				System.out.println(currentUserProfile.getOrganization());
 					currentUserProfile.setOrganization(null);
 					currentUser.setProfile(currentUserProfile);
 					return new ResponseEntity<Object>(this.userService.addUser(currentUser), HttpStatus.OK);
@@ -117,9 +121,9 @@ public class OrganizationMembersController {
 					return new ResponseEntity<Object>("User does not belong to this organization",
 							HttpStatus.NOT_MODIFIED);
 				}
-			} else {
-				return new ResponseEntity<Object>("User Profile not updated", HttpStatus.NOT_FOUND);
-			}
+//			} else {
+//				return new ResponseEntity<Object>("User Profile not updated", HttpStatus.NOT_FOUND);
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Error while leaving Organization", HttpStatus.BAD_REQUEST);
