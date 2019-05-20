@@ -82,7 +82,7 @@ public class HackathonTeamController {
 			}
 		}
 		Optional<HackathonTeams> hackTeam=hackathonTeamsService.getHackathonTeams(teamid);
-		if(hackTeam.isEmpty()) {
+		if(!hackTeam.isPresent()) {
 			return new ResponseEntity<Object>("Team Not present", HttpStatus.OK);
 		}
 		HackathonTeams currTeam=hackTeam.get();
@@ -113,6 +113,17 @@ public class HackathonTeamController {
 				}
 			}
 			return new ResponseEntity<Object>(hackathons, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("teamsByHackathon/{hackId}")
+	public ResponseEntity<Object> getHackathonTeamsByHackathon(@PathVariable("hackId") int hackId){
+		try {
+			return new ResponseEntity<Object>(this.hackathonTeamsService.getHackathonTeamsByHackIdOrdered(hackId), HttpStatus.OK);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
