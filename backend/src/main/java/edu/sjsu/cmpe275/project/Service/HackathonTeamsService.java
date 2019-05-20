@@ -33,6 +33,10 @@ public class HackathonTeamsService {
         return this.hackathonTeamsDao.findById(ID);
     }
 	
+	public List<HackathonTeams> getHackathonTeamsByHackIdOrdered(int hackId){
+		return this.hackathonTeamsDao.findHackathonTeamsByHackIdId(hackId);
+	}
+	
 	public List<HackathonTeams> getHackathonTeamsByTeamId(int teamId){
 		return this.hackathonTeamsDao.findHackathonTeamsByTeamIdId(teamId);
 	}
