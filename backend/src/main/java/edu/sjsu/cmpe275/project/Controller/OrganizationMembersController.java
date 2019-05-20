@@ -101,29 +101,32 @@ public class OrganizationMembersController {
 			@PathVariable("organizationId") int organizationId) {
 		
 		try {
-			Optional<User> user = this.userService.getUser(userId);
-			Optional<Organization> organization = this.organizationService.getOrganization(organizationId);
-			if (!user.isPresent() || !organization.isPresent()) {
-				return new ResponseEntity<Object>("User or Organization with the given Id not found",
-						HttpStatus.NOT_FOUND);
-			}
-			User currentUser = user.get();
-			
-			Profile currentUserProfile = currentUser.getProfile();
-			System.out.println("hHeeeeeeeeeeeeeeeeeeeee");
-			if (currentUserProfile != null) {
-//				if (currentUserProfile.getOrganization().equals(organization.get())) {
-				System.out.println(currentUserProfile.getOrganization());
-					currentUserProfile.setOrganization(null);
-					currentUser.setProfile(currentUserProfile);
-					return new ResponseEntity<Object>(this.userService.addUser(currentUser), HttpStatus.OK);
-				} else {
-					return new ResponseEntity<Object>("User does not belong to this organization",
-							HttpStatus.NOT_MODIFIED);
-				}
-//			} else {
-//				return new ResponseEntity<Object>("User Profile not updated", HttpStatus.NOT_FOUND);
+			List<OrganizationMembers> orgMem=this.organizationMembersService.getOrganizationMembersByUserAndOrg(organizationId, userId);
+			this.organizationMembersService.deleteOrganization(orgMem.get(0).getId());
+			return new ResponseEntity<Object>("Left from Organization", HttpStatus.OK);
+//			Optional<User> user = this.userService.getUser(userId);
+//			Optional<Organization> organization = this.organizationService.getOrganization(organizationId);
+//			if (!user.isPresent() || !organization.isPresent()) {
+//				return new ResponseEntity<Object>("User or Organization with the given Id not found",
+//						HttpStatus.NOT_FOUND);
 //			}
+//			User currentUser = user.get();
+//			
+//			Profile currentUserProfile = currentUser.getProfile();
+//			System.out.println("hHeeeeeeeeeeeeeeeeeeeee");
+//			if (currentUserProfile != null) {
+////				if (currentUserProfile.getOrganization().equals(organization.get())) {
+//				System.out.println(currentUserProfile.getOrganization());
+//					currentUserProfile.setOrganization(null);
+//					currentUser.setProfile(currentUserProfile);
+//					return new ResponseEntity<Object>(this.userService.addUser(currentUser), HttpStatus.OK);
+//				} else {
+//					return new ResponseEntity<Object>("User does not belong to this organization",
+//							HttpStatus.NOT_MODIFIED);
+//				}
+////			} else {
+////				return new ResponseEntity<Object>("User Profile not updated", HttpStatus.NOT_FOUND);
+////			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Error while leaving Organization", HttpStatus.BAD_REQUEST);

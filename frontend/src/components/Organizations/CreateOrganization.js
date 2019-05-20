@@ -35,7 +35,7 @@ class CreateOrganization extends Component {
             .then(async (res) => {
                 console.log(res)
                 await this.setState({
-                    redirectVar: <Redirect to="/login" />
+                    redirectVar: <Redirect to="/profile" />
                 })
             })
             .catch((err) => {

@@ -224,7 +224,7 @@ class Profile extends Component {
         axios.post(url + `/leaveOrganization/${this.state.userId}/${this.state.myOrganizationIds[id]}`)
             .then((response) => {
                 console.log("response", response.data);
-                alert("Profile Updated Successfully");
+                window.location.reload();
             })
             .catch((err) => {
                 console.log(err);

@@ -28,7 +28,8 @@ class CreateHackathons extends Component {
         // console.log(judgeList)
         const hackathon = await {
             ...this.state,
-            judgeList: await this.state.judgeList.split(",")
+            judgeList: await this.state.judgeList.split(",").map(function(item){return item.trim()}),
+            sponsers: await this.state.sponsers.split(",").map(function(item){return item.trim()})
         }
         // console.log(this.state)
         console.log(hackathon)

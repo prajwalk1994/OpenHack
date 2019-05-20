@@ -72,6 +72,7 @@ class MembershipApprovals extends Component {
             .then((response) => {
                 console.log(response.data);
                 alert("Membership confirmed");
+                window.location.reload();
             })
             .catch((error) => {
                 if (error.response) {
