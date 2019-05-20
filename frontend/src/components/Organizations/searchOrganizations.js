@@ -7,7 +7,7 @@ class searchOrganizations extends Component {
         super(props);
         this.state = {
             userid: localStorage.getItem("userid"),
-            organizationSearched: "EMPTY NAME",
+            organizationSearched: "",
             organizationSearchedId: "",
             organizationsList: ["happy", "haoppy"],
             // organizationsIds:[],
@@ -46,7 +46,28 @@ class searchOrganizations extends Component {
             })
     }
 
-    searchOrgnizations = () => {
+    handleSearchChange = (e) => {
+        this.setState({
+            organizationSearchedtemp: e.target.value
+        })
+    }
+
+    searchOrgnizations = async (e) => {
+        e.preventDefault();
+        await this.setState({
+            organizationSearched: this.state.organizationSearchedtemp
+        })
+
+        for (let i = 0; i < this.state.organizationsList.length; i++) {
+            if (this.state.organizationSearched == this.state.organizationsList[i]) {
+                this.setState({
+                    organizationSearchedId:i
+                })
+                // await alert("org found at " + i)
+            } else {
+                await alert("organization not found")
+            }
+        }
 
     }
 
@@ -79,10 +100,10 @@ class searchOrganizations extends Component {
         })
 
         var datalistOrgs = "";
-        datalistOrgs = this.state.organizationsList.map((item,index)=>{
-            return(
+        datalistOrgs = this.state.organizationsList.map((item, index) => {
+            return (
                 <div>
-                    <option value={item}/>
+                    <option value={item} />
                 </div>
             )
         })
@@ -91,7 +112,7 @@ class searchOrganizations extends Component {
         searchedOrgDiv = (
             <div className="row">
                 <h4 className="col-sm-3" name="searchedName">{this.state.organizationSearched}</h4>
-                <button className="col-sm-9  btn btn_login" onClick={this.sendJoinRequest}>join</button>
+                <button className="col-sm-9  btn btn_login" onClick={this.sendJoinRequest}>Join</button>
             </div>
         )
 
@@ -100,15 +121,18 @@ class searchOrganizations extends Component {
                 <div className=" justify-content-center formContainer">
                     <h3>Search Organizations</h3>
                     <div className="row justify-content-center">
-                        <input list="organizations" type="text" className="form-control mb-4" name="searchOrg" placeholder="search organizations"></input>
+                        <input list="organizations" type="text" onChange={this.handleSearchChange} className="form-control mb-4" name="searchOrg" placeholder="search organizations"></input>
                         <datalist id="organizations">
                             {datalistOrgs}
                         </datalist>
                     </div>
                     <div className="row justify-content-center">
-                        <button className="form_element btn btn_login" onClick={this.searchOrgnizations}>Search</button>
+                        <button className="btn btn_login" onClick={this.searchOrgnizations}>Search</button>
                     </div>
-
+                    <div className="row justify-content-center">
+                        <h4 className="col-sm-9">{this.state.organizationSearched}</h4>
+                        {this.state.organizationSearched ? <button className="btn btn_login col-sm-3" onClick={(e) => this.sendJoinRequest(e, (this.state.organizationSearchedId+1))}>join</button> : <div></div>}
+                    </div>
                 </div>
                 <div className="justify-content-center formContainer ml-5">
                     {!this.state.visibility ? <h3>List of all Organizations</h3> : <div></div>}

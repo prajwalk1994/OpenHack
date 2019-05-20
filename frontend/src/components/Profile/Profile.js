@@ -143,9 +143,6 @@ class Profile extends Component {
             } else {
                 alert("User not verified!");
             }
-
-
-
         }
         else {
             alert("Admin cannot create Organization")
