@@ -15,7 +15,9 @@ import searchOrganizations from './Organizations/searchOrganizations'
 import searchHackathons from './Hackathons/searchHackathons';
 import Navbar from './Navbar/Navbar';
 import Navbar2 from './Navbar/Navbar2'
-import ResultsReport from './ResultsReport/ResultsReport'
+import ResultsReport from './ResultsReport/ResultsReport';
+import FinancialReport from './FinancialReport/FinancialReport';
+import HackathonEarningReport from './FinancialReport/HackathonEarningReport';
 class Menu extends Component {
     constructor(props) {
         super(props);
@@ -40,6 +42,8 @@ class Menu extends Component {
                 <Route path="/searchOrgs" component={searchOrganizations} />
                 <Route path="/searchHackathons" component={searchHackathons} />
                 <Route path="/resultsreport" component={ResultsReport} />
+                <Route path="/financialreport" component={FinancialReport} />
+                <Route path="/earningreport" component={HackathonEarningReport} />
             </div>
         );
     }

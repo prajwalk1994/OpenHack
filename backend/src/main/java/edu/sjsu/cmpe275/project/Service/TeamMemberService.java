@@ -39,4 +39,8 @@ public class TeamMemberService {
 	public List<TeamMember> getTeamMemberByHackId(int hackId){
 		return this.teamMemberDao.findTeamMemberByHackathon(hackId);
 	}
+	
+	public List<Object> getHackathonMetrics(int hackId){
+		return this.teamMemberDao.findFinancialReportMetrics(hackId);
+	}
 }
