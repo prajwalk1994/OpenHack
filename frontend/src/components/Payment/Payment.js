@@ -1,19 +1,40 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from "react-router-dom";
+import Axios from 'axios';
+import url from '../../config/config';
+
 class Payment extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            userId:localStorage.getItem("userid"),
+            tempHackId:localStorage.getItem("tempHackId"),
+            tempRegFee:localStorage.getItem("tempRegFee"),
             price: 0,
             discount: 0,
             redirectVar: ""
         }
     }
 
+    componentDidMount=(e)=>{
+        Axios.get(url + `/sponsorDiscount/${this.state.userId}/${this.state.tempHackId}`)
+            .then((response) => {
+                console.log("response", response.data);
+                this.setState({
+                    discount:response.data
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+                alert(err.response.data);
+            })
+    }
+
     makePayment = (e) => {
         e.preventDefault();
         alert("Payment email sent!")
+        
         this.setState({
             redirectVar: <Redirect to="/submission"></Redirect>
         })
@@ -37,7 +58,7 @@ class Payment extends Component {
                             </div>
                             <div className="row justify-content-center">
                                 <label className="col-sm-2">Price</label>
-                                <input className="form-control col-sm-4" type="text" name="price" value={this.state.price} disabled></input>
+                                <input className="form-control col-sm-4" type="text" name="price" value={this.state.tempRegFee} disabled></input>
                             </div>
                             <div className="row justify-content-center">
                                 <label className="col-sm-2" >Discount</label>
@@ -45,7 +66,7 @@ class Payment extends Component {
                             </div>
                             <div className="row justify-content-center">
                                 <label className="col-sm-2" >Total</label>
-                                <input className="form-control col-sm-4" type="text" name="discount" value={this.state.discount} disabled></input>
+                                <input className="form-control col-sm-4" type="text" name="discount" value={this.state.tempRegFee*(1-this.state.discount/100)} disabled></input>
                             </div>
                             <div className="row justify-content-right">
                                 <label for="cardNumber" className="col-sm-4">CARD NUMBER</label>

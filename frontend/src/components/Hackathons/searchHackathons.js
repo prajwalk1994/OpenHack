@@ -7,6 +7,7 @@ class searchHackathons extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            email: localStorage.getItem("email"),
             hackathonSearched: "Hello World",
             minteamSize: 0,
             maxteamSize: 0,
@@ -14,7 +15,8 @@ class searchHackathons extends Component {
             maxteamSizeList: 0,
             visibility: false,
             allHackathonsData: [],
-            hackathonsList: ["Code bug","codera"],
+            hackathonsList: [],
+            judgeLists: [],
             visibility: false,
             members: {},
             roles: {},
@@ -28,6 +30,7 @@ class searchHackathons extends Component {
         Axios.get(url + "/hackathons")
             .then((response) => {
                 console.log(response.data)
+
                 this.setState({
                     allHackathonsData: response.data
                 })
@@ -65,40 +68,52 @@ class searchHackathons extends Component {
 
     sendJoinRequest = async (e) => {
         e.preventDefault();
+        console.log(Object.values(this.state.members))
         if (this.state.members.length != this.state.roles.length) {
             alert("please select all roles")
         }
         else if (this.state.teamName == "") {
             alert("Enter Team Name")
         }
-        else {
-            var requestBody = {}
-            console.log(Object.keys(this.state.members).length)
-            for (let i = 0; i < Object.keys(this.state.members).length; i++) {
-                requestBody[this.state.members["member" + (i + 1)]] = await this.state.roles["role" + (i + 1)]
-                // console.log(this.state.members["member"+(i+1)])
-                // console.log(this.state.roles["role"+(i+1)])
-            }
-            console.log(requestBody)
+        else if (!Object.values(this.state.members).includes(this.state.email)) {
+            alert("You should be part of the team!")
         }
-        await Axios.post(url + `/team/${this.state.teamName}/${this.state.hackathonId}`, requestBody)
-            .then(async (response) => {
-                console.log(response.data)
-                await Axios.post(url + `/hackathonteam/${this.state.hackathonId}/${response.data.id}`).then(async response => {
-                    alert("Creation successful")
-                    await this.setState({
-                        redirectTo: <Redirect to="/profile" />
-                    })
-                })
-
-            })
-            .catch((err) => {
-                if (err.response) {
-                    console.log("err", err.response)
-                } else {
-                    alert("Something went wrong!")
+        else {
+        console.log(this.state.judgeLists, Object.values(this.state.members))
+        console.log(this.state.judgeLists.filter(value => Object.values(this.state.members).includes(value)))
+            if (this.state.judgeLists.filter(value => Object.values(this.state.members).includes(value)).length!=0) {
+                alert("judge cannot be a Team member");
+            } else {
+                var requestBody = {}
+                console.log(Object.keys(this.state.members).length)
+                for (let i = 0; i < Object.keys(this.state.members).length; i++) {
+                    requestBody[this.state.members["member" + (i + 1)]] = await this.state.roles["role" + (i + 1)] || "ProductManger"
+                    // console.log(this.state.members["member"+(i+1)])
+                    // console.log(this.state.roles["role"+(i+1)])
                 }
-            })
+                console.log(requestBody)
+                await Axios.post(url + `/team/${this.state.teamName}/${this.state.hackathonId}`, requestBody)
+                    .then(async (response) => {
+                        console.log(response.data)
+                        await Axios.post(url + `/hackathonteam/${this.state.hackathonId}/${response.data.id}`).then(async response => {
+                            alert("Creation successful")
+                            await this.setState({
+                                redirectTo: <Redirect to="/profile" />
+                            })
+                        })
+
+                    })
+                    .catch((err) => {
+                        if (err.response) {
+                            alert(err.response.data)
+                            console.log("err", err.response)
+                        } else {
+                            alert("Something went wrong!")
+                        }
+                    })
+            }
+        }
+
 
     }
 
@@ -133,9 +148,16 @@ class searchHackathons extends Component {
     }
 
     joinHackathon = async (e, id) => {
+        e.preventDefault();
+
         //send id of Hackathon selected to backend
         console.log(this.state)
-        e.preventDefault();
+
+        await this.judgeCheckHacker(id - 1);
+
+        if (this.state.judgeLists.includes(this.state.email)) {
+            alert("You are judge, cannot be hacker");
+        } else {
         await this.setState({
             visibility: true,
             hackathonId: id,
@@ -143,8 +165,23 @@ class searchHackathons extends Component {
             maxteamSize: this.state.maxteamSizeList[id - 1]
         })
         console.log("hackathon id ", id, " min team size ", this.state.minteamSize, " max team size", this.state.maxteamSize)
+    }
 
     }
+
+    judgeCheckHacker = async (index) => {
+        var tempJudgeList = [];
+        for (let i = 0; i < this.state.allHackathonsData[index].judgeList.length; i++) {
+            await tempJudgeList.push(this.state.allHackathonsData[index].judgeList[i].email);
+        }
+
+        await this.setState({
+            judgeLists: tempJudgeList
+        })
+        console.log("judges list for selected hackathon", this.state.judgeLists)
+
+    }
+
     DeleteHackathon = async (e, id) => {
         await Axios.post(url + `/hackathon/changeStatus/${id}/"No"`).then(res => {
             console.log(res.data)
@@ -174,7 +211,8 @@ class searchHackathons extends Component {
                 <div className="row">
                     <div></div>
                     <h4 className="col-sm-6">{item}</h4>
-                    {(localStorage.getItem("role") == "Admin") ? <button className="btn btn-danger col-sm-6" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button> : <button className="btn btn_login col-sm-6" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
+                    {(localStorage.getItem("role") == "Admin") ? <button className="btn btn-danger col-sm-6" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button> :
+                        <button className="btn btn_login col-sm-6" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
                     <br></br>
                 </div>
             )
@@ -203,7 +241,7 @@ class searchHackathons extends Component {
                 <td><input type="text" name={"member" + (i + 1)} placeholder={"team member " + (i + 1)} onChange={this.handleChange} ></input></td>
                 <td>
                     <select class="form-control" name={"role" + (i + 1)} id="role" onChange={this.handleChange}>
-                        <option selected>ProductManger</option>
+                        <option>ProductManger</option>
                         <option>Engineer</option>
                         <option>FullStack</option>
                         <option>Designer</option>

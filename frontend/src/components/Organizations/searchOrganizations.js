@@ -11,7 +11,7 @@ class searchOrganizations extends Component {
             organizationSearched: "",
             organizationSearchedId: "",
             organizationsList: [],
-            // organizationsIds:[],
+            organizationsIds:[],
             organizationOwners: [],
             AllOrgsData: "",
             visibility: false
@@ -28,16 +28,16 @@ class searchOrganizations extends Component {
                 })
                 console.log(this.state.AllOrgsData[0].owner.email)
                 var tempOrg = []
-                // var tempOrgIds=[]
+                var tempOrgIds=[]
                 var tempOwners = []
                 for (let i of response.data) {
                     tempOrg.push(i.name)
                     tempOwners.push(i.owner.email)
-                    // tempOrgIds.push(i.id)
+                    tempOrgIds.push(i.id)
                 }
                 this.setState({
                     organizationsList: tempOrg,
-                    // organizationsIds:tempOrgIds
+                    organizationsIds:tempOrgIds,
                     organizationOwners: tempOwners
                 })
                 console.log("state after setting orgs", this.state)
@@ -62,16 +62,21 @@ class searchOrganizations extends Component {
         await this.setState({
             organizationSearched: this.state.organizationSearchedtemp
         })
-
-        for (let i = 0; i < this.state.organizationsList.length; i++) {
+        
+        for (var i = 0; i < this.state.organizationsList.length; i++) {
             if (this.state.organizationSearched == this.state.organizationsList[i]) {
-                this.setState({
+                await this.setState({
                     organizationSearchedId:i
                 })
+                break;
                 // await alert("org found at " + i)
-            } else {
-                await alert("organization not found")
-            }
+            } 
+        }
+        if(this.state.organizationSearchedId!=i){
+            alert("Organization Not found!")
+            await this.setState({
+                organizationSearched:""
+            })
         }
 
     }
@@ -80,7 +85,7 @@ class searchOrganizations extends Component {
         //send id of organization selected to backend
         e.preventDefault();
         console.log("sending join request...")
-        axios.post(url + "/organizationMember/" + this.state.userid + "/" + organizationId)
+        axios.post(url + "/organizationMember/" + this.state.userid + "/" + this.state.organizationsIds[organizationId])
             .then((response) => {
                 console.log(response.data)
                 alert("Join request sent!")
@@ -100,7 +105,8 @@ class searchOrganizations extends Component {
             return (
                 <div className="row">
                     <h5 className="col-sm-6 mt-4">{item}</h5>
-                    {(this.state.organizationOwners[index]!=this.state.userEmail)?(<button className=" col-sm-6 form_element btn btn_login" onClick={(e) => this.sendJoinRequest(e, (index + 1))}>join</button>):(<button className=" col-sm-6 form_element btn btn-light" onClick={(e)=>{alert("Owner cannot join!")}}>Owner</button>)}
+                    {(this.state.organizationOwners[index]!=this.state.userEmail)?(<button className=" col-sm-6 form_element btn btn_login" onClick={(e) => this.sendJoinRequest(e, (index))}>join</button>):
+                    (<button className=" col-sm-6 form_element btn btn-light" onClick={(e)=>{alert("Owner cannot join!")}}>Owner</button>)}
                 </div>
             )
         })

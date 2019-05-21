@@ -55,8 +55,11 @@ public class OrganizationMembersController {
 	public ResponseEntity<Object> addOrganizationMember(@PathVariable("userId") int userId,
 			@PathVariable("organizationId") int organizationId) {
 		try {
+			System.out.println("organizationMember route inside Organization Member Controller!");
 			Optional<User> user = this.userService.getUser(userId);
 			Optional<Organization> organization = this.organizationService.getOrganization(organizationId);
+//			System.out.println(user);
+//			System.out.println(organization);
 			if (!user.isPresent() || !organization.isPresent()) {
 				return new ResponseEntity<Object>("Not Found", HttpStatus.NOT_FOUND);
 			}
