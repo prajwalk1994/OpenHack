@@ -10,9 +10,9 @@ class Payment extends Component {
         super(props);
         this.state = {
             email:localStorage.getItem("email"),
-            userid:"2",
+            userid:localStorage.getItem("userid"),
             tempHackId:"",
-            regFee:"",
+            regFee:0,
             teamid:"",
             price: 0,
             discount: 0,
@@ -67,6 +67,7 @@ class Payment extends Component {
             .then((response) => {
                 console.log("response", response.data);
                 alert("Payment Successful")
+                alert(response.data)
             })
             .catch((err) => {
                 console.log(err);

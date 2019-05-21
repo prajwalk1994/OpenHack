@@ -44,7 +44,7 @@ public class HackathonTeams implements Serializable{
 	private Float Grade;
 	
 	@Column(name="PAYMENTS")
-	private String Payments;
+	private boolean Payments;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="SUBMISSION_STATUS")
@@ -89,11 +89,11 @@ public class HackathonTeams implements Serializable{
 		Grade = grade;
 	}
 
-	public String getPayments() {
+	public boolean getPayments() {
 		return Payments;
 	}
 
-	public void setPayments(String payments) {
+	public void setPayments(boolean payments) {
 		Payments = payments;
 	}
 

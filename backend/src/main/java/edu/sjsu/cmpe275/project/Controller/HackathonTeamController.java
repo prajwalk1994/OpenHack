@@ -99,7 +99,7 @@ public class HackathonTeamController {
 			return new ResponseEntity<Object>("Team Not present", HttpStatus.OK);
 		}
 		HackathonTeams currTeam=hackTeam.get();
-		currTeam.setPayments("1");
+		currTeam.setPayments(true);
 		this.hackathonTeamsService.addHackathonTeams(currTeam);
 		// throw mail
 		for(TeamMember member:a1) {
@@ -114,16 +114,19 @@ public class HackathonTeamController {
 	@GetMapping("/hackathonsByUser/{userId}")
 	public ResponseEntity<Object> getHackathonsByUser(@PathVariable("userId") int userId){
 		try {
+			System.out.println("inside hackathonsByUser route in Hackathon Team Controller!");
 			Optional<User> user = this.userService.getUser(userId);
 			List<HackathonTeams> hackathons = new ArrayList<>();
 			if(!user.isPresent()) {
 				return new ResponseEntity<Object>("User not found", HttpStatus.NOT_FOUND);
 			}
 			List<TeamMember> teams = this.teamMemberService.getTeamMemberByUser(userId);
+//			System.out.println(userId);
 			for(TeamMember member : teams) {
+//				System.out.println(member.getId());
 				Team team = member.getTeam();
 				List<HackathonTeams> hackathonTeams = this.hackathonTeamsService.getHackathonTeamsByTeamId(team.getId());
-				System.out.println(hackathonTeams);
+				
 				for(HackathonTeams hackTeam: hackathonTeams) {
 					hackathons.add(hackTeam);
 				}

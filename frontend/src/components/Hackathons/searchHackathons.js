@@ -87,7 +87,7 @@ class searchHackathons extends Component {
                 var requestBody = {}
                 console.log(Object.keys(this.state.members).length)
                 for (let i = 0; i < Object.keys(this.state.members).length; i++) {
-                    requestBody[this.state.members["member" + (i + 1)]] = await this.state.roles["role" + (i + 1)] || "ProductManger"
+                    requestBody[this.state.members["member" + (i + 1)]] = await this.state.roles["role" + (i + 1)] || "ProductManager"
                     // console.log(this.state.members["member"+(i+1)])
                     // console.log(this.state.roles["role"+(i+1)])
                 }
