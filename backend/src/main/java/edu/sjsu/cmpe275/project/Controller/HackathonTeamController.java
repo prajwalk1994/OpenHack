@@ -151,6 +151,17 @@ public class HackathonTeamController {
 		}
 	}
 	
+	@GetMapping("hackathonTeams")
+	public ResponseEntity<Object> hackathonTeams(){
+		try {
+			return new ResponseEntity<Object>(this.hackathonTeamsService.getAllHackathonTeams(), HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/checkTeamPayment/{hackId}/{teamId}")
 	public ResponseEntity<Object> checkTeamPayment(@PathVariable("hackId") int hackId, @PathVariable("teamId") int teamId){
 		try {

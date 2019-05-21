@@ -24,7 +24,8 @@ class searchHackathons extends Component {
             roles: {},
             hackathonId: 0,
             teamName: "",
-            currentStatus: []
+            currentStatus: [],
+            
         }
     }
 
@@ -255,6 +256,19 @@ class searchHackathons extends Component {
         }
     }
 
+    checkBeforeFinalized = (e, id) => {
+        Axios.get(url + `checkSubmissions/${id}`).then(res => {
+            localStorage.setItem("tempFinalized",true)
+        }).catch((err) => {
+            localStorage.setItem("tempFinalized",false)
+            if (err.response) {
+                console.log("err", err.response)
+            } else {
+                alert("Something went wrong!")
+            }
+        })
+    }
+
     render() {
 
 
@@ -277,6 +291,13 @@ class searchHackathons extends Component {
             } else if (this.state.currentStatus[index] == "Closed") {
                 ButtonDiv = finalizeButton
             } else if (this.state.currentStatus[index] == "Final") {
+                // this.checkBeforeFinalized(index + 1)
+                // if(localStorage.getItem("tempFinalized")){
+                //     ButtonDiv = <div><button className="btn btn-dark" disabled>Finalized</button></div>
+                // }
+                // else{
+                //     alert("All teams must be graded before finalizing!")
+                // }
                 ButtonDiv = <div><button className="btn btn-dark" disabled>Finalized</button></div>
             }
             console.log(this.state.currentStatus[index])

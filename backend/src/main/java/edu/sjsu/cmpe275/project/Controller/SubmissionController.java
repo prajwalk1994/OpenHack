@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,6 +69,22 @@ public class SubmissionController {
 //			}
 //			this.hackathonTeamsService.addHackathonTeams(currentTeam);
 //			return new ResponseEntity<Object>(currentTeam, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/checkSubmissions/{hackId}")
+	public ResponseEntity<Object> checkSubmissions(@PathVariable("hackId") int hackId) {
+		try {
+			List<HackathonTeams> hackTeams=this.hackathonTeamsService.getHackathonTeamsByHackIdOrdered(hackId);
+			for(HackathonTeams temp:hackTeams) {
+				if(temp.getGrade()==null) {
+					return new ResponseEntity<Object>("All hackathons are not yet graded", HttpStatus.BAD_REQUEST);
+				}
+			}
+			return new ResponseEntity<Object>("Can be changed to finalized", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
