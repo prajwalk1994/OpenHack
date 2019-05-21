@@ -83,6 +83,7 @@ public class HackathonTeamController {
 		TeamMember currMember=a.get(0);
 		currMember.setPayment(true);
 		//Set amount
+		currMember.setAmount(amount);
 		this.teamMemberService.addTeamMember(currMember);
 		List<TeamMember> a1=teamMemberService.getTeamMemberByTeamId(teamid);
 		for(TeamMember member:a1) {
