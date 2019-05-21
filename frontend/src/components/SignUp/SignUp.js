@@ -91,6 +91,7 @@ class SignUp extends Component {
                             <div class="form-group">
                                 <div>
                                     <h2 className="">Open Hack Sign Up</h2>
+                                    <label>Already existing user ? <a href="/login">click here</a></label>
                                 </div>
                                 <form>
                                     <div>

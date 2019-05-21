@@ -19,7 +19,7 @@ class Profile extends Component {
             name: "",
             username: "",
             businessTitle: "",
-            screenName:localStorage.getItem("username"),
+            screenName: localStorage.getItem("username"),
             // organization: "",
             aboutMe: "",
             address: {
@@ -39,7 +39,7 @@ class Profile extends Component {
 
         // console.log("**************************cfhgjhk*")
 
-        await axios.get(url + "/hackathonsByUser/"+ this.state.userId)
+        await axios.get(url + "/hackathonsByUser/" + this.state.userId)
             .then((response) => {
                 // console.log("***************************")
                 let hackathons = response.data;
@@ -59,7 +59,7 @@ class Profile extends Component {
 
         axios.get(url + "/organizationMember/?userId=" + this.state.userId)
             .then((response) => {
-                console.log("Org details: ",response.data)
+                console.log("Org details: ", response.data)
                 var tempOrg = []
                 var tempOrgIds = []
                 for (let item of response.data) {
@@ -70,7 +70,7 @@ class Profile extends Component {
                 }
                 this.setState({
                     myOrganizations: tempOrg,
-                    myOrganizationIds:tempOrgIds
+                    myOrganizationIds: tempOrgIds
                 })
             })
             .catch((error) => {
@@ -148,9 +148,6 @@ class Profile extends Component {
             } else {
                 alert("User not verified!");
             }
-
-
-
         }
         else {
             alert("Admin cannot create Organization")
@@ -212,17 +209,17 @@ class Profile extends Component {
         }
     }
 
-    submitcode = async (e,arg1,arg2,arg3) => {
-        await localStorage.setItem("tempHackId",arg1)
-        await localStorage.setItem("tempRegFee",arg2)
-        await localStorage.setItem("tempTeamId",arg3)
+    submitcode = async (e, arg1, arg2, arg3) => {
+        await localStorage.setItem("tempHackId", arg1)
+        await localStorage.setItem("tempRegFee", arg2)
+        await localStorage.setItem("tempTeamId", arg3)
         await this.setState({
             redirectTo: <Redirect to="/Payment" />
         })
         // Axios.post()
     }
 
-    handleLeaveOrg=(e,id)=>{
+    handleLeaveOrg = (e, id) => {
         console.log(id)
         axios.post(url + `/leaveOrganization/${this.state.userId}/${this.state.myOrganizationIds[id]}`)
             .then((response) => {
@@ -238,12 +235,12 @@ class Profile extends Component {
     render() {
         var organizationsDiv = (<div>No Organizations</div>);
         if (this.state.myOrganizations.length > 0) {
-            var organizationsDiv = this.state.myOrganizations.map((item,index) => {
+            var organizationsDiv = this.state.myOrganizations.map((item, index) => {
                 console.log(item)
                 return (
                     <div className="row">
                         <label className="col-sm-8">{item}</label>
-                        <button className="btn btn-danger col-sm-4" onClick={(e)=>this.handleLeaveOrg(e,(index))}>leave</button>
+                        <button className="btn btn-danger col-sm-4" onClick={(e) => this.handleLeaveOrg(e, (index))}>leave</button>
                     </div>
                 )
             })
@@ -262,7 +259,7 @@ class Profile extends Component {
                 return (
                     <div className="row">
                         <label className="col-sm-6">{item.hackId.name}</label>
-                        <button className="btn btn_login col-sm-6" onClick={(e)=>{this.submitcode(e,item.hackId.id,item.hackId.regFee,item.teamId.id)}}>submit </button>
+                        <button className="btn btn_login col-sm-6" onClick={(e) => { this.submitcode(e, item.hackId.id, item.hackId.regFee, item.teamId.id) }}>submit </button>
                     </div>
                 )
             })
@@ -311,7 +308,6 @@ class Profile extends Component {
                         </div>
                     </div>
                     <div className="row col-sm-3" style={{ margin: "15px" }}>
-
                         <div className="formContainer">
                             <div>
                                 <h3>My Hackathons List</h3>
@@ -330,9 +326,7 @@ class Profile extends Component {
                         </div>
                     </div>
                     <div className="row col-sm-4" style={{ margin: "15px" }}>
-
-
-                        <div className="formContainer">
+                        <div className="formContainer" style={{ paddingLeft: "30px", paddingRight: "30px" }}>
                             <div className="">
                                 <button className="form_element btn_login btn btn-block" onClick={this.searchHackathon}>search Hackathons</button>
                             </div>
@@ -355,7 +349,6 @@ class Profile extends Component {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         );

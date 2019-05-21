@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import '../Navbar/Navbar2.css'
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 class Navbar2 extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            redirect:true
+        this.state = {
+            redirect: true
         }
     }
 
+    handleLogout = (e) => {
+        e.preventDefault();
+        localStorage.removeItem("userid")
+        localStorage.removeItem("role")
+        localStorage.removeItem("email")
+        localStorage.removeItem("username")
+        localStorage.removeItem("verified")
+    }
     render() {
         return (
-        // {this.state.redirect ? <Redirect to="/login"></Redirect>:<div></div>}
-
             <div>
                 <div class="nav-wrapper">
                     <div class="logo-container">
@@ -31,8 +37,9 @@ class Navbar2 extends Component {
                                 <a href="/login"><li class="nav-tab">Login</li></a>
                                 <a href="/signup"><li class="nav-tab">signup</li></a>
                                 <a href="/profile"><li class="nav-tab">Profile</li></a>
-                                <a href="/hackathons"><li class="nav-tab">Hackathons</li></a>
-                                <a href="/logout"><li class="nav-tab">Logout</li></a>
+                                <a href="/searchHackathons"><li class="nav-tab">Hackathons</li></a>
+                                <a href="/searchOrgs"><li class="nav-tab">Organizations</li></a>
+                                <a href="/logout" onClick={this.handleLogout}><li class="nav-tab">Logout</li></a>
                             </ul>
                         </div>
                     </nav>
