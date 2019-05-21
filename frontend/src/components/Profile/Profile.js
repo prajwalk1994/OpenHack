@@ -148,6 +148,9 @@ class Profile extends Component {
             } else {
                 alert("User not verified!");
             }
+
+
+
         }
         else {
             alert("Admin cannot create Organization")
@@ -209,8 +212,11 @@ class Profile extends Component {
         }
     }
 
-    submitcode = (e) => {
-        this.setState({
+    submitcode = async (e,arg1,arg2,arg3) => {
+        await localStorage.setItem("tempHackId",arg1)
+        await localStorage.setItem("tempRegFee",arg2)
+        await localStorage.setItem("tempTeamId",arg3)
+        await this.setState({
             redirectTo: <Redirect to="/Payment" />
         })
         // Axios.post()
@@ -252,11 +258,11 @@ class Profile extends Component {
         var HackathonsDiv = (<div>No Organizations</div>);
         if (this.state.myHackathons.length > 0) {
             HackathonsDiv = this.state.myHackathons.map((item) => {
-                //console.log(item)
+                console.log(item)
                 return (
                     <div className="row">
-                        <label className="col-sm-8">{item.name}</label>
-                        <button className="btn btn-primary col-sm-4" onClick={this.submitcode}>submit </button>
+                        <label className="col-sm-6">{item.hackId.name}</label>
+                        <button className="btn btn_login col-sm-6" onClick={(e)=>{this.submitcode(e,item.hackId.id,item.hackId.regFee,item.teamId.id)}}>submit </button>
                     </div>
                 )
             })

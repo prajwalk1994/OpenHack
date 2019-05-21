@@ -8,7 +8,18 @@ class CreateHackathons extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: localStorage.getItem("email")
+            email: localStorage.getItem("email"),
+            name: "",
+            description: "",
+            endDate: "",
+            judgeList: [],
+            maxTeam: 0,
+            minTeam: 0,
+            name: "",
+            regFee: "",
+            sponDiscount: "",
+            sponsers: [],
+            startDate: ""
         }
     }
 
@@ -28,25 +39,46 @@ class CreateHackathons extends Component {
         // console.log(judgeList)
         const hackathon = await {
             ...this.state,
-            judgeList: await this.state.judgeList.split(",").map(function(item){return item.trim()}),
-            sponsers: await this.state.sponsers.split(",").map(function(item){return item.trim()})
+            judgeList: await this.state.judgeList.split(",").map(function (item) { return item.trim() }),
+            sponsers: await this.state.sponsers.split(",").map(function (item) { return item.trim() })
         }
         // console.log(this.state)
         console.log(hackathon)
-        Axios.post(url + `/hackathon?email=${this.state.email}`, hackathon).then(async (res) => {
-            console.log(res)
-            await this.setState({
-                redirectTo: <Redirect to="/searchHackathons" />
-            })
-        }).catch(err => {
-            if (err.response) {
-                alert(err.response.data)
-                console.log(err)
+
+        //Dates check
+        console.log(new Date().getTime(), (new Date(this.state.startDate).getTime()), (new Date(this.state.endDate).getTime()))
+
+        if (this.state.name.length == 0) {
+            alert("Name required")
+        }
+        else {
+            if (new Date().getTime() < (new Date(this.state.startDate).getTime()) && (new Date(this.state.startDate).getTime()) < new Date(this.state.endDate).getTime()) {
+                if (this.state.minTeam < this.state.maxTeam) {
+                    Axios.post(url + `/hackathon?email=${this.state.email}`, hackathon).then(async (res) => {
+                        console.log(res)
+                        await this.setState({
+                            redirectTo: <Redirect to="/searchHackathons" />
+                        })
+                    }).catch(err => {
+                        if (err.response) {
+                            alert(err.response.data)
+                            console.log(err)
+                        }
+                        else {
+                            alert("Something went wrong!")
+                        }
+                    })
+                } else {
+                    alert("invalid team size")
+                }
+
+            } else {
+                alert("invalid time")
             }
-            else {
-                alert("Something went wrong!")
-            }
-        })
+        }
+
+
+
     }
 
 
@@ -57,7 +89,7 @@ class CreateHackathons extends Component {
                     {this.state.redirectTo}
                 </div>
                 <div className="container mt-5">
-                    <div className="formContainer" style={{marginLeft:"25%",marginRight:"25%"}}>
+                    <div className="formContainer" style={{ marginLeft: "25%", marginRight: "25%" }}>
                         <h3>Create Hackathon</h3>
                         <center>
                             <div className="row justify-content-center">

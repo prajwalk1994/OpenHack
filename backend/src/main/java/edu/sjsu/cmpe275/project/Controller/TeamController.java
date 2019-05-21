@@ -51,6 +51,7 @@ public class TeamController {
 	public ResponseEntity<Object> createTeam(@RequestBody Map<String, Role> emails,
 			@PathVariable("teamName") String teamName, @PathVariable("hackId") int hackId) {
 		try {
+			System.out.println("Create team inside Team Controller called!");
 			List<TeamMember> users = new ArrayList<>();
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
 			if(!hackathon.isPresent()) return new ResponseEntity<Object>("Hackathon not found", HttpStatus.NOT_FOUND);
@@ -74,6 +75,7 @@ public class TeamController {
 				users.add(teamMember);
 			}
 			for (TeamMember member : users) {
+				System.out.println("mail to "+member.getUser().getEmail()+" is sent!");
 				mailService.makePaymentMail(hackathon.get(), member.getTeam().getId(), member.getUser().getId(), member.getUser().getEmail());
 				this.teamMemberService.addTeamMember(member);
 				

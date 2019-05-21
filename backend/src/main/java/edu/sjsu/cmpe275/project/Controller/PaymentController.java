@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.project.Controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
 import edu.sjsu.cmpe275.project.Entity.Organization;
+import edu.sjsu.cmpe275.project.Entity.OrganizationMembers;
 import edu.sjsu.cmpe275.project.Entity.Profile;
 import edu.sjsu.cmpe275.project.Entity.Team;
 import edu.sjsu.cmpe275.project.Entity.TeamMember;
 import edu.sjsu.cmpe275.project.Entity.User;
+import edu.sjsu.cmpe275.project.Entity.OrganizationMembers.Approve;
 import edu.sjsu.cmpe275.project.Repository.TeamMemberDao;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
 import edu.sjsu.cmpe275.project.Service.MailingService;
+import edu.sjsu.cmpe275.project.Service.OrganizationMembersService;
 import edu.sjsu.cmpe275.project.Service.TeamMemberService;
 import edu.sjsu.cmpe275.project.Service.TeamService;
 import edu.sjsu.cmpe275.project.Service.UserService;
@@ -50,14 +54,17 @@ public class PaymentController {
 	
 	@Autowired
 	TeamService teamService;
+	
+	@Autowired
+	OrganizationMembersService organizaitionMemberService;
 
 	@PostMapping("checkPayment1")
 	public ResponseEntity<Object> makePayment() {
 		System.out.println();
 
 		Hackathon hackathon = new Hackathon();
-		int teamid = 6;
-		int userid = 2;
+		int teamid = 2;
+		int userid = 1;
 		String email = "kovurivinay@gmail.com";
 		mailService.makePaymentMail(hackathon, teamid, userid, email);
 		return null;
@@ -103,24 +110,55 @@ public class PaymentController {
 	public ResponseEntity<Object> getSponsorDiscount(@PathVariable("userId") int userId,
 			@PathVariable("hackId") int hackId) {
 		try {
+			//Change
 			Optional<User> user = this.userService.getUser(userId);
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
 			if(!user.isPresent() || !hackathon.isPresent()) {
 				return new ResponseEntity<Object>("User or Hackathon not found", HttpStatus.NOT_FOUND);
 			}
-			Profile userProfile = user.get().getProfile();
+//			Profile userProfile = user.get().getProfile();
 			List<Organization> orgList = hackathon.get().getOrgList();
-			if(userProfile == null) {
-				return new ResponseEntity<Object>("No organization found", HttpStatus.NOT_FOUND);
+			System.out.println(orgList.get(0).getName());
+//			if(userProfile == null) {
+//				return new ResponseEntity<Object>("No organization found", HttpStatus.NOT_FOUND);
+//			}
+//			if(!orgList.contains(userProfile.getOrganization())) {
+//				return new ResponseEntity<Object>("No organization found", HttpStatus.NOT_FOUND);
+//			}
+			List<OrganizationMembers> checkOrgList= this.organizaitionMemberService.getOrganizationsOfUser(userId);
+//			System.out.println(checkOrgList.get(0).getApproval().getClass().getName());
+			if(!checkOrgList.isEmpty()) {
+//				System.out.println(checkOrgList.get(0).getApproval());
+				if(checkOrgList.get(0).getApproval()==Approve.Yes){
+//					System.out.println(Arrays.asList(orgList));
+//					System.out.println(checkOrgList.get(0).getOrganization());
+//					System.out.println(orgList.contains(checkOrgList.get(0).getOrganization()));
+					if(orgList.contains(checkOrgList.get(0).getOrganization())) {
+						return new ResponseEntity<Object>(hackathon.get().getSponDiscount(), HttpStatus.OK);
+					}
+				}
+				else {
+					return new ResponseEntity<Object>("Not a member of Discounted Organizations!", HttpStatus.BAD_REQUEST);
+				}
 			}
-			if(!orgList.contains(userProfile.getOrganization())) {
-				return new ResponseEntity<Object>("No organization found", HttpStatus.NOT_FOUND);
-			}
-			return new ResponseEntity<Object>(hackathon.get().getSponDiscount(), HttpStatus.OK);
+			return new ResponseEntity<Object>("Not a member of Discounted Organizations!", HttpStatus.BAD_REQUEST);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@PostMapping("/sendPaymentMail")
+	public ResponseEntity<Object> sendPaymentMail(@PathVariable("userId") int userId, @PathVariable("teamId") int teamId) {
+		System.out.println();
+		
+		Hackathon hackathon = new Hackathon();
+		int teamid = 6;
+		int userid = 2;
+		String email = "kovurivinay@gmail.com";
+		mailService.makePaymentMail(hackathon, teamid, userid, email);
+		return null;
 	}
 	
 	@GetMapping("paymentStatus/{teamId}")

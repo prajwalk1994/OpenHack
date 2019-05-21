@@ -50,6 +50,7 @@ public class HackathonTeamController {
 	@PostMapping("/hackathonteam/{hackId}/{teamId}")
 	public ResponseEntity<Object> addTeamToHackathon(@PathVariable("hackId") int hackId, @PathVariable("teamId") int teamId){
 		try {
+			System.out.println("addTeamToHackathon inside Hackathon Team Controller called!");
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
 			Optional<Team> team = this.teamService.getTeam(teamId);
 			if(!hackathon.isPresent() || !team.isPresent()) {

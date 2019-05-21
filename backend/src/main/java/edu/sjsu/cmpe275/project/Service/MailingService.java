@@ -24,22 +24,65 @@ public class MailingService {
 		return new MailingService();
 	}
 	
-	public boolean makePaymentMail(Hackathon hackathon, int teamid,int userid, String email){
+//	public boolean makeIndividualPaymentMail(Hackathon hackathon, int teamid,int userid, String email){
+//		Email from = new Email("payment@openhack.com");
+//	    String subject = "Hackathon Payment Mail";
+//	    Email to = new Email(email);
+//	    System.out.println(( "<html>\n" + 
+//	    		"  <div>\n" + 
+//	    		"    Hackathon name:\n" + hackathon.getName()+
+//	    		"    <br>\n" + 
+//	    		"    Hackathon Description: \n" + hackathon.getDescription()+
+//	    		"   <br>\n" + 
+//	    		"    <br>\n" + 
+//	    		"  	Please click on below link to make the payment\n" + 
+//	    		"    <br>\n" + 
+//	    		"    <a href="+Config.url+"/makePayment?hackathonName="+hackathon.getName()+"&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+//	    		"  </div>\n" + 
+//	    		"</html>"));
+//	    Content content = new Content("text/html", "<html>\n" + 
+//	    		"  <div>\n" + 
+//	    		"    Hackathon name:\n" + hackathon.getName()+
+//	    		"    <br>\n" + 
+//	    		"    Hackathon Description: \n" + hackathon.getDescription()+
+//	    		"   <br>\n" + 
+//	    		"    <br>\n" + 
+//	    		"  	Please click on below link to make the payment\n" + 
+//	    		"    <br>\n" + 
+//	    		"    <a href="+Config.url+"/individualPayment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+//	    		"  </div>\n" + 
+//	    		"</html>");
+//	    Mail mail = new Mail(from, subject, to, content);
+//
+//	    SendGrid sg = new SendGrid("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");
+//	    Request request = new Request();
+//	    try {
+//	      request.setMethod(Method.POST);
+//	      request.setEndpoint("mail/send");
+//	      request.setBody(mail.build());
+//	      Response response = sg.api(request);
+//	    } catch (IOException ex) {
+//	      System.out.println(ex.getMessage());
+//	      return false;
+//	    }
+//	    return true;
+//	}
+	public boolean makePaymentMail1(Hackathon hackathon, int teamid,int userid, String email){
 		Email from = new Email("payment@openhack.com");
-	    String subject = "Hackathon Payment Mail";
+	    String subject = "Dummy Hackathon Payment Mail";
 	    Email to = new Email(email);
-	    System.out.println(( "<html>\n" + 
-	    		"  <div>\n" + 
-	    		"    Hackathon name:\n" + hackathon.getName()+
-	    		"    <br>\n" + 
-	    		"    Hackathon Description: \n" + hackathon.getDescription()+
-	    		"   <br>\n" + 
-	    		"    <br>\n" + 
-	    		"  	Please click on below link to make the payment\n" + 
-	    		"    <br>\n" + 
-	    		"    <a href="+Config.url+"/makePayment?hackathonName="+hackathon.getName()+"&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
-	    		"  </div>\n" + 
-	    		"</html>"));
+//	    System.out.println(( "<html>\n" + 
+//	    		"  <div>\n" + 
+//	    		"    Hackathon name:\n" + hackathon.getName()+
+//	    		"    <br>\n" + 
+//	    		"    Hackathon Description: \n" + hackathon.getDescription()+
+//	    		"   <br>\n" + 
+//	    		"    <br>\n" + 
+//	    		"  	Please click on below link to make the payment\n" + 
+//	    		"    <br>\n" + 
+//	    		"    <a href="+Config.url+"/makePayment?hackathonName="+hackathon.getName()+"&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+//	    		"  </div>\n" + 
+//	    		"</html>"));
 	    Content content = new Content("text/html", "<html>\n" + 
 	    		"  <div>\n" + 
 	    		"    Hackathon name:\n" + hackathon.getName()+
@@ -49,7 +92,52 @@ public class MailingService {
 	    		"    <br>\n" + 
 	    		"  	Please click on below link to make the payment\n" + 
 	    		"    <br>\n" + 
-	    		"    <a href="+Config.url+"/individualPayment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+//	    		"    <a href="+Config.url+"/individualPayment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+				"    <a href="+Config.frontendUrl+"/Payment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" +
+	    		"  </div>\n" + 
+	    		"</html>");
+	    Mail mail = new Mail(from, subject, to, content);
+
+	    SendGrid sg = new SendGrid("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");
+	    Request request = new Request();
+	    try {
+	      request.setMethod(Method.POST);
+	      request.setEndpoint("mail/send");
+	      request.setBody(mail.build());
+	      Response response = sg.api(request);
+	    } catch (IOException ex) {
+	      System.out.println(ex.getMessage());
+	      return false;
+	    }
+	    return true;
+	}
+	public boolean makePaymentMail(Hackathon hackathon, int teamid,int userid, String email){
+		Email from = new Email("payment@openhack.com");
+	    String subject = "Hackathon Payment Mail";
+	    Email to = new Email(email);
+//	    System.out.println(( "<html>\n" + 
+//	    		"  <div>\n" + 
+//	    		"    Hackathon name:\n" + hackathon.getName()+
+//	    		"    <br>\n" + 
+//	    		"    Hackathon Description: \n" + hackathon.getDescription()+
+//	    		"   <br>\n" + 
+//	    		"    <br>\n" + 
+//	    		"  	Please click on below link to make the payment\n" + 
+//	    		"    <br>\n" + 
+//	    		"    <a href="+Config.url+"/makePayment?hackathonName="+hackathon.getName()+"&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+//	    		"  </div>\n" + 
+//	    		"</html>"));
+	    Content content = new Content("text/html", "<html>\n" + 
+	    		"  <div>\n" + 
+	    		"    Hackathon name:\n" + hackathon.getName()+
+	    		"    <br>\n" + 
+	    		"    Hackathon Description: \n" + hackathon.getDescription()+
+	    		"   <br>\n" + 
+	    		"    <br>\n" + 
+	    		"  	Please click on below link to make the payment\n" + 
+	    		"    <br>\n" + 
+//	    		"    <a href="+Config.url+"/individualPayment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
+				"    <a href="+Config.frontendUrl+"/Payment?&teamid="+teamid+"&userid="+userid+"&hackId="+hackathon.getId()+">Payment Link </a>\n" +
 	    		"  </div>\n" + 
 	    		"</html>");
 	    Mail mail = new Mail(from, subject, to, content);
