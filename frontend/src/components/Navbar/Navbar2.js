@@ -5,8 +5,14 @@ class Navbar2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: true
+            redirect: ""
         }
+    }
+
+    componentDidMount=()=>{
+        this.setState({
+            redirect:""
+        })
     }
 
     handleLogout = (e) => {
@@ -16,10 +22,15 @@ class Navbar2 extends Component {
         localStorage.removeItem("email")
         localStorage.removeItem("username")
         localStorage.removeItem("verified")
+        this.setState({
+            redirect:<Redirect to="/login"/>
+        })
+        window.location.reload()
     }
     render() {
         return (
             <div>
+                {this.state.redirect}
                 <div class="nav-wrapper">
                     <div class="logo-container">
                         <h2>Open Hack</h2>
@@ -35,7 +46,6 @@ class Navbar2 extends Component {
                             <ul class="nav-tabs">
                                 <a href="/"><li class="nav-tab">Home</li></a>
                                 <a href="/login"><li class="nav-tab">Login</li></a>
-                                <a href="/signup"><li class="nav-tab">signup</li></a>
                                 <a href="/profile"><li class="nav-tab">Profile</li></a>
                                 <a href="/searchHackathons"><li class="nav-tab">Hackathons</li></a>
                                 <a href="/searchOrgs"><li class="nav-tab">Organizations</li></a>

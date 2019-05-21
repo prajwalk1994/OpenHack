@@ -17,13 +17,15 @@ class searchHackathons extends Component {
             maxteamSizeList: 0,
             visibility: false,
             allHackathonsData: [],
-            hackathonsList: ["Code bug", "codera"],
+            hackathonsList: [],
             judgeLists: [],
             visibility: false,
             members: {},
             roles: {},
             hackathonId: 0,
-            teamName: ""
+            teamName: "",
+            currentStatus: [],
+            
         }
     }
 
@@ -36,6 +38,10 @@ class searchHackathons extends Component {
                 this.setState({
                     allHackathonsData: response.data
                 })
+                let tempStatusList = []
+                for (let i of response.data) {
+                    tempStatusList.push(i.status)
+                }
                 var tempHack = []
                 var minSizeList = []
                 var maxSizeList = []
@@ -47,10 +53,12 @@ class searchHackathons extends Component {
                         maxSizeList.push(i.maxTeam)
                     }
                 }
+
                 this.setState({
                     hackathonsList: tempHack,
                     minteamSizeList: minSizeList,
-                    maxteamSizeList: maxSizeList
+                    maxteamSizeList: maxSizeList,
+                    currentStatus: tempStatusList
                     // organizationsIds:tempOrgIds
                 })
                 console.log("state after setting hackathons", this.state)
@@ -210,8 +218,24 @@ class searchHackathons extends Component {
 
     }
 
-    DeleteHackathon = async (e, id) => {
-        await Axios.post(url + `/hackathon/changeStatus/${id}/"No"`).then(res => {
+    handleChangeStatus = async (e, status, id) => {
+
+        if (status == "Open") {
+            console.log("In Open condition")
+            let tempcurrentStatus = this.state.currentStatus
+            tempcurrentStatus[id - 1] = "Closed"
+            this.setState({
+                currentStatus: tempcurrentStatus
+            })
+        } else if (status == "Closed") {
+            console.log("In closed condition")
+            let tempcurrentStatus = this.state.currentStatus
+            tempcurrentStatus[id - 1] = "Final"
+            this.setState({
+                currentStatus: tempcurrentStatus
+            })
+        }
+        await Axios.post(url + `/hackathon/changeStatus/${id}/${status}`).then(res => {
             console.log(res.data)
         }).catch((err) => {
             if (err.response) {
@@ -220,6 +244,7 @@ class searchHackathons extends Component {
                 alert("Something went wrong!")
             }
         })
+        window.location.reload();
     }
     changeTeamSize = () => {
         if (this.state.minteamSize + 1 <= this.state.maxteamSize) {
@@ -231,14 +256,56 @@ class searchHackathons extends Component {
         }
     }
 
+    checkBeforeFinalized = (e, id) => {
+        Axios.get(url + `checkSubmissions/${id}`).then(res => {
+            localStorage.setItem("tempFinalized",true)
+        }).catch((err) => {
+            localStorage.setItem("tempFinalized",false)
+            if (err.response) {
+                console.log("err", err.response)
+            } else {
+                alert("Something went wrong!")
+            }
+        })
+    }
+
     render() {
+
+
         var hackathonsListDiv = "";
         hackathonsListDiv = this.state.hackathonsList.map((item, index) => {
+            var openButton = (<div>
+                <button className="btn btn-success" onClick={(e) => { this.handleChangeStatus(e, "Open", index + 1) }}>Open Submission</button>
+            </div>);
+            var closeButton = (<div>
+                <button className="btn btn-warning" onClick={(e) => { this.handleChangeStatus(e, "Closed", index + 1) }} >Close Submission</button>
+            </div>);
+            var finalizeButton = (<div>
+                <button className="btn btn-dark" onClick={(e) => { this.handleChangeStatus(e, "Final", index + 1) }} >Finalize Submission</button>
+            </div>);
+            var ButtonDiv = ""
+            if (!this.state.currentStatus[index]) {
+                ButtonDiv = openButton;
+            } else if (this.state.currentStatus[index] == "Open") {
+                ButtonDiv = closeButton
+            } else if (this.state.currentStatus[index] == "Closed") {
+                ButtonDiv = finalizeButton
+            } else if (this.state.currentStatus[index] == "Final") {
+                // this.checkBeforeFinalized(index + 1)
+                // if(localStorage.getItem("tempFinalized")){
+                //     ButtonDiv = <div><button className="btn btn-dark" disabled>Finalized</button></div>
+                // }
+                // else{
+                //     alert("All teams must be graded before finalizing!")
+                // }
+                ButtonDiv = <div><button className="btn btn-dark" disabled>Finalized</button></div>
+            }
+            console.log(this.state.currentStatus[index])
             return (
                 <div className="row">
                     <div></div>
                     <h4 className="col-sm-6">{item}</h4>
-                    {(localStorage.getItem("role") == "Admin") ? <button className="btn btn-danger col-sm-6" onClick={(e) => this.DeleteHackathon(e, (index + 1))}>Delete</button> :
+                    {(localStorage.getItem("role") == "Admin") ? <div className="col-sm-6">{ButtonDiv}</div> :
                         <button className="btn btn_login col-sm-6" onClick={(e) => this.joinHackathon(e, (index + 1))}>join</button>}
                     <br></br>
                 </div>

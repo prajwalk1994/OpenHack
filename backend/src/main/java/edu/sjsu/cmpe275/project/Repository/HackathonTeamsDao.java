@@ -13,8 +13,9 @@ import edu.sjsu.cmpe275.project.Entity.HackathonTeams;
 public interface HackathonTeamsDao extends JpaRepository<HackathonTeams, Integer>{
 	
 	List<HackathonTeams> findHackathonTeamsByTeamIdId(int teamId);
-	Optional<HackathonTeams> findHackathonTeamsByHackIdAndTeamId(int hackId, int teamId);
 	
+	Optional<HackathonTeams> findHackathonTeamsByHackIdAndTeamId(int hackId, int teamId);
+	Optional<HackathonTeams> findHackathonTeamsByHackIdIdAndTeamIdId(int hackId, int teamId);
 	@Query(value = "select h.* from hackathon_teams h, team t where h.team_id_id = t.id order by t.score desc", nativeQuery = true)
 	List<HackathonTeams> findHackathonTeamsByHackIdId(int hackId);
 }

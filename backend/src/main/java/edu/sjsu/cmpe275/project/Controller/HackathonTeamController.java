@@ -78,6 +78,7 @@ public class HackathonTeamController {
 			@PathVariable("userid") int userid,@PathVariable("teamid") int teamid,@PathVariable("email") String tempEmail,
 			@PathVariable("amount") float amount){
 		// Team members payment
+		Optional<User> mainUser=userService.getUser(userid);
 		List<TeamMember> a=teamMemberService.getTeamMemberByTeamIdAndUserId(teamid, userid);
 		System.out.println(a.get(0).getRole());
 		TeamMember currMember=a.get(0);
@@ -89,11 +90,11 @@ public class HackathonTeamController {
 		for(TeamMember member:a1) {
 //			System.out.println(member.isPayment());
 			if(!member.isPayment()) {
-				this.mailService.confirmationMail(tempEmail);
+				this.mailService.confirmationMail(mainUser.get().getEmail());
 				return new ResponseEntity<Object>("Your payment is done. But Team Payment Not Done", HttpStatus.OK);
 			}
 		}
-		this.mailService.confirmationMail(tempEmail);
+		this.mailService.confirmationMail(mainUser.get().getEmail());
 		Optional<HackathonTeams> hackTeam=hackathonTeamsService.getHackathonTeams(teamid);
 		if(!hackTeam.isPresent()) {
 			return new ResponseEntity<Object>("Team Not present", HttpStatus.OK);
@@ -150,16 +151,38 @@ public class HackathonTeamController {
 		}
 	}
 	
-//	@GetMapping("/checkTeamPayment")
-//	public ResponseEntity<Object> checkTeamPayment(@RequestParam("hack_id") int hack_id){
-//		try {
-//			
-//		}
-//		catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
-//		}
-//		return null;
-//		
-//	}
+	@GetMapping("hackathonTeams")
+	public ResponseEntity<Object> hackathonTeams(){
+		try {
+			return new ResponseEntity<Object>(this.hackathonTeamsService.getAllHackathonTeams(), HttpStatus.OK);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/checkTeamPayment/{hackId}/{teamId}")
+	public ResponseEntity<Object> checkTeamPayment(@PathVariable("hackId") int hackId, @PathVariable("teamId") int teamId){
+		try {
+			System.out.println("In checkTeamPayment route of Hackathon Team Controller");
+			List<HackathonTeams> hackteams=this.hackathonTeamsService.getHackathonTeamsByTeamId(teamId);
+			if(hackteams.size()==0) {
+				return new ResponseEntity<Object>("Team Not found", HttpStatus.NOT_FOUND);
+			}
+			for(HackathonTeams temp:hackteams) {
+				if(temp.getHackId().getId()==hackId && temp.getPayments()==true) {
+					return new ResponseEntity<Object>("Payment Done", HttpStatus.OK);
+				}
+			}
+//			if(hackteams.get(0).ge) {
+//				return new ResponseEntity<Object>("Payment Done", HttpStatus.OK);
+//			}
+			return new ResponseEntity<Object>("All the Team members should complete the payment!", HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
+		}		
+	}
 }

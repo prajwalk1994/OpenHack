@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import url from '../../config/config'
-
+import {Redirect} from 'react-router-dom'
 
 class submission extends Component {
     constructor(props) {
@@ -9,8 +9,9 @@ class submission extends Component {
         this.state = {
             url: "",
             teamid: "",
-            hackathonId: localStorage.getItem("hackathonid"),
-            teamid: localStorage.getItem("teamid"),
+            hackathonId: localStorage.getItem("tempHackId"),
+            teamid: localStorage.getItem("tempTeamId"),
+            redirectVar:""
         }
     }
 
@@ -25,47 +26,52 @@ class submission extends Component {
     }
 
     checkPayment = () => {
-        alert("Submission successful!")
-        // Axios.get(url+"/checkPayment",6)
-        // .then((response)=>{
-        //     console.log(response.data)
-        //     Axios.post(url+"/submission").then(res=>{
-        //         console.log(res.data)
-        //     })
-        // })
-        // .catch((err) => {
-        //     if(err.response){
-        //     console.log("errror", err.response.data)
-        //     }else{
-        //         alert("Something went wrong!")
-        //     }
-        // })
+
     }
 
     doSubmission = (e) => {
         e.preventDefault();
 
+        if (this.state.url.length == 0) {
+            alert("Url shouldn't be empty!")
+        }
+        else {
+            Axios.get(url + `/checkTeamPayment/${this.state.hackathonId}/${this.state.teamid}`)
+                .then((response) => {
+                    console.log(response.data)
+                    Axios.post(url + `/submission/${this.state.teamid}/${this.state.hackathonId}/${this.state.url}`)
+                        .then((response) => {
+                            console.log(response.data)
+                            console.log("state after response", this.state)
+                            alert("Code submission successful!")
+                            this.setState({
+                                redirectVar:<Redirect to="/profile"/>
+                            })
+                        })
+                        .catch((err) => {
+                            if (err.response) {
+                                console.log("errror", err.response)
+                            } else {
+                                alert("something went wrong")
+                            }
+                        })
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        console.log("errror", err.response.data)
+                    } else {
+                        alert("Something went wrong!")
+                    }
+                })
+        }
 
-        //check payment if all team members has made
-        this.checkPayment();
 
 
-        Axios.get(url + "/submission/" + this.state.teamid + "/" + this.state.hackathonId)
-            .then((response) => {
-                console.log(response.data)
-                console.log("state after response", this.state)
-            })
-            .catch((err) => {
-                if (err.response) {
-                    console.log("errror", err.response)
-                } else {
-                    alert("something went wrong")
-                }
-            })
     }
     render() {
         return (
             <div className="container">
+                {this.state.redirectVar}
                 <center>
                     <div className="row col-sm-6 formContainer justify-content-center">
                         <div className="row">
