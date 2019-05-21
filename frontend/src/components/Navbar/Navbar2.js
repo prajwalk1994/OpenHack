@@ -46,7 +46,6 @@ class Navbar2 extends Component {
                             <ul class="nav-tabs">
                                 <a href="/"><li class="nav-tab">Home</li></a>
                                 <a href="/login"><li class="nav-tab">Login</li></a>
-                                <a href="/signup"><li class="nav-tab">signup</li></a>
                                 <a href="/profile"><li class="nav-tab">Profile</li></a>
                                 <a href="/searchHackathons"><li class="nav-tab">Hackathons</li></a>
                                 <a href="/searchOrgs"><li class="nav-tab">Organizations</li></a>
