@@ -260,7 +260,8 @@ class Profile extends Component {
                 return (
                     <div className="row">
                         <label className="col-sm-6">{item.hackId.name}</label>
-                        <button className="btn btn_login col-sm-6" onClick={(e) => { this.submitcode(e, item.hackId.id, item.hackId.regFee, item.teamId.id) }}>submit </button>
+                        {(item.submissionUrl.length==0)?<button className="btn btn_login col-sm-6" onClick={(e) => { this.submitcode(e, item.hackId.id, item.hackId.regFee, item.teamId.id) }}>submit </button>:
+                        <button className="btn btn-dark col-sm-6" disabled>Submitted</button>}
                     </div>
                 )
             })

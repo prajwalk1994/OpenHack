@@ -28,10 +28,10 @@ import edu.sjsu.cmpe275.project.Service.HackathonTeamsService;
 public class SubmissionController {
 	@Autowired
 	HackathonTeamsService hackathonTeamsService;
-	
+
 	@Autowired
 	HackathonService hackathonService;
-	
+
 	@Autowired
 	HackathonTeamsDao hackathonTeamsDao;
 
@@ -41,23 +41,33 @@ public class SubmissionController {
 		try {
 			System.out.println("Inside submission route of Submission controller!");
 //			List<HackathonTeams> hackathonTeams = this.hackathonTeamsService.getHackathonTeamsByTeamId(teamId);
-			Optional<HackathonTeams> hackathonTeams = this.hackathonTeamsDao.findHackathonTeamsByHackIdIdAndTeamIdId(hackId, teamId);
+			Optional<HackathonTeams> hackathonTeams = this.hackathonTeamsDao
+					.findHackathonTeamsByHackIdIdAndTeamIdId(hackId, teamId);
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
-//			if(hackathonTeams.size()==0) {
-//				return new ResponseEntity<Object>("No team with that hackathon present", HttpStatus.NOT_FOUND);
+			if (!hackathonTeams.isPresent()) {
+				return new ResponseEntity<Object>("No team with that hackathon present", HttpStatus.NOT_FOUND);
+			}
+			if (!hackathon.isPresent()) {
+				return new ResponseEntity<Object>("Hackathon not present", HttpStatus.NOT_FOUND);
+			}
+			System.out.println(hackathon);
+			if (hackathon.get().getStatus() == Status.Open) {
+				hackathonTeams.get().setSubmissionUrl(url);
+				this.hackathonTeamsService.addHackathonTeams(hackathonTeams.get());
+				return new ResponseEntity<Object>(hackathonTeams.get(), HttpStatus.OK);
+			}
+			return new ResponseEntity<Object>("Status is not Open", HttpStatus.BAD_REQUEST);
+//			Hackathon currHackathon = hackathon.get();
+//			HackathonTeams currentTeam = hackathonTeams.get();
+//			currentTeam.setSubmissionUrl(url);
+//			if(new Date().compareTo(currHackathon.getEndDate()) > 0 || currHackathon.getStatus().equals(Status.Closed)) {
+//				return new ResponseEntity<Object>("Cannot submit after End date", HttpStatus.UNAUTHORIZED);
 //			}
-			System.out.println(hackathonTeams);
-			Hackathon currHackathon = hackathon.get();
-			HackathonTeams currentTeam = hackathonTeams.get();
-			currentTeam.setSubmissionUrl(url);
-			if(new Date().compareTo(currHackathon.getEndDate()) > 0 || currHackathon.getStatus().equals(Status.Closed)) {
-				return new ResponseEntity<Object>("Cannot submit after End date", HttpStatus.UNAUTHORIZED);
-			}
-			if(currentTeam.getGrade()!=0) {
-				return new ResponseEntity<Object>("Team has already been graded", HttpStatus.UNAUTHORIZED);
-			}
-			this.hackathonTeamsService.addHackathonTeams(currentTeam);
-			return new ResponseEntity<Object>(currentTeam, HttpStatus.OK);
+//			if(currentTeam.getGrade()!=0) {
+//				return new ResponseEntity<Object>("Team has already been graded", HttpStatus.UNAUTHORIZED);
+//			}
+//			this.hackathonTeamsService.addHackathonTeams(currentTeam);
+//			return new ResponseEntity<Object>(currentTeam, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("Bad Request", HttpStatus.BAD_REQUEST);
