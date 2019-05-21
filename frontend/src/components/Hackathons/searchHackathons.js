@@ -7,14 +7,16 @@ class searchHackathons extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hackathonSearched: "Hello World",
+            hackathonSearched:"",
+            hackathonSearchedtemp:"",
+            hackathonSearchedId:"",
             minteamSize: 0,
             maxteamSize: 0,
             minteamSizeList: 0,
             maxteamSizeList: 0,
             visibility: false,
             allHackathonsData: [],
-            hackathonsList: ["Code bug","codera"],
+            hackathonsList: ["Code bug", "codera"],
             visibility: false,
             members: {},
             roles: {},
@@ -59,8 +61,29 @@ class searchHackathons extends Component {
             })
     }
 
-    searchHackathons = () => {
+    handleSearchChange = (e) => {
+        this.setState({
+            hackathonSearchedtemp: e.target.value
+        })
+    }
 
+    searchHackathons = async(e) => {
+        e.preventDefault();
+        await this.setState({
+            hackathonSearched: this.state.hackathonSearchedtemp
+        })
+
+        for (let i = 0; i < this.state.hackathonsList.length; i++) {
+            console.log(i)
+            if (this.state.hackathonSearched == this.state.hackathonsList[i]) {
+               await this.setState({
+                    hackathonSearchedId:i
+                })
+                // await alert("org found at " + i)
+            } else {
+                await alert("Hackathon not found")
+            }
+        }
     }
 
     sendJoinRequest = async (e) => {
@@ -167,7 +190,6 @@ class searchHackathons extends Component {
     }
 
     render() {
-
         var hackathonsListDiv = "";
         hackathonsListDiv = this.state.hackathonsList.map((item, index) => {
             return (
@@ -225,11 +247,15 @@ class searchHackathons extends Component {
                         <div className="justify-content-center formContainer">
                             <h3>Search Hackathons</h3>
                             <div className="">
-                                <input list="hackathons1" type="text" className="form-control mb-4" name="searchHackathon" placeholder="Search Hackathons"></input>
+                                <input list="hackathons1" onChange={this.handleSearchChange} type="text" className="form-control mb-4" name="searchHackathon" placeholder="Search Hackathons"></input>
                                 <datalist id="hackathons1">
                                     {datalistHackathons}
                                 </datalist>
                                 <button className="btn btn_login" onClick={this.searchHackathons}>Search</button>
+                                <div className="row justify-content-center">
+                                    <h4 className="col-sm-9">{this.state.hackathonSearched}</h4>
+                                    {this.state.hackathonSearched ? <button className="btn btn_login col-sm-3" onClick={(e) => this.joinHackathon(e, (this.state.hackathonSearchedId + 1))}>join</button> : <div></div>}
+                                </div>
                             </div>
                         </div>
                         <div className="justify-content-center formContainer ml-5">
