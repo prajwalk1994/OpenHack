@@ -5,8 +5,14 @@ class Navbar2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: true
+            redirect: ""
         }
+    }
+
+    componentDidMount=()=>{
+        this.setState({
+            redirect:""
+        })
     }
 
     handleLogout = (e) => {
@@ -16,10 +22,15 @@ class Navbar2 extends Component {
         localStorage.removeItem("email")
         localStorage.removeItem("username")
         localStorage.removeItem("verified")
+        this.setState({
+            redirect:<Redirect to="/login"/>
+        })
+        window.location.reload()
     }
     render() {
         return (
             <div>
+                {this.state.redirect}
                 <div class="nav-wrapper">
                     <div class="logo-container">
                         <h2>Open Hack</h2>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
 import edu.sjsu.cmpe275.project.Entity.Hackathon.Status;
 import edu.sjsu.cmpe275.project.Entity.HackathonTeams;
+import edu.sjsu.cmpe275.project.Repository.HackathonTeamsDao;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
 import edu.sjsu.cmpe275.project.Service.HackathonTeamsService;
 
@@ -30,16 +31,22 @@ public class SubmissionController {
 	
 	@Autowired
 	HackathonService hackathonService;
+	
+	@Autowired
+	HackathonTeamsDao hackathonTeamsDao;
 
-	@PostMapping("submission/{teamId}/{hackId}")
+	@PostMapping("submission/{teamId}/{hackId}/{url}")
 	public ResponseEntity<Object> addSubmissionUrl(@PathVariable("teamId") int teamId,
-			@PathVariable("hackId") int hackId, @RequestParam("url") String url) {
+			@PathVariable("hackId") int hackId, @PathVariable("url") String url) {
 		try {
-			Optional<HackathonTeams> hackathonTeams = this.hackathonTeamsService.getHackathonTeamsByHackIdAndTeamId(hackId, teamId);
+			System.out.println("Inside submission route of Submission controller!");
+//			List<HackathonTeams> hackathonTeams = this.hackathonTeamsService.getHackathonTeamsByTeamId(teamId);
+			Optional<HackathonTeams> hackathonTeams = this.hackathonTeamsDao.findHackathonTeamsByHackIdIdAndTeamIdId(hackId, teamId);
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
-			if(!hackathonTeams.isPresent()) {
-				return new ResponseEntity<Object>("No team with hackathon present", HttpStatus.NOT_FOUND);
-			}
+//			if(hackathonTeams.size()==0) {
+//				return new ResponseEntity<Object>("No team with that hackathon present", HttpStatus.NOT_FOUND);
+//			}
+			System.out.println(hackathonTeams);
 			Hackathon currHackathon = hackathon.get();
 			HackathonTeams currentTeam = hackathonTeams.get();
 			currentTeam.setSubmissionUrl(url);

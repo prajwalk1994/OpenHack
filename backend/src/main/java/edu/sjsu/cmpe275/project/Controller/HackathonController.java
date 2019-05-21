@@ -127,7 +127,7 @@ public class HackathonController {
 		hackathon.setMaxTeam(hackathonTemp.getMaxTeam());
 		hackathon.setRegFee(hackathonTemp.getRegFee());
 		hackathon.setSponDiscount(hackathonTemp.getSponDiscount());
-		
+		hackathon.setAdmin(email);
 		List<User> users = new ArrayList<User>();
 		for(String str : hackathonTemp.getJudgeList()){
 //			System.out.println(str);
@@ -197,6 +197,7 @@ public class HackathonController {
 	@PostMapping("hackathon/changeStatus/{hackId}/{status}")
 	public ResponseEntity<Object> changeHackathonStatus(@PathVariable("hackId") int hackId, @PathVariable("status") Status status){
 		try {
+			System.out.println("In changeStatus route of Hackathon Controller");
 			Optional<Hackathon> hackathon = this.hackathonService.getHackathon(hackId);
 			if(!hackathon.isPresent()) {
 				return new ResponseEntity<Object>("Hackathon Not found", HttpStatus.NOT_FOUND);

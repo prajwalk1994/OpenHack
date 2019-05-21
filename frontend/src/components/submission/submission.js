@@ -9,8 +9,8 @@ class submission extends Component {
         this.state = {
             url: "",
             teamid: "",
-            hackathonId: localStorage.getItem("hackathonid"),
-            teamid: localStorage.getItem("teamid"),
+            hackathonId: localStorage.getItem("tempHackId"),
+            teamid: localStorage.getItem("tempTeamId"),
         }
     }
 
@@ -25,43 +25,43 @@ class submission extends Component {
     }
 
     checkPayment = () => {
-        alert("Submission successful!")
-        // Axios.get(url+"/checkPayment",6)
-        // .then((response)=>{
-        //     console.log(response.data)
-        //     Axios.post(url+"/submission").then(res=>{
-        //         console.log(res.data)
-        //     })
-        // })
-        // .catch((err) => {
-        //     if(err.response){
-        //     console.log("errror", err.response.data)
-        //     }else{
-        //         alert("Something went wrong!")
-        //     }
-        // })
+
     }
 
     doSubmission = (e) => {
         e.preventDefault();
 
+        if (this.state.url.length == 0) {
+            alert("Url shouldn't be empty!")
+        }
+        else {
+            Axios.get(url + `/checkTeamPayment/${this.state.hackathonId}/${this.state.teamid}`)
+                .then((response) => {
+                    console.log(response.data)
+                    Axios.post(url + `/submission/${this.state.teamid}/${this.state.hackathonId}/${this.state.url}`)
+                        .then((response) => {
+                            console.log(response.data)
+                            console.log("state after response", this.state)
+                        })
+                        .catch((err) => {
+                            if (err.response) {
+                                console.log("errror", err.response)
+                            } else {
+                                alert("something went wrong")
+                            }
+                        })
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        console.log("errror", err.response.data)
+                    } else {
+                        alert("Something went wrong!")
+                    }
+                })
+        }
 
-        //check payment if all team members has made
-        this.checkPayment();
 
 
-        Axios.get(url + "/submission/" + this.state.teamid + "/" + this.state.hackathonId)
-            .then((response) => {
-                console.log(response.data)
-                console.log("state after response", this.state)
-            })
-            .catch((err) => {
-                if (err.response) {
-                    console.log("errror", err.response)
-                } else {
-                    alert("something went wrong")
-                }
-            })
     }
     render() {
         return (

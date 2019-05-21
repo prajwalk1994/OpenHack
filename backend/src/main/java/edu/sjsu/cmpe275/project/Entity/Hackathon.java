@@ -40,6 +40,9 @@ public class Hackathon {
 	@Column(name = "NAME")
 	private String name;
 
+	@Column(name = "ADMIN")
+	private String admin;
+	
 	@Column(name = "STARTDATE")
 	private Date startDate;
 
@@ -187,6 +190,14 @@ public class Hackathon {
 
 	public void setHackathonTeams(List<HackathonTeams> hackathonTeams) {
 		HackathonTeams = hackathonTeams;
+	}
+
+	public String getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
 
 }

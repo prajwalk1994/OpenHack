@@ -209,14 +209,15 @@ class Profile extends Component {
         }
     }
 
-    submitcode = async (e, arg1, arg2, arg3) => {
-        await localStorage.setItem("tempHackId", arg1)
+    submitcode = async (e, id, arg2, arg3) => {
+        await localStorage.setItem("tempHackId", id)
         await localStorage.setItem("tempRegFee", arg2)
         await localStorage.setItem("tempTeamId", arg3)
+
+        await localStorage.setItem("submissionHackathonId",id)
         await this.setState({
-            redirectTo: <Redirect to="/Payment" />
+            redirectTo: <Redirect to="/Submission" />
         })
-        // Axios.post()
     }
 
     handleLeaveOrg = (e, id) => {
