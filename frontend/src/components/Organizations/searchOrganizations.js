@@ -73,7 +73,6 @@ class searchOrganizations extends Component {
                 await alert("organization not found")
             }
         }
-
     }
 
     sendJoinRequest = (e, organizationId) => {
