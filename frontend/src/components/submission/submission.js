@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import url from '../../config/config'
-
+import {Redirect} from 'react-router-dom'
 
 class submission extends Component {
     constructor(props) {
@@ -11,6 +11,7 @@ class submission extends Component {
             teamid: "",
             hackathonId: localStorage.getItem("tempHackId"),
             teamid: localStorage.getItem("tempTeamId"),
+            redirectVar:""
         }
     }
 
@@ -42,6 +43,10 @@ class submission extends Component {
                         .then((response) => {
                             console.log(response.data)
                             console.log("state after response", this.state)
+                            alert("Code submission successful!")
+                            this.setState({
+                                redirectVar:<Redirect to="/profile"/>
+                            })
                         })
                         .catch((err) => {
                             if (err.response) {
@@ -66,6 +71,7 @@ class submission extends Component {
     render() {
         return (
             <div className="container">
+                {this.state.redirectVar}
                 <center>
                     <div className="row col-sm-6 formContainer justify-content-center">
                         <div className="row">
