@@ -7,10 +7,12 @@ class searchOrganizations extends Component {
         super(props);
         this.state = {
             userid: localStorage.getItem("userid"),
+            userEmail: localStorage.getItem("email"),
             organizationSearched: "",
             organizationSearchedId: "",
-            organizationsList: ["happy", "haoppy"],
+            organizationsList: [],
             // organizationsIds:[],
+            organizationOwners: [],
             AllOrgsData: "",
             visibility: false
         }
@@ -24,16 +26,19 @@ class searchOrganizations extends Component {
                 this.setState({
                     AllOrgsData: response.data
                 })
-
+                console.log(this.state.AllOrgsData[0].owner.email)
                 var tempOrg = []
                 // var tempOrgIds=[]
+                var tempOwners = []
                 for (let i of response.data) {
                     tempOrg.push(i.name)
+                    tempOwners.push(i.owner.email)
                     // tempOrgIds.push(i.id)
                 }
                 this.setState({
                     organizationsList: tempOrg,
                     // organizationsIds:tempOrgIds
+                    organizationOwners: tempOwners
                 })
                 console.log("state after setting orgs", this.state)
             })
@@ -78,6 +83,7 @@ class searchOrganizations extends Component {
         axios.post(url + "/organizationMember/" + this.state.userid + "/" + organizationId)
             .then((response) => {
                 console.log(response.data)
+                alert("Join request sent!")
             })
             .catch((err) => {
                 if (err.response) {
@@ -94,7 +100,7 @@ class searchOrganizations extends Component {
             return (
                 <div className="row">
                     <h5 className="col-sm-6 mt-4">{item}</h5>
-                    <button className=" col-sm-6 form_element btn btn_login" onClick={(e) => this.sendJoinRequest(e, (index + 1))}>join</button>
+                    {(this.state.organizationOwners[index]!=this.state.userEmail)?(<button className=" col-sm-6 form_element btn btn_login" onClick={(e) => this.sendJoinRequest(e, (index + 1))}>join</button>):(<button className=" col-sm-6 form_element btn btn-light" onClick={(e)=>{alert("Owner cannot join!")}}>Owner</button>)}
                 </div>
             )
         })

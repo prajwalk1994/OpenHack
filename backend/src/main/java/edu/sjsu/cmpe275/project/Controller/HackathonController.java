@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
 import edu.sjsu.cmpe275.project.Entity.Hackathon.Status;
+import edu.sjsu.cmpe275.project.Entity.Organization;
 import edu.sjsu.cmpe275.project.Entity.User;
+import edu.sjsu.cmpe275.project.Repository.OrganizationDao;
 import edu.sjsu.cmpe275.project.Repository.UserDao;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
 import edu.sjsu.cmpe275.project.Service.UserService;
@@ -30,6 +32,7 @@ class HackathonTemp{
 	private Date endDate;
 	private String description;
 	private List<String> judgeList;
+	private List<String> sponsers;
 	private int regFee;
 	private int minTeam;
 	private int maxTeam;
@@ -88,6 +91,12 @@ class HackathonTemp{
 	public void setSponDiscount(int sponDiscount) {
 		this.sponDiscount = sponDiscount;
 	}
+	public List<String> getsponsers() {
+		return sponsers;
+	}
+	public void setOrgList(List<String> sponsers) {
+		this.sponsers = sponsers;
+	}
 
 }
 @RestController
@@ -99,6 +108,8 @@ public class HackathonController {
 	@Autowired
 	UserDao userDao;
 	@Autowired
+	OrganizationDao organizationDao;
+	@Autowired
 	UserService userService;
 	
 	@PostMapping("hackathon")
@@ -107,7 +118,7 @@ public class HackathonController {
 		// check if admin
 		// mandatory attribute check
 		Hackathon hackathon= new Hackathon();
-		System.out.println(hackathonTemp);
+//		System.out.println(hackathonTemp);
 		hackathon.setName(hackathonTemp.getName());
 		hackathon.setDescription(hackathonTemp.getDescription());
 		hackathon.setStartDate(hackathonTemp.getStartDate());
@@ -119,16 +130,29 @@ public class HackathonController {
 		
 		List<User> users = new ArrayList<User>();
 		for(String str : hackathonTemp.getJudgeList()){
-			System.out.println(str);
+//			System.out.println(str);
 			ArrayList<User> user = userDao.findUserByEmail(str);
 			if(user.size()==0) {
 				return new ResponseEntity<>("FAILURE-Invalid_Judges", HttpStatus.BAD_REQUEST);
 			}
 			users.add(user.get(0));
 		}
+		System.out.println(hackathonTemp.getsponsers());
+		List<Organization> orgs= new ArrayList<Organization>();
+		for(String str : hackathonTemp.getsponsers()) {
+			System.out.println(str);
+			ArrayList<Organization> org= this.organizationDao.findOrganizationByName(str);
+			if(org.size()==0) {
+				return new ResponseEntity<>("FAILURE-Invalid_Organizations", HttpStatus.BAD_REQUEST);
+			}
+			orgs.add(org.get(0));
+		}
+		
 		hackathon.setJudgeList(users);
+		hackathon.setOrgList(orgs);
 		
 		System.out.println(hackathon.getJudgeList());
+		System.out.println(hackathon.getOrgList());
 		System.out.println("Inside Create Hackathon");
 		int len = email.length();
 		if (!email.substring(len - 8, len).equals("sjsu.edu")) {
@@ -139,7 +163,7 @@ public class HackathonController {
 				|| hackathon.getEndDate() == null || hackathon.getDescription() == null
 				|| hackathon.getDescription().length() == 0 || hackathon.getRegFee()<0 || hackathon.getJudgeList().size()==0
 				|| hackathon.getMaxTeam()<=0 || hackathon.getMinTeam()<=0 || hackathon.getSponDiscount()>50) {
-			return new ResponseEntity<>("FAILURE-Empty-fields", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("FAILURE-Empty_fields", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(this.hackathonService.addHackathon(hackathon), HttpStatus.OK);
 	}

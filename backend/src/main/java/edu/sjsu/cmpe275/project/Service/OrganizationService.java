@@ -36,4 +36,6 @@ public class OrganizationService {
 	public List<Organization> getOrganizationsByOwnerId(int ownerId){
 		return this.organizationDao.findOrganizationByOwnerId(ownerId);
 	}
+	
+	
 }
