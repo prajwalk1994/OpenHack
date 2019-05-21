@@ -44,6 +44,9 @@ public class TeamMember {
 	
 	@Column(name = "PAYMENT")
 	private boolean payment;
+	
+	@Column(name = "AMOUNT")
+	private float amount;
 
 	public int getId() {
 		return id;
@@ -83,6 +86,14 @@ public class TeamMember {
 
 	public void setPayment(boolean payment) {
 		this.payment = payment;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 	
 	
