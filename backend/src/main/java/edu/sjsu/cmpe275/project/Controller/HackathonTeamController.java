@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import edu.sjsu.cmpe275.project.Entity.TeamMember;
 import edu.sjsu.cmpe275.project.Entity.User;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
 import edu.sjsu.cmpe275.project.Service.HackathonTeamsService;
+import edu.sjsu.cmpe275.project.Service.MailingService;
 import edu.sjsu.cmpe275.project.Service.TeamMemberService;
 import edu.sjsu.cmpe275.project.Service.TeamService;
 import edu.sjsu.cmpe275.project.Service.UserService;
@@ -43,6 +46,9 @@ public class HackathonTeamController {
 	
 	@Autowired
 	TeamMemberService teamMemberService;
+	
+	@Autowired
+	MailingService mailService;
 	
 	@Autowired
 	UserService userService;
@@ -67,21 +73,27 @@ public class HackathonTeamController {
 		}
 	}
 	
-	@PostMapping("/makePayment")
-	public ResponseEntity<Object> makePayment(@RequestParam("hackathonName") String hackathonName,
-			@RequestParam("userid") int userid,@RequestParam("teamid") int teamid){
+	@PostMapping("/makePayment/{userid}/{teamid}/{email}/{amount}")
+	public ResponseEntity<Object> makePayment(
+			@PathVariable("userid") int userid,@PathVariable("teamid") int teamid,@PathVariable("email") String tempEmail,
+			@PathVariable("amount") float amount){
 		// Team members payment
 		List<TeamMember> a=teamMemberService.getTeamMemberByTeamIdAndUserId(teamid, userid);
 		System.out.println(a.get(0).getRole());
 		TeamMember currMember=a.get(0);
 		currMember.setPayment(true);
+		//Set amount
+		currMember.setAmount(amount);
 		this.teamMemberService.addTeamMember(currMember);
-		List<TeamMember> a1=teamMemberService.getTeamMemberByTeamIdAndUserId(teamid, userid);
+		List<TeamMember> a1=teamMemberService.getTeamMemberByTeamId(teamid);
 		for(TeamMember member:a1) {
+//			System.out.println(member.isPayment());
 			if(!member.isPayment()) {
-				return new ResponseEntity<Object>("Team Payment Not Done", HttpStatus.OK);
+				this.mailService.confirmationMail(tempEmail);
+				return new ResponseEntity<Object>("Your payment is done. But Team Payment Not Done", HttpStatus.OK);
 			}
 		}
+		this.mailService.confirmationMail(tempEmail);
 		Optional<HackathonTeams> hackTeam=hackathonTeamsService.getHackathonTeams(teamid);
 		if(!hackTeam.isPresent()) {
 			return new ResponseEntity<Object>("Team Not present", HttpStatus.OK);
@@ -90,8 +102,11 @@ public class HackathonTeamController {
 		currTeam.setPayments("1");
 		this.hackathonTeamsService.addHackathonTeams(currTeam);
 		// throw mail
+		for(TeamMember member:a1) {
+			this.mailService.confirmationMailTeam(member.getUser().getEmail());
+		}
 		System.out.println("Mail sent as team payment is done!");
-		return new ResponseEntity<Object>("Team Payment Done and Mail Sent", HttpStatus.OK);
+		return new ResponseEntity<Object>("Team Payment is also Done and Mail Sent", HttpStatus.OK);
 	
 	}
 	

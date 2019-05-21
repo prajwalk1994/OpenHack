@@ -156,12 +156,56 @@ public class MailingService {
 	    return true;
 	}
 	
+	public boolean confirmationMail(String email){
+		Email from = new Email("verification@openhack.com");
+	    String subject = "Hackathon Confirmation Mail";
+	    Email to = new Email(email);
+	    
+	    Content content = new Content("text/plain", "Payment Done.");
+	    Mail mail = new Mail(from, subject, to, content);
+
+	    SendGrid sg = new SendGrid("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");
+	    Request request = new Request();
+	    try {
+	      request.setMethod(Method.POST);
+	      request.setEndpoint("mail/send");
+	      request.setBody(mail.build());
+	      Response response = sg.api(request);
+	    } catch (IOException ex) {
+	      System.out.println(ex.getMessage());
+	      return false;
+	    }
+	    return true;
+	}
+	
+	public boolean confirmationMailTeam(String email){
+		Email from = new Email("TeamVerification@openhack.com");
+	    String subject = "Hackathon Team Payment Confirmation status";
+	    Email to = new Email(email);
+	    
+	    Content content = new Content("text/plain", "Team Payment is Done. All the people have paid!");
+	    Mail mail = new Mail(from, subject, to, content);
+
+	    SendGrid sg = new SendGrid("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");
+	    Request request = new Request();
+	    try {
+	      request.setMethod(Method.POST);
+	      request.setEndpoint("mail/send");
+	      request.setBody(mail.build());
+	      Response response = sg.api(request);
+	    } catch (IOException ex) {
+	      System.out.println(ex.getMessage());
+	      return false;
+	    }
+	    return true;
+	}
+	
 	public boolean sendMail(String accessToken, String email){
 		Email from = new Email("verification@openhack.com");
 	    String subject = "Hackathon Verification Mail";
 	    Email to = new Email(email);
 	    
-	    Content content = new Content("text/plain", "Please click on this link: " + "http://localhost:8080/activateLogin?accessToken="+accessToken+"&email="+email);
+	    Content content = new Content("text/plain", "Please click on this link: " +Config.url+"/activateLogin?accessToken="+accessToken+"&email="+email);
 	    Mail mail = new Mail(from, subject, to, content);
 
 	    SendGrid sg = new SendGrid("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");
