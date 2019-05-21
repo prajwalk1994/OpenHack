@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
+import edu.sjsu.cmpe275.project.Entity.Hackathon.Status;
 import edu.sjsu.cmpe275.project.Entity.HackathonTeams;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
 import edu.sjsu.cmpe275.project.Service.HackathonTeamsService;
@@ -41,8 +42,8 @@ public class SubmissionController {
 			}
 			Hackathon currHackathon = hackathon.get();
 			HackathonTeams currentTeam = hackathonTeams.get();
-//			currentTeam.setSubmissionUrl(url);
-			if(new Date().compareTo(currHackathon.getEndDate()) > 0 || currHackathon.getStatus().equals("Closed")) {
+			currentTeam.setSubmissionUrl(url);
+			if(new Date().compareTo(currHackathon.getEndDate()) > 0 || currHackathon.getStatus().equals(Status.Closed)) {
 				return new ResponseEntity<Object>("Cannot submit after End date", HttpStatus.UNAUTHORIZED);
 			}
 			if(currentTeam.getGrade()!=0) {
