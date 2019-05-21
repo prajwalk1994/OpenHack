@@ -7,15 +7,17 @@ class searchHackathons extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            hackathonSearched: "",
+            hackathonSearchedtemp: "",
+            hackathonSearchedId: "",
             email: localStorage.getItem("email"),
-            hackathonSearched: "Hello World",
             minteamSize: 0,
             maxteamSize: 0,
             minteamSizeList: 0,
             maxteamSizeList: 0,
             visibility: false,
             allHackathonsData: [],
-            hackathonsList: [],
+            hackathonsList: ["Code bug", "codera"],
             judgeLists: [],
             visibility: false,
             members: {},
@@ -62,8 +64,34 @@ class searchHackathons extends Component {
             })
     }
 
-    searchHackathons = () => {
+    handleSearchChange = (e) => {
+        this.setState({
+            hackathonSearchedtemp: e.target.value
+        })
+    }
 
+    searchHackathons = async (e) => {
+        e.preventDefault();
+        await this.setState({
+            hackathonSearched: this.state.hackathonSearchedtemp
+        })
+
+        for (var i = 0; i < this.state.hackathonsList.length; i++) {
+            console.log(i)
+            if (this.state.hackathonSearched == this.state.hackathonsList[i]) {
+                await this.setState({
+                    hackathonSearchedId: i
+                })
+                break;
+                // await alert("hack found at " + i)
+            }
+        }
+        if (this.state.hackathonSearchedId != i) {
+            alert("Hackathon Not found!")
+            await this.setState({
+                hackathonSearched: ""
+            })
+        }
     }
 
     sendJoinRequest = async (e) => {
@@ -79,9 +107,9 @@ class searchHackathons extends Component {
             alert("You should be part of the team!")
         }
         else {
-        console.log(this.state.judgeLists, Object.values(this.state.members))
-        console.log(this.state.judgeLists.filter(value => Object.values(this.state.members).includes(value)))
-            if (this.state.judgeLists.filter(value => Object.values(this.state.members).includes(value)).length!=0) {
+            console.log(this.state.judgeLists, Object.values(this.state.members))
+            console.log(this.state.judgeLists.filter(value => Object.values(this.state.members).includes(value)))
+            if (this.state.judgeLists.filter(value => Object.values(this.state.members).includes(value)).length != 0) {
                 alert("judge cannot be a Team member");
             } else {
                 var requestBody = {}
@@ -158,14 +186,14 @@ class searchHackathons extends Component {
         if (this.state.judgeLists.includes(this.state.email)) {
             alert("You are judge, cannot be hacker");
         } else {
-        await this.setState({
-            visibility: true,
-            hackathonId: id,
-            minteamSize: this.state.minteamSizeList[id - 1],
-            maxteamSize: this.state.maxteamSizeList[id - 1]
-        })
-        console.log("hackathon id ", id, " min team size ", this.state.minteamSize, " max team size", this.state.maxteamSize)
-    }
+            await this.setState({
+                visibility: true,
+                hackathonId: id,
+                minteamSize: this.state.minteamSizeList[id - 1],
+                maxteamSize: this.state.maxteamSizeList[id - 1]
+            })
+            console.log("hackathon id ", id, " min team size ", this.state.minteamSize, " max team size", this.state.maxteamSize)
+        }
 
     }
 
@@ -204,7 +232,6 @@ class searchHackathons extends Component {
     }
 
     render() {
-
         var hackathonsListDiv = "";
         hackathonsListDiv = this.state.hackathonsList.map((item, index) => {
             return (
@@ -263,11 +290,15 @@ class searchHackathons extends Component {
                         <div className="justify-content-center formContainer">
                             <h3>Search Hackathons</h3>
                             <div className="">
-                                <input list="hackathons1" type="text" className="form-control mb-4" name="searchHackathon" placeholder="Search Hackathons"></input>
+                                <input list="hackathons1" onChange={this.handleSearchChange} type="text" className="form-control mb-4" name="searchHackathon" placeholder="Search Hackathons"></input>
                                 <datalist id="hackathons1">
                                     {datalistHackathons}
                                 </datalist>
                                 <button className="btn btn_login" onClick={this.searchHackathons}>Search</button>
+                                <div className="row justify-content-center">
+                                    <h4 className="col-sm-9">{this.state.hackathonSearched}</h4>
+                                    {this.state.hackathonSearched ? <button className="btn btn_login col-sm-3" onClick={(e) => this.joinHackathon(e, (this.state.hackathonSearchedId + 1))}>join</button> : <div></div>}
+                                </div>
                             </div>
                         </div>
                         <div className="justify-content-center formContainer ml-5">

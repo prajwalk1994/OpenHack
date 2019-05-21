@@ -78,7 +78,6 @@ class searchOrganizations extends Component {
                 organizationSearched:""
             })
         }
-
     }
 
     sendJoinRequest = (e, organizationId) => {
