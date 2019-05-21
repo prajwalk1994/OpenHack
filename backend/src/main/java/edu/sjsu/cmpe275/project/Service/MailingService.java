@@ -137,7 +137,7 @@ public class MailingService {
 	    		"  	Please click on below link to make the payment\n" + 
 	    		"    <br>\n" + 
 //	    		"    <a href="+Config.url+"/individualPayment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" + 
-				"    <a href="+Config.frontendUrl+"/Payment?&teamid="+teamid+"&userid="+userid+" >Payment Link </a>\n" +
+				"    <a href="+Config.frontendUrl+"/Payment?&teamid="+teamid+"&userid="+userid+"&hackId="+hackathon.getId()+">Payment Link </a>\n" +
 	    		"  </div>\n" + 
 	    		"</html>");
 	    Mail mail = new Mail(from, subject, to, content);
