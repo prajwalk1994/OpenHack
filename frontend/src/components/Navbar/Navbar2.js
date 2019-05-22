@@ -9,23 +9,23 @@ class Navbar2 extends Component {
         }
     }
 
-    componentDidMount=()=>{
-        this.setState({
+    componentDidMount=async ()=>{
+        await this.setState({
             redirect:""
         })
     }
 
-    handleLogout = (e) => {
+    handleLogout = async (e) => {
         e.preventDefault();
         localStorage.removeItem("userid")
         localStorage.removeItem("role")
         localStorage.removeItem("email")
         localStorage.removeItem("username")
         localStorage.removeItem("verified")
-        this.setState({
+        await this.setState({
             redirect:<Redirect to="/login"/>
         })
-        window.location.reload()
+        await window.location.reload()
     }
     render() {
         return (
