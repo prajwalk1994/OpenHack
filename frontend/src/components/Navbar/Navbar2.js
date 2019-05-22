@@ -9,9 +9,9 @@ class Navbar2 extends Component {
         }
     }
 
-    componentDidMount=()=>{
+    componentDidMount = () => {
         this.setState({
-            redirect:""
+            redirect: ""
         })
     }
 
@@ -23,7 +23,7 @@ class Navbar2 extends Component {
         localStorage.removeItem("username")
         localStorage.removeItem("verified")
         this.setState({
-            redirect:<Redirect to="/login"/>
+            redirect: <Redirect to="/login" />
         })
         window.location.reload()
     }
@@ -49,6 +49,9 @@ class Navbar2 extends Component {
                                 <a href="/profile"><li class="nav-tab">Profile</li></a>
                                 <a href="/searchHackathons"><li class="nav-tab">Hackathons</li></a>
                                 <a href="/searchOrgs"><li class="nav-tab">Organizations</li></a>
+                                <a href="/resultsreport"><li class="nav-tab">Result Report</li></a>
+                                <a href="/financialreport"><li class="nav-tab">Financial Report</li></a>
+                                <a href="/earningreport"><li class="nav-tab">Earnings Report</li></a>
                                 <a href="/logout" onClick={this.handleLogout}><li class="nav-tab">Logout</li></a>
                             </ul>
                         </div>
