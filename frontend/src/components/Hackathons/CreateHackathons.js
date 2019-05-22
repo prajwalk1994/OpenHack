@@ -37,20 +37,23 @@ class CreateHackathons extends Component {
         //     await judgeList.push({email:i})
         // }
         // console.log(judgeList)
-        
-        const hackathon = await {
+
+        if (this.state.judgeList.length == 0) {
+            alert("Judge_list should not be empty")
+            return
+        }
+
+        var hackathon = await {
             ...this.state,
-            
+            judgeList: await this.state.judgeList.split(",").map(function (item) { return item.trim() }),
         }
-        if(this.state.judgeList.length!=0){
-            await this.setState({
-                judgeList: await this.state.judgeList.split(",").map(function (item) { return item.trim() }),
-            })
-        }
-        if(this.state.sponsers.length!=0){
-            await this.setState({
+
+
+        if (this.state.sponsers.length != 0) {
+            hackathon = await {
+                ...hackathon,
                 sponsers: await this.state.sponsers.split(",").map(function (item) { return item.trim() })
-            })
+            }
         }
         // console.log(this.state)
         console.log(hackathon)

@@ -10,6 +10,8 @@ export default class HackathonEarningReport extends Component {
             hackathonList: [],
             selectedHackathonId: "",
             hackathonMetrics : [],
+            selectedackathonName : "",
+            expense : 0,
         }
     }
 
@@ -27,7 +29,7 @@ export default class HackathonEarningReport extends Component {
             })
     }
 
-    handleHackathonResults = (e, id) => {
+    handleHackathonResults = (e, id, name) => {
         e.preventDefault();
         Axios.get(url + "/getMetrics/" + id)
         .then((response) => {
@@ -35,6 +37,7 @@ export default class HackathonEarningReport extends Component {
             this.setState({
                 hackathonMetrics : response.data,
                 selectedHackathonId : id,
+                selectedackathonName : name,
             })
         })
         .catch((error) => {
@@ -51,15 +54,18 @@ export default class HackathonEarningReport extends Component {
             return (
                 <div className="row">
                     <li class="list-group-item col-sm-8 mr-2" >{item.name}</li>
-                    <button className="btn btn-dark col-sm-3" onClick={(e) => this.handleHackathonResults(e, item.id)}>view results</button>
+                    <button className="btn btn-dark col-sm-3" onClick={(e) => this.handleHackathonResults(e, item.id, item.name)}>view results</button>
                 </div>
             )
         })
 
         let selectedHackathonDiv = (
             <div>
-                Expense : {hackathonMetrics[0]}<br/>
+                <h3>{this.state.selectedackathonName}</h3>
+                <br/>
+                Revenue : {hackathonMetrics[0]}<br/>
                 Sponsors : {hackathonMetrics[1] * 1000}<br/>
+                Expense : {this.state.expense} <br/>
                 Profit : {hackathonMetrics[0] + (hackathonMetrics[1] * 1000)}<br/>
             </div>
         )
