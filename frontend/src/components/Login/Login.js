@@ -4,7 +4,9 @@ import url from '../../config/config'
 import axios from 'axios';
 import { Link, Redirect } from "react-router-dom";
 import firebase from 'firebase'
+import firebaseui from 'firebaseui';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import { setTimeout } from 'timers';
 
 firebase.initializeApp({
     apiKey: "AIzaSyC0PdhMUGu5E2IsSuaLkJ_4V0VOJXWoaIM",
@@ -17,33 +19,166 @@ class Login extends Component {
         this.state = {
             email: "",
             password: "",
-            username: ""
+            username: "",
+            // check: "no",
+            firebaseuser:{},
+            isSignedIn:false
         }
         this.uiConfig = {
             signInFlow: "popup",
+            // 'signInSuccessUrl': `profile`,
+    //   'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
+    //   'callbacks': {
+    //     'signInSuccess': function(currentUser, credential, redirectUrl) {
+    //       console.log('callback run: ');
+    //       alert("Signed in as "+currentUser + " with credential " + credential);
+    //       return true;
+    //     }.bind(this),
+    //     uiShown: function() {
+    //       alert("doing login stuff.");
+    //     }
+    //   },
             signInOptions: [
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                 firebase.auth.FacebookAuthProvider.PROVIDER_ID,
             ],
             callbacks: {
-                signInSuccess: () => false
-            }
-        }
-    }
-    componentDidMount = () => {
-        firebase.auth().onAuthStateChanged(user => {
-            this.setState({ isSignedIn: !!user })
-            if(!!user){
-                let firbaseuser={
-                    userid: user.email,
-                    profilepic:user.photoURL,
-                    firstname:user.displayName,
-                    phonenumber:user.phoneNumber
+                
+                signInSuccess: async () => {
+                    // alert("ksai")
+                   await setTimeout(() => {
+                        
+                    }, 3000);
+                    let sendingObj= await {
+                        // ...this.state.firebaseuser,
+                        email:localStorage.getItem("firebaseEmail"),
+                        password:"123",
+                        role:"Hacker",
+                        username:localStorage.getItem("firebaseEmail")
+                    }
+                    console.log(sendingObj)
+                    await axios.post(url + "/login", sendingObj).then(async (res) => {
+                        localStorage.setItem("userid", res.data[0].id)
+                        localStorage.setItem("role", res.data[0].role)
+                        localStorage.setItem("email", res.data[0].email)
+                        localStorage.setItem("username", res.data[0].username)
+                        localStorage.setItem("verified", res.data[0].verified)
+    
+                        console.log(res.data)
+                        console.log("Login successful ", res.status)
+                        alert("Login successful")
+                        await this.setState({
+                            redirectVar: <Redirect to="/profile" />
+                        })
+    
+                    }).catch(async (err) => {
+                        // console.log(err)
+                        console.log("Invalid credentials!")
+                        await axios.post(url + "/signUp", sendingObj).then(async (res) => {
+                            console.log(res)
+                            if (res.data == "Success!") {
+                                alert("Signup successful")
+                                await this.setState({
+                                    redirectVar: <Redirect to="/profile" />
+                                })
+                            }
+                            else {
+                                alert(res.data)
+                            }
+    
+                        }).catch(err => {
+                            return false;     
+                            console.log(err)
+                        })
+                    })
+                    return false;                
                 }
             }
-            console.log("user", user)
-            console.log("user",JSON.stringify(user))
+        }
+        
+    }
+    
+
+//      // Make sure we un-register Firebase observers when the component unmounts.
+//   componentWillUnmount() {
+//     this.unregisterAuthObserver();
+//   }
+
+    componentDidMount = async () => {
+        console.log(this.state)
+        var check=false
+        localStorage.setItem("firebaseEmail","")
+        await firebase.auth().onAuthStateChanged(async user => {
+            
+            if(!!user){
+            // check=true
+            // await this.setState({ isSignedIn: !!user,
+            // check:"yes" })
+            // let firebaseuser = await {
+            //     email: user.email,
+            //     password: "123",
+            //     role: "Hacker",
+            //     username: user.email,
+            //     // profilepic:user.photoURL,
+            //     // firstname:user.displayName,
+            //     // phonenumber:user.phoneNumber
+            // }
+            localStorage.setItem("firebaseEmail",user.email)
+            // await this.setState({
+            //     firebaseuser:firebaseuser
+            // })
+            
+            // console.log("user", firebaseuser)
+            console.log(this.state)
+            setTimeout(() => {
+                        
+            }, 3000);
+            await this.setState({ isSignedIn: !!user })
+        }
+            // console.log(this.state)
+            
         })
+        // if (check) {
+        //     console.log("here")
+        //     if (!!this.state.isSignedIn) {
+                
+        //         await axios.post(url + "/login", this.state.firebaseuser).then(async (res) => {
+        //             localStorage.setItem("userid", res.data[0].id)
+        //             localStorage.setItem("role", res.data[0].role)
+        //             localStorage.setItem("email", res.data[0].email)
+        //             localStorage.setItem("username", res.data[0].username)
+        //             localStorage.setItem("verified", res.data[0].verified)
+
+        //             console.log(res.data)
+        //             console.log("Login successful ", res.status)
+        //             alert("Login successful")
+        //             await this.setState({
+        //                 redirectVar: <Redirect to="/profile" />
+        //             })
+
+        //         }).catch(async (err) => {
+        //             // console.log(err)
+        //             // alert("Invalid credentials!")
+        //             await axios.post(url + "/signUp", this.state.firebaseuser).then(async (res) => {
+        //                 console.log(res)
+        //                 if (res.data == "Success!") {
+        //                     alert("Signup successful")
+        //                     await this.setState({
+        //                         redirectVar: <Redirect to="/profile" />
+        //                     })
+        //                 }
+        //                 else {
+        //                     alert(res.data)
+        //                 }
+
+        //             }).catch(err => {
+        //                 console.log(err)
+        //             })
+        //         })
+        //     }
+
+        //     // console.log("user",JSON.stringify(user))
+        // }
     }
     handleChange = (e) => {
         this.setState({
@@ -75,6 +210,14 @@ class Login extends Component {
         })
     }
 
+    // fauth = () => {
+    //     alert("yes")
+    //     firebase.auth().signOut()
+    //     this.setState({
+    //         check: "yes"
+    //     })
+    // }
+
     render() {
         return (
             <div>
@@ -104,8 +247,7 @@ class Login extends Component {
                                         </div> */}
                                         <StyledFirebaseAuth
                                             uiConfig={this.uiConfig}
-                                            firebaseAuth={firebase.auth()}
-                                        />
+                                            firebaseAuth={firebase.auth()} />
                                         <div class="">
                                             <label class="form_footer">We don't post anything without your permission.</label>
                                         </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../Navbar/Navbar2.css'
+import firebase from 'firebase'
 import { Redirect } from 'react-router-dom';
 class Navbar2 extends Component {
     constructor(props) {
@@ -22,6 +23,9 @@ class Navbar2 extends Component {
         localStorage.removeItem("email")
         localStorage.removeItem("username")
         localStorage.removeItem("verified")
+        firebase.auth().signOut()
+        localStorage.removeItem("firebaseEmail")
+        
         await this.setState({
             redirect:<Redirect to="/login"/>
         })

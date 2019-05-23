@@ -85,6 +85,7 @@ public class LoginController {
 		// To check if the user already exists
 		List<User> users = userDao.findUserByEmail(email);
 		if (users.size() > 0) {
+			System.out.println(users.get(0).getEmail());
 			return new ResponseEntity<>("FAILURE-Email_Exists", HttpStatus.OK);
 		}
 		List<User> usernames = userDao.findUserByUsername(req.getUsername());

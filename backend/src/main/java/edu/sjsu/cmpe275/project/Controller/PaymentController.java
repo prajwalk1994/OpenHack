@@ -66,7 +66,7 @@ public class PaymentController {
 		int teamid = 2;
 		int userid = 1;
 		String email = "kovurivinay@gmail.com";
-		mailService.makePaymentMail(hackathon, teamid, userid, email);
+		mailService.sendMailCheck("kovurivinay@gmail.com");
 		return null;
 	}
 
