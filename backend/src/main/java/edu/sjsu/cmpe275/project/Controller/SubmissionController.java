@@ -83,6 +83,9 @@ public class SubmissionController {
 				if(temp.getGrade()==null) {
 					return new ResponseEntity<Object>("All hackathons are not yet graded", HttpStatus.BAD_REQUEST);
 				}
+				if(temp.getSubmissionUrl() == null) {
+					return new ResponseEntity<Object>("All teams have not submitted the Github URL", HttpStatus.BAD_REQUEST);
+				}
 			}
 			return new ResponseEntity<Object>("Can be changed to finalized", HttpStatus.OK);
 		} catch (Exception e) {

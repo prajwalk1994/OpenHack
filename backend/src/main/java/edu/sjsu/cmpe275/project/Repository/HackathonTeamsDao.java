@@ -16,6 +16,6 @@ public interface HackathonTeamsDao extends JpaRepository<HackathonTeams, Integer
 	
 	Optional<HackathonTeams> findHackathonTeamsByHackIdAndTeamId(int hackId, int teamId);
 	Optional<HackathonTeams> findHackathonTeamsByHackIdIdAndTeamIdId(int hackId, int teamId);
-	@Query(value = "select h.* from hackathon_teams h, team t where h.team_id_id = t.id order by t.score desc", nativeQuery = true)
+	@Query(value = "select h.* from hackathon_teams h, team t where h.team_id_id = t.id and h.hack_id_id = ?1 order by h.grade desc", nativeQuery = true)
 	List<HackathonTeams> findHackathonTeamsByHackIdId(int hackId);
 }

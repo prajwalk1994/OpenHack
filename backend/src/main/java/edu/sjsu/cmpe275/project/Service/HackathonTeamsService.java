@@ -42,6 +42,6 @@ public class HackathonTeamsService {
 	}
 	
 	public Optional<HackathonTeams> getHackathonTeamsByHackIdAndTeamId(int hackId, int teamId){
-		return this.hackathonTeamsDao.findHackathonTeamsByHackIdAndTeamId(hackId, teamId);
+		return this.hackathonTeamsDao.findHackathonTeamsByHackIdIdAndTeamIdId(hackId, teamId);
 	}
 }
