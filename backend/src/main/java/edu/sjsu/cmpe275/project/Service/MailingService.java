@@ -221,4 +221,30 @@ public class MailingService {
 	    }
 	    return true;
 	}
+	
+	public boolean sendMailCheck( String email){
+		Email from = new Email("verification@openhack.com");
+	    String subject = "Congratulations! You are the winner";
+	    Email to = new Email(email);
+	    String a="localhost";
+	    Content content = new Content("text/plain", "Hello Hacker,\n" + 
+	    		"\n" + 
+	    		"Congratulations for Securing a place in the TOP 3. Keep up the good work and Keep coding! \n" + 
+	    		"Here's the link for the results:\n" + 
+	    		"link here" );
+	    Mail mail = new Mail(from, subject, to, content);
+
+	    SendGrid sg = new SendGrid("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");
+	    Request request = new Request();
+	    try {
+	      request.setMethod(Method.POST);
+	      request.setEndpoint("mail/send");
+	      request.setBody(mail.build());
+	      Response response = sg.api(request);
+	    } catch (IOException ex) {
+	      System.out.println(ex.getMessage());
+	      return false;
+	    }
+	    return true;
+	}
 }
