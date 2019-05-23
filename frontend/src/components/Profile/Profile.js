@@ -260,8 +260,7 @@ class Profile extends Component {
                 return (
                     <div className="row">
                         <label className="col-sm-6">{item.hackId.name}</label>
-                        {(item.submissionUrl.length==0)?<button className="btn btn_login col-sm-6" onClick={(e) => { this.submitcode(e, item.hackId.id, item.hackId.regFee, item.teamId.id) }}>submit </button>:
-                        <button className="btn btn-dark col-sm-6" disabled>Submitted</button>}
+                        {(item.submissionUrl) ? ((item.submissionUrl.length == 0) ? <button className="btn btn_login col-sm-6" onClick={(e) => { this.submitcode(e, item.hackId.id, item.hackId.regFee, item.teamId.id) }}>submit </button> : <button className="btn btn-dark col-sm-6" disabled>Submitted</button>) : <button className="btn btn_login col-sm-6" onClick={(e) => { this.submitcode(e, item.hackId.id, item.hackId.regFee, item.teamId.id) }}>submit </button>}
                     </div>
                 )
             })
@@ -274,7 +273,7 @@ class Profile extends Component {
         }
 
         return (
-            <div className="scroll" style={{ marginLeft: "10%", marginRight: "5%" }}>
+            <div className="scroll" style={{ marginLeft: "5%" }}>
                 <div>
                     {this.state.redirectTo}
                 </div>

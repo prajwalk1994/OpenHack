@@ -70,7 +70,7 @@ class ResultsReport extends Component {
                     <li className="list-group-item col-sm-6" style={{backgroundColor:color}}>
                         {item.teamId.teamName}
                     </li>
-                    <li className="list-group-item col-sm-2 mt-2 ml-5">{item.teamId.score}</li>
+                    <li className="list-group-item col-sm-2 mt-2 ml-5">{item.grade}</li>
                 </div>
             )
         })

@@ -260,6 +260,7 @@ class searchHackathons extends Component {
         Axios.get(url + `checkSubmissions/${id}`).then(res => {
             localStorage.setItem("tempFinalized",true)
         }).catch((err) => {
+            console.log(err.response.data);
             localStorage.setItem("tempFinalized",false)
             if (err.response) {
                 console.log("err", err.response)

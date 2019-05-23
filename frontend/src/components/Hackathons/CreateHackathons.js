@@ -37,8 +37,8 @@ class CreateHackathons extends Component {
         //     await judgeList.push({email:i})
         // }
         // console.log(judgeList)
-        
-        if(this.state.judgeList.length==0){
+
+        if (this.state.judgeList.length == 0) {
             alert("Judge_list should not be empty")
             return
         }
@@ -47,10 +47,10 @@ class CreateHackathons extends Component {
             ...this.state,
             judgeList: await this.state.judgeList.split(",").map(function (item) { return item.trim() }),
         }
-        
-        
-        if(this.state.sponsers.length!=0){
-            hackathon=await {
+
+
+        if (this.state.sponsers.length != 0) {
+            hackathon = await {
                 ...hackathon,
                 sponsers: await this.state.sponsers.split(",").map(function (item) { return item.trim() })
             }
