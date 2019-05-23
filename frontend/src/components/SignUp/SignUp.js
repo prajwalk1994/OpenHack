@@ -26,27 +26,26 @@ class SignUp extends Component {
     }
     callingBackend = async (user) => {
         var re = /^([0-9a-zA-Z]){3,}$/;
-        if(!re.test(this.state.username)){
+        if (!re.test(this.state.username)) {
             alert("Username/ScreenName must be alphanumeric and must be atleast 3 characters")
         }
-        else{
+        else {
             await Axios.post(url + "/signUp", user).then(async (res) => {
                 console.log(res)
-                if (res.data == "Success!") {
-                    console.log("Signup successful")
-                    await this.setState({
-                        redirectVar: <Redirect to="/login" />
-                    })
-                }
-                else {
-                    alert(res.data)
-                }
+                console.log("Signup successful")
+                await this.setState({
+                    redirectVar: <Redirect to="/login" />
+                })
 
-        }).catch(err => {
-            console.log(err)
-        })
+
+            }).catch(err => {
+                if (err.response) {
+                    alert(err.response.data)
+                }
+                console.log(err)
+            })
         }
-        
+
     }
     handleClick = (e) => {
         e.preventDefault();

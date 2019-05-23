@@ -19,11 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.project.Entity.Hackathon;
 import edu.sjsu.cmpe275.project.Entity.Hackathon.Status;
+import edu.sjsu.cmpe275.project.Entity.HackathonTeams;
 import edu.sjsu.cmpe275.project.Entity.Organization;
+import edu.sjsu.cmpe275.project.Entity.TeamMember;
 import edu.sjsu.cmpe275.project.Entity.User;
+import edu.sjsu.cmpe275.project.Repository.HackathonTeamsDao;
 import edu.sjsu.cmpe275.project.Repository.OrganizationDao;
+import edu.sjsu.cmpe275.project.Repository.TeamMemberDao;
 import edu.sjsu.cmpe275.project.Repository.UserDao;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
+import edu.sjsu.cmpe275.project.Service.HackathonTeamsService;
+import edu.sjsu.cmpe275.project.Service.MailingService;
+import edu.sjsu.cmpe275.project.Service.TeamMemberService;
 import edu.sjsu.cmpe275.project.Service.UserService;
 
 class HackathonTemp{
@@ -106,11 +113,19 @@ public class HackathonController {
 	@Autowired
 	HackathonService hackathonService;
 	@Autowired
+	HackathonTeamsService hackathonTeamsService;
+	@Autowired
+	TeamMemberDao teamMemberDao;
+	@Autowired
+	HackathonTeamsDao hackathonTeamsDao;
+	@Autowired
 	UserDao userDao;
 	@Autowired
 	OrganizationDao organizationDao;
 	@Autowired
 	UserService userService;
+	@Autowired
+	MailingService mailService;
 	
 	@PostMapping("hackathon")
 	public ResponseEntity<Object> createHackathon(@RequestBody HackathonTemp hackathonTemp,
@@ -204,6 +219,17 @@ public class HackathonController {
 			}
 			Hackathon currentHackathon = hackathon.get();
 			currentHackathon.setStatus(status);
+			this.hackathonService.addHackathon(currentHackathon);
+			if(status.equals(Status.Final)) {
+				List<HackathonTeams> hackTeams=this.hackathonTeamsDao.findHackathonTeamsByHackIdId(hackId);
+				for(HackathonTeams team:hackTeams) {
+					List<TeamMember> users=this.teamMemberDao.findTeamMemberByTeamId(team.getTeamId().getId());
+					for(TeamMember user:users) {
+						Optional<User> tempUser=this.userService.getUser(user.getId());
+						this.mailService.sendMailToAll(tempUser.get().getEmail());
+					}
+				}
+			}
 			return new ResponseEntity<Object>(this.hackathonService.addHackathon(currentHackathon), HttpStatus.OK);
 		}
 		catch(Exception e) {

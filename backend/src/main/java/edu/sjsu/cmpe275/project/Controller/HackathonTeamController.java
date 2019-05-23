@@ -24,6 +24,7 @@ import edu.sjsu.cmpe275.project.Entity.HackathonTeams;
 import edu.sjsu.cmpe275.project.Entity.Team;
 import edu.sjsu.cmpe275.project.Entity.TeamMember;
 import edu.sjsu.cmpe275.project.Entity.User;
+import edu.sjsu.cmpe275.project.Repository.TeamMemberDao;
 import edu.sjsu.cmpe275.project.Service.HackathonService;
 import edu.sjsu.cmpe275.project.Service.HackathonTeamsService;
 import edu.sjsu.cmpe275.project.Service.MailingService;
@@ -52,6 +53,9 @@ public class HackathonTeamController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	TeamMemberDao teamMemberDao;
 	
 	@PostMapping("/hackathonteam/{hackId}/{teamId}")
 	public ResponseEntity<Object> addTeamToHackathon(@PathVariable("hackId") int hackId, @PathVariable("teamId") int teamId){
@@ -143,6 +147,18 @@ public class HackathonTeamController {
 	@GetMapping("teamsByHackathon/{hackId}")
 	public ResponseEntity<Object> getHackathonTeamsByHackathon(@PathVariable("hackId") int hackId){
 		try {
+			List<HackathonTeams> hackTeams=this.hackathonTeamsService.getHackathonTeamsByHackIdOrdered(hackId);
+			int count=1;
+			while(count<=3 && count<=hackTeams.size()) {
+				for(HackathonTeams team:hackTeams) {
+					List<TeamMember> users=this.teamMemberDao.findTeamMemberByTeamId(team.getTeamId().getId());
+					for(TeamMember user:users) {
+						Optional<User> tempUser=this.userService.getUser(user.getId());
+						this.mailService.sendMailToWinner(tempUser.get().getEmail());
+					}
+				}
+				count++;
+			}
 			return new ResponseEntity<Object>(this.hackathonTeamsService.getHackathonTeamsByHackIdOrdered(hackId), HttpStatus.OK);
 		}
 		catch(Exception e) {
